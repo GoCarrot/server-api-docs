@@ -1,0 +1,6 @@
+name: server-api
+title: Teak Server API
+version: ~
+start_page: v2_schedule.adoc
+nav:
+- modules/ROOT/nav.adoc
