@@ -1,6 +1,6 @@
 name: server-api
 title: Server API
 version: 'v2'
-start_page: v2_schedule.adoc
+start_page: notifications/v2_schedule.adoc
 nav:
 - modules/ROOT/nav.adoc
