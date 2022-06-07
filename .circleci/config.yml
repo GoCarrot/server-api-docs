@@ -15,7 +15,7 @@ jobs:
       - image: cimg/node:lts
     steps:
       - checkout
-      - build-antora-playbook:
+      - teak/build-antora-playbook:
           build_type: << pipeline.parameters.build_type >>
 
 workflows:
