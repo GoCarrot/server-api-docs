@@ -40,7 +40,7 @@ commands:
           command: |
             curl --location --request POST 'https://circleci.com/api/v2/project/github/GoCarrot/antora-ui-teak/pipeline' \
             --header 'Content-Type: application/json' \
-            -u "${CIRCLE_API_TOKEN}" \
+            --header 'Circle-Token: ${CIRCLE_API_TOKEN} \
             -d '{
               "parameters": {
                 "build_type": "<< parameters.build_type >>"
