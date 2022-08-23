@@ -1,0 +1,101 @@
+= Email Address Management
+
+== Updating
+[cols="1,3a", stripes="even"]
+|===
+| Endpoint
+| https://api.gocarrot.com/v2/email
+| Request Type
+| POST
+| Content-Type
+| application/json or application/x-www-form-urlencoded
+|===
+
+Description: The `v2/email` endpoint allows for server side modification of player email addresses. For example, this API can be connected to your internal administrative tools to ensure that the email address Teak has on file for a player is promptly updated in response to any modifications made in your internal administrative tools.
+
+Please be aware that Teak enforces that each player may only have a single email address, and each email address may only belong to a single player. The response to this API will inform you of the actions Teak took in order to preserve these invariants while making the requested change.
+
+=== Required Parameters
+[cols="1,3a", stripes="even"]
+|===
+| game_id
+| Your Teak App ID
+| secret_key
+| Your Teak Server Secret
+| user_id
+| The Game Assigned Player ID of the player you are updating the email address for. This must match the value provided by the game client's Teak SDK integration.
+| email
+| The email address to assign to this player.
+|===
+
+=== Email Added Success Response
+
+:response-code: 200
+:response-body: JSON dictionary with 'code' and 'status' keys. 'code' will be '200', 'status' will be 'added'.
+:response-example: {"code":200, "status":"added"}
+include::partial$response.adoc[]
+
+=== Email Changed Success Response
+
+:response-code: 200
+:response-body: JSON dictionary with 'code', 'status', and 'previous_email' keys. 'code' will be '200', 'status' will be 'changed', and 'previous_email' will be the email address previously on file for the user before this API call.
+:response-example: {"code":200, "status":"changed", "previous_email":"foo@example.com"}
+include::partial$response.adoc[]
+
+=== Email Moved Success Response
+
+:response-code: 200
+:response-body: JSON dictionary with 'code', 'status', and 'previous_player_ids' keys. 'code' will be '200', 'status' will be 'moved', and 'previous_player_ids' will be an array of strings of all the game assigned player ids Teak has associated with the internal player record that previously had the given email address.
+:response-example: {"code":200, "status":"moved", "previous_player_ids":["abc", "def"]}
+include::partial$response.adoc[]
+
+=== Error Responses
+
+==== Not Found
+
+:response-code: 404
+:response-body: JSON dictionary with 'code' and 'error' keys. 'code' will be 404. 'error' will be a dictionary containing a 'message' key describing the error.
+:response-example: {"code":404,"error":{"message":"Invalid game id or user id"}}
+include::partial$response.adoc[]
+
+== Removing
+[cols="1,3a", stripes="even"]
+|===
+| Endpoint
+| https://api.gocarrot.com/v2/email
+| Request Type
+| DELETE
+| Content-Type
+| application/json or application/x-www-form-urlencoded
+|===
+
+Description: The DELETE `v2/email` endpoint allows for removal of an email address from a player record in Teak.
+
+=== Required Parameters
+[cols="1,3a", stripes="even"]
+|===
+| game_id
+| Your Teak App ID
+| secret_key
+| Your Teak Server Secret
+| user_id
+| The Game Assigned Player ID of the player you are updating the email address for. This must match the value provided by the game client's Teak SDK integration.
+| email
+| The email address to assign to this player.
+|===
+
+=== Email Removed Success Response
+
+:response-code: 200
+:response-body: JSON dictionary with 'code' and 'status' keys. 'code' will be '200', 'status' will be 'removed'.
+:response-example: {"code":200, "status":"removed"}
+include::partial$response.adoc[]
+
+=== Error Responses
+
+==== Not Found
+
+:response-code: 404
+:response-body: JSON dictionary with 'code' and 'error' keys. 'code' will be 404. 'error' will be a dictionary containing a 'message' key describing the error.
+:response-example: {"code":404,"error":{"message":"Invalid game id or user id"}}
+include::partial$response.adoc[]
