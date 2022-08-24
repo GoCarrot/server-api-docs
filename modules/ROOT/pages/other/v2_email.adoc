@@ -80,15 +80,20 @@ Description: The DELETE `v2/email` endpoint allows for removal of an email addre
 | Your Teak Server Secret
 | user_id
 | The Game Assigned Player ID of the player you are updating the email address for. This must match the value provided by the game client's Teak SDK integration.
-| email
-| The email address to assign to this player.
 |===
 
 === Email Removed Success Response
 
 :response-code: 200
-:response-body: JSON dictionary with 'code' and 'status' keys. 'code' will be '200', 'status' will be 'removed'.
-:response-example: {"code":200, "status":"removed"}
+:response-body: JSON dictionary with a 'status' key. 'status' will be 'removed'.
+:response-example: {"status":"removed"}
+include::partial$response.adoc[]
+
+=== Email Already Absent Success Response
+
+:response-code: 200
+:response-body: JSON dictionary with a 'status' key. status' will be 'email_absent'.
+:response-example: {"status":"email_absent"}
 include::partial$response.adoc[]
 
 === Error Responses
@@ -96,6 +101,11 @@ include::partial$response.adoc[]
 ==== Not Found
 
 :response-code: 404
-:response-body: JSON dictionary with 'code' and 'error' keys. 'code' will be 404. 'error' will be a dictionary containing a 'message' key describing the error.
-:response-example: {"code":404,"error":{"message":"Invalid game id or user id"}}
+:response-body: JSON dictionary with "status" and "errors" keys. "status" will be "error", "errors" will be a dictionary in which the keys are the parameter which could not be found, and the values will be an array of human readable messages indicating what could not be found.
+include::partial$response.adoc[]
+
+==== Rate Limit Response
+
+:response-code: 429
+:response-body: JSON dictionary with "status" and "errors" keys. "status" will be "rate_limt". "errors" will contain the key "rate_limit".
 include::partial$response.adoc[]
