@@ -41,7 +41,7 @@ include::partial$response.adoc[]
 
 :response-code: 200
 :response-body: JSON dictionary with 'status', 'action', and 'previous_email' keys. 'action' will be 'changed', and 'previous_email' will be the email address previously on file for the user before this API call.
-:response-example: {status":"ok", "action":"changed", "previous_email":"foo@example.com"}
+:response-example: {"status":"ok", "action":"changed", "previous_email":"foo@example.com"}
 include::partial$response.adoc[]
 
 === Email Moved Success Response
@@ -104,14 +104,14 @@ Description: The DELETE `v2/email` endpoint allows for removal of an email addre
 
 :response-code: 200
 :response-body: JSON dictionary with 'status' and 'action' keys. 'status' will be 'ok' and 'action' will be 'removed'.
-:response-example: {"status":"ok", action":"removed"}
+:response-example: {"status":"ok", "action":"removed"}
 include::partial$response.adoc[]
 
 === Email Already Absent Success Response
 
 :response-code: 200
 :response-body: JSON dictionary with 'status' and 'action' keys. 'status' will be 'ok' and 'action' will be 'none'.
-:response-example: {"status":"ok", action":"none"}
+:response-example: {"status":"ok", "action":"none"}
 include::partial$response.adoc[]
 
 === Error Responses
