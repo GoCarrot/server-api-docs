@@ -28,25 +28,32 @@ Please be aware that Teak enforces that each player may only have a single email
 | The email address to assign to this player.
 |===
 
-=== Email Added Success Response
+=== Success Response
 
 :response-code: 200
-:response-body: JSON dictionary with 'code' and 'status' keys. 'code' will be '200', 'status' will be 'added'.
-:response-example: {"code":200, "status":"added"}
+:response-body: JSON dictionary with 'status' and 'action' keys. 'status' will be 'ok'. 'action' will be one of 'moved_and_changed', 'moved', 'changed', 'added', or 'none', depending on the action taken to update the email address for the player.
+:response-example: {"status": "ok", "action": "added"}
 include::partial$response.adoc[]
 
 === Email Changed Success Response
 
 :response-code: 200
-:response-body: JSON dictionary with 'code', 'status', and 'previous_email' keys. 'code' will be '200', 'status' will be 'changed', and 'previous_email' will be the email address previously on file for the user before this API call.
-:response-example: {"code":200, "status":"changed", "previous_email":"foo@example.com"}
+:response-body: JSON dictionary with 'status', 'action', and 'previous_email' keys. 'action' will be 'changed', and 'previous_email' will be the email address previously on file for the user before this API call.
+:response-example: {status":"ok", "action":"changed", "previous_email":"foo@example.com"}
 include::partial$response.adoc[]
 
 === Email Moved Success Response
 
 :response-code: 200
-:response-body: JSON dictionary with 'code', 'status', and 'previous_player_ids' keys. 'code' will be '200', 'status' will be 'moved', and 'previous_player_ids' will be an array of strings of all the game assigned player ids Teak has associated with the internal player record that previously had the given email address.
-:response-example: {"code":200, "status":"moved", "previous_player_ids":["abc", "def"]}
+:response-body: JSON dictionary with 'status', 'action', and 'previous_player_ids' keys. 'action' will be 'moved', and 'previous_player_ids' will be an array of strings of all the game assigned player ids Teak has associated with the internal player record that previously had the given email address.
+:response-example: {"status":"ok", "action":"moved", "previous_player_ids":["abc", "def"]}
+include::partial$response.adoc[]
+
+=== Email Moved And Changed Success Response
+
+:response-code: 200
+:response-body: JSON dictionary with 'status', 'action', 'previous_email', and 'previous_player_ids' keys. 'action' will be 'moved_and_changed', 'previous_email' will be the email address previously on file for the user before this API call, and 'previous_player_ids' will be an array of strings of all the game assigned player ids Teak has associated with the internal player record that previously had the given email address.
+:response-example: {"status":"ok", "action":"moved_and_changed", "previous_email":"foo@example.com", "previous_player_ids":["abc", "def"]}
 include::partial$response.adoc[]
 
 === Error Responses
@@ -54,8 +61,15 @@ include::partial$response.adoc[]
 ==== Not Found
 
 :response-code: 404
-:response-body: JSON dictionary with 'code' and 'error' keys. 'code' will be 404. 'error' will be a dictionary containing a 'message' key describing the error.
-:response-example: {"code":404,"error":{"message":"Invalid game id or user id"}}
+:response-body: JSON dictionary with 'status' and 'errors' keys. 'status' will be 'error'. 'errors' will be a dictionary containing keys indicating which resources were not found, with values being an array of human readable error messages.
+:response-example: {"status":"error","errors":{"user_id":["No player with id foo"]}}
+include::partial$response.adoc[]
+
+==== Rate Limit Response
+
+:response-code: 429
+:response-body: JSON dictionary with 'status' and 'errors' keys. 'status' will be 'rate_limit'. 'errors' will contain the key 'rate_limit'
+:response-example: {"status":"rate_limit","errors":{"rate_limit":["/v2/email may only be called 300 times per second. Please wait a second and try again"]}}
 include::partial$response.adoc[]
 
 == Removing
@@ -85,15 +99,15 @@ Description: The DELETE `v2/email` endpoint allows for removal of an email addre
 === Email Removed Success Response
 
 :response-code: 200
-:response-body: JSON dictionary with a 'status' key. 'status' will be 'removed'.
-:response-example: {"status":"removed"}
+:response-body: JSON dictionary with 'status' and 'action' keys. 'status' will be 'ok' and 'action' will be 'removed'.
+:response-example: {"status":"ok", action":"removed"}
 include::partial$response.adoc[]
 
 === Email Already Absent Success Response
 
 :response-code: 200
-:response-body: JSON dictionary with a 'status' key. status' will be 'email_absent'.
-:response-example: {"status":"email_absent"}
+:response-body: JSON dictionary with 'status' and 'action' keys. 'status' will be 'ok' and 'action' will be 'none'.
+:response-example: {"status":"ok", action":"none"}
 include::partial$response.adoc[]
 
 === Error Responses
@@ -101,11 +115,13 @@ include::partial$response.adoc[]
 ==== Not Found
 
 :response-code: 404
-:response-body: JSON dictionary with "status" and "errors" keys. "status" will be "error", "errors" will be a dictionary in which the keys are the parameter which could not be found, and the values will be an array of human readable messages indicating what could not be found.
+:response-body: JSON dictionary with 'status' and 'errors' keys. 'status' will be 'error'. 'errors' will be a dictionary containing keys indicating which resources were not found, with values being an array of human readable error messages.
+:response-example: {"status":"error","errors":{"user_id":["No player with id foo"]}}
 include::partial$response.adoc[]
 
 ==== Rate Limit Response
 
 :response-code: 429
-:response-body: JSON dictionary with "status" and "errors" keys. "status" will be "rate_limt". "errors" will contain the key "rate_limit".
+:response-body: JSON dictionary with 'status' and 'errors' keys. 'status' will be 'rate_limit'. 'errors' will contain the key 'rate_limit'
+:response-example: {"status":"rate_limit","errors":{"rate_limit":["/v2/email may only be called 300 times per second. Please wait a second and try again"]}}
 include::partial$response.adoc[]
