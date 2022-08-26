@@ -64,7 +64,7 @@ include::partial$response.adoc[]
 :response-example: {"status":"error","errors":{"notification_identifier":["must be present"]}}
 include::partial$response.adoc[]
 
-== Rate Limit Response
+=== Rate Limit Response
 
 :response-code: 429
 :response-body: JSON dictionary with 'status' and 'errors' keys. 'status' will be 'rate_limit'. 'errors' will contain the key 'rate_limit'
