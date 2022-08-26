@@ -9,6 +9,8 @@
 | POST
 | Content-Type
 | application/json or application/x-www-form-urlencoded
+| Rate Limiting
+| 300 requests per second
 |===
 
 Description: The `v2/email` endpoint allows for server side modification of player email addresses. For example, this API can be connected to your internal administrative tools to ensure that the email address Teak has on file for a player is promptly updated in response to any modifications made in your internal administrative tools.
@@ -81,6 +83,8 @@ include::partial$response.adoc[]
 | DELETE
 | Content-Type
 | application/json or application/x-www-form-urlencoded
+| Rate Limiting
+| 300 requests per second
 |===
 
 Description: The DELETE `v2/email` endpoint allows for removal of an email address from a player record in Teak.
