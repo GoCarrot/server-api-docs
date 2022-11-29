@@ -1,5 +1,52 @@
 = Email Address Management
 
+== Reading
+[cols="1,3a", stripes="even"]
+|===
+| Endpoint
+| https://api.gocarrot.com/v2/email
+| Request Type
+| GET
+| Rate Limiting
+| 300 requests per second
+|===
+
+Description: The GET `v2/email` retrieves the current email address for a game assigned player id.
+
+=== Required Parameters
+[cols="1,3a", stripes="even"]
+|===
+| game_id
+| Your Teak App ID
+| secret_key
+| Your Teak Server Secret
+| user_id
+| The Game Assigned Player ID of the player you are retrieving the email address for. This must match the value provided by the game client's Teak SDK integration.
+|===
+
+=== Success Response
+
+:response-code: 200
+:response-body: JSON dictionary with 'status' and 'email' keys. 'status' will be 'ok' and 'email' will either be the player's email address or null if the player has no email address in Teak.
+:response-example: {"status":"ok", "email":"eve@example.com"}
+include::partial$response.adoc[]
+
+=== Error Responses
+
+==== Not Found
+
+:response-code: 404
+:response-body: JSON dictionary with 'status' and 'errors' keys. 'status' will be 'error'. 'errors' will be a dictionary containing keys indicating which resources were not found, with values being an array of human readable error messages.
+:response-example: {"status":"error","errors":{"user_id":["No player with id foo"]}}
+include::partial$response.adoc[]
+
+==== Rate Limit Response
+
+:response-code: 429
+:response-body: JSON dictionary with 'status' and 'errors' keys. 'status' will be 'rate_limit'. 'errors' will contain the key 'rate_limit'
+:response-example: {"status":"rate_limit","errors":{"rate_limit":["/v2/email may only be called 300 times per second. Please wait a second and try again"]}}
+include::partial$response.adoc[]
+
 == Updating
 [cols="1,3a", stripes="even"]
 |===
