@@ -358,7 +358,7 @@ include::partial$response.adoc[]
 | 300 requests per second
 |===
 
-Description: The DELETE `v2/email` endpoint allows for removal of an email address from a player record in Teak.
+Description: The DELETE `v2/email` endpoint allows for removal of an email address from a player record in Teak. Teak will retain the subscription status for removed email addresses, and if the email is later readded the previous subscriptoin status will apply.
 
 === Required Parameters
 [cols="1,3a", stripes="even"]
