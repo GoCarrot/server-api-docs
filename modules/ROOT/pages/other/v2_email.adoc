@@ -87,7 +87,9 @@ Description: The GET `{endpoint}` endpoint retrieves the current subscription st
 ! channel
 ! 'email'
 ! state
-! One of 'opt_out', 'available', or 'opt_in'. +
+! One of 'spam_report', opt_out', 'available', or 'opt_in'. +
+'spam_report' indicates that the address has marked a delivered email as spam and is opted out from future deliveries. +
+'opt_out' indicates that the address has unsubscribed from emails. +
 'available' indicates the address can be sent to, but has not confirmed an opt in. +
 'opt_in' indicates that the address has confirmed an opt in to receiving emails.
 ! delivery_fault
@@ -206,6 +208,8 @@ seen will apply to the address as soon as it is associated with a player.
 
 Updating subscription status will not clear any delivery faults. See <<clear_delivery_fault>> to clear a delivery fault.
 
+Requests to update a `spam_report` state to `opt_out` will be ignored.
+
 === Required Parameters
 [cols="1,3a", stripes="even"]
 |===
@@ -243,9 +247,9 @@ Updating subscription status will not clear any delivery faults. See <<clear_del
 ! channel
 ! 'email'
 ! previous_state
-! The previous subscription status state for this email address. One of 'opt_out', 'available', or 'opt_in'
+! The previous subscription status state for this email address. One of 'spam_report', 'opt_out', 'available', or 'opt_in'
 ! state
-! The newly set state. One of 'opt_out', 'available', or 'opt_in'
+! The newly set state. One of 'spam_report', 'opt_out', 'available', or 'opt_in'
 ! delivery_fault
 ! true if an error was encountered attempting to send to the email address, otherwise false
 ! email
