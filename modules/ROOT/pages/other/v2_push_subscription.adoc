@@ -1,0 +1,171 @@
+= Push Subscription Management
+
+In Teak a player's push subscription status is *_not_* connected to their per device opt-in/out state. That is, if a player denies push notifications from the platform specific push notification permission prompt, their subscription status reported by this API will still be `opt_in`. This API applies across _all_ of a player's mobile devices, and the subscription status may be changed even if the player has no mobile devices.
+
+The subscription status set by this API applies to both locally scheduled notifications and dashboard managed schedules.
+
+== Reading
+:endpoint: v2/push/subscription_status
+[cols="1,3a", stripes="even"]
+|===
+| Endpoint
+| https://api.gocarrot.com/{endpoint}
+| Request Type
+| GET
+| Rate Limiting
+| 300 requests per second
+|===
+
+Description: The GET `{endpoint}` endpoint retrieves the current push subscription status for a game assigned player id.
+
+=== Required Parameters
+[cols="1,3a", stripes="even"]
+|===
+| game_id
+| Your Teak App ID
+| secret_key
+| Your Teak Server Secret
+| user_id
+| The Game Assigned Player ID of the player you are retrieving push subscription status for. This must match the value provided by the game client's Teak SDK integration.
+|===
+
+=== Success Response
+
+[cols="1,3a"]
+|===
+| Status Code
+| 200
+| Response Body
+| JSON dictionary with 'status', 'channel', 'user_id', 'state', and 'reachable' keys.
+[cols="1,3a", stripes="even"]
+!===
+! status
+! 'ok'
+! channel
+! 'push'
+! user_id
+! The game assigned player id of the player opt out status was retrieved for.
+! state
+! One of 'opt_out' or 'opt_in'. +
+'opt_out' indicates that the player has opted out of receiving push notifications through set preferences. +
+'opt_in' indicates that the player has not opted out of receiving push notifications.
+! reachable
+! true if the player has any registered mobile devices, otherwise false.
+!===
+| Example
+| [source, json, subs="attributes"]
+----
+{"status":"ok", "channel":"push", "user_id":"example_user", "state":"opt_in", "reachable": false}
+----
+|===
+
+=== Error Responses
+
+==== Player Not Found
+
+:response-code: 404
+:response-body: JSON dictionary with 'status' and 'errors' keys. 'status' will be 'error'. 'errors' will be a dictionary containing keys indicating which resources were not found, with values being an array of human readable error messages.
+:response-example: {"status":"error","errors":{"user_id":["No player with id foo"]}}
+include::partial$response.adoc[]
+
+==== Rate Limit Response
+
+:response-code: 429
+:response-body: JSON dictionary with 'status' and 'errors' keys. 'status' will be 'rate_limit'. 'errors' will contain the key 'rate_limit'
+:response-example: {"status":"rate_limit","errors":{"rate_limit":["/{endpoint} may only be called 300 times per second. Please wait a second and try again"]}}
+include::partial$response.adoc[]
+
+== Updating
+:endpoint: v2/push/subscription_status
+[cols="1,3a", stripes="even"]
+|===
+| Endpoint
+| https://api.gocarrot.com/{endpoint}
+| Request Type
+| POST
+| Content-Type
+| application/json or application/x-www-form-urlencoded
+| Rate Limiting
+| 300 requests per second
+|===
+
+Description: The POST `{endpoint}` endpoint updates the push subscription status for a given player.
+
+The state will apply to all of a player's mobile devices. However please be aware that if the user has chosen to opt out of push notifications in their device settings or by denying the push notifications from the platform specific push notification permission prompt, this API *_cannot_* be used to cause a player to receive push notifications on that device.
+
+It is not necessary for the player to have any mobile devices to make this call.
+
+=== Required Parameters
+[cols="1,3a", stripes="even"]
+|===
+| game_id
+| Your Teak App ID
+| secret_key
+| Your Teak Server Secret
+| user_id
+| The Game Assigned Player ID of the player you are updating push subscription status for. This must match the value provided by the game client's Teak SDK integration.
+| state
+| One of 'opt_out' or 'opt_in'
+[cols="1,3a", stripes="even"]
+!===
+! opt_out
+! Mobile notifications should be sent to this player.
+! opt_in
+! Mobile notifications may be sent to this player.
+!===
+|===
+
+=== Success Response
+
+[cols="1,3a"]
+|===
+| Status Code
+| 200
+| Response Body
+| JSON dictionary with 'status', 'channel', 'user_id', 'previous_state', 'state', and 'reachable' keys.
+[cols="1,3a", stripes="even"]
+!===
+! status
+! 'ok'
+! channel
+! 'push'
+! user_id
+! The game assigned player id of the player opt out status was retrieved for.
+! previous_state
+! The previously set mobile notification subscription state for this player.
+! state
+! One of 'opt_out' or 'opt_in'. +
+'opt_out' indicates that the player has opted out of receiving push notifications through set preferences. +
+'opt_in' indicates that the player has not opted out of receiving push notifications.
+! reachable
+! true if the player has any registered mobile devices, otherwise false.
+!===
+| Example
+| [source, json, subs="attributes"]
+----
+{"status":"ok", "channel":"push", "user_id":"example_user", "previous_state": "opt_out", state":"opt_in", "reachable": false}
+----
+|===
+
+=== Error Responses
+
+==== Unknown State
+
+:response-code: 404
+:response-body: JSON dictionary with 'status' and 'errors' keys. 'status' will be 'error'. 'errors' will be a dictionary containing keys indicating which parameters were invalid, with values being an array of human readable error messages..
+:response-example: {"status":"error","errors":{"state":["Unknown state opted_in"]}}
+include::partial$response.adoc[]
+
+==== Player Not Found
+
+:response-code: 404
+:response-body: JSON dictionary with 'status' and 'errors' keys. 'status' will be 'error'. 'errors' will be a dictionary containing keys indicating which resources were not found, with values being an array of human readable error messages.
+:response-example: {"status":"error","errors":{"user_id":["No player with id foo"]}}
+include::partial$response.adoc[]
+
+==== Rate Limit Response
+
+:response-code: 429
+:response-body: JSON dictionary with 'status' and 'errors' keys. 'status' will be 'rate_limit'. 'errors' will contain the key 'rate_limit'
+:response-example: {"status":"rate_limit","errors":{"rate_limit":["/{endpoint} may only be called 300 times per second. Please wait a second and try again"]}}
+include::partial$response.adoc[]
