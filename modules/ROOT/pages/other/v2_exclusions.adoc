@@ -177,7 +177,7 @@ Description: The POST `{endpoint}` endpoint creates or updates an exclusion for 
 | secret_key
 | Your Teak Server Secret
 | user_id
-| The Game Assigned Player ID of the player you are retrieving the email address for. This must match the value provided by the game client's Teak SDK integration.
+| The Game Assigned Player ID of the player you are creating or updating an exclusion for. This must match the value provided by the game client's Teak SDK integration.
 |===
 
 === Optional Parameters
@@ -276,7 +276,7 @@ Description: The DELETE `{endpoint}` endpoint destroys an exclusion for a given 
 | secret_key
 | Your Teak Server Secret
 | user_id
-| The Game Assigned Player ID of the player you are retrieving the email address for. This must match the value provided by the game client's Teak SDK integration.
+| The Game Assigned Player ID of the player clearing an exclusion for. This must match the value provided by the game client's Teak SDK integration.
 |===
 
 === Success Response
