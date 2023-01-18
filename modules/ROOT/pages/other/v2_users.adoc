@@ -1,0 +1,75 @@
+= Player Removal
+:endpoint: v2/users
+
+From time to time a player may request that all of their data be deleted. The DELETE `{endpoint}` endpoint will remove all information Teak has about a player, while retaining anonymized usage data so that metrics such as daily active users and revenue may still be properly calculated. Data removal is complete immediately upon receiving a response from this endpoint, and cannot be undone.
+
+== Destroying
+[cols="1,3a", stripes="even"]
+|===
+| Endpoint
+| https://api.gocarrot.com/{endpoint}
+| Request Type
+| DELETE
+| Rate Limiting
+| 60 requests per second
+|===
+
+Description: The DELETE `{endpoint}` endpoint removes all information Teak has about a player while retaining anonymized usage data.
+
+=== Required Parameters
+[cols="1,3a", stripes="even"]
+|===
+| game_id
+| Your Teak App ID
+| secret_key
+| Your Teak Server Secret
+| user_id
+| The Game Assigned Player ID of the player you are removing data for.
+|===
+
+=== Success Response
+[cols="1,3a"]
+|===
+| Status Code
+| 200
+| Response Body
+| JSON dictionary with 'status' and 'user_id' keys.
+[cols="1,3a", stripes="even"]
+!===
+! status
+! One of 'ok' or 'user_not_found'. If the status is 'ok', Teak found the player record and removed all data for the player. If the status is 'user_not_found', Teak had no existing data for the given user_id for the game.
+! user_id
+! The Game Assigned Player ID data removal was requested for.
+!===
+| Example
+| [source, json, subs="attributes"]
+----
+{
+  "status":"ok",
+  "user_id":"player42"
+}
+----
+|===
+
+=== Error Responses
+
+==== Not Found
+
+:response-code: 404
+:response-body: JSON dictionary with 'status' and 'errors' keys. 'status' will be 'error'. 'errors' will be a dictionary containing keys indicating which resources were not found, with values being an array of human readable error messages.
+:response-example: {"status":"error","errors":{"game_id":["Unknown app id foo"]}}
+include::partial$response.adoc[]
+
+==== Invalid Parameter
+
+:response-code: 422
+:response-body: JSON dictionary with 'status' and 'errors' keys. 'status' will be 'error'. 'errors' will be a dictionary containing keys indicating which parameters were invalid, with values being an array of human readable error messages.
+:response-example: {"status":"error","errors":{"user_id":["must be present"]}}
+include::partial$response.adoc[]
+
+==== Rate Limit Response
+
+:response-code: 429
+:response-body: JSON dictionary with 'status' and 'errors' keys. 'status' will be 'rate_limit'. 'errors' will contain the key 'rate_limit'
+:response-example: {"status":"rate_limit","errors":{"rate_limit":["/{endpoint} may only be called 60 times per second. Please wait a second and try again"]}}
+include::partial$response.adoc[]
