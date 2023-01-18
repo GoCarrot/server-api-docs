@@ -6,3 +6,4 @@
 * xref:page$other/v2_email.adoc[Email Address Management]
 * xref:page$other/v2_push_subscription.adoc[Push Subscription Management]
 * xref:page$other/v2_desktop_subscription.adoc[Desktop Web Push Subscription Management]
+* xref:page$other/v2_exclusions.adoc[Exclusion Management]

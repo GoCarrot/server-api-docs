@@ -1,0 +1,330 @@
+= Exclusion Management
+
+An exclusion is an (optionally time limited) request to cease all marketing communication to a player. In response to an exclusion request, Teak will purge all methods Teak has of reaching a player, including push tokens, email address, and advertising identifiers. Until the exclusion is deleted or expires, Teak will not record any methods of reaching a player. Once an exclusion is deleted or expires, Teak will record methods of reaching a player, however previously known player contact methods will not be restored.
+
+Other player opt out preferences are not impacted by an exclusion.
+
+== Listing
+:endpoint: v2/exclusions
+[cols="1,3a", stripes="even"]
+|===
+| Endpoint
+| https://api.gocarrot.com/{endpoint}
+| Request Type
+| GET
+| Rate Limiting
+| 60 requests per second
+|===
+
+Description: The GET `{endpoint}` endpoint retrieves current exclusions for the game. Exclusions that have expired may or may not be included in the returned list.
+
+=== Required Parameters
+[cols="1,3a", stripes="even"]
+|===
+| game_id
+| Your Teak App ID
+| secret_key
+| Your Teak Server Secret
+|===
+
+=== Optional Parameters
+[cols="1,3a", stripes="even"]
+|===
+| limit
+| The number of exclusion records to return. Will be clamped to [1, 10000]. Defaults to 1,000
+| after
+| A pagination token from a previous call to {endpoint}
+|===
+
+=== Success Response
+[cols="1,3a"]
+|===
+| Status Code
+| 200
+| Response Body
+| JSON dictionary with 'status' and 'exclusions' keys. If pagination is possible, the dictionary will include a 'paging' key,
+[cols="1,3a", stripes="even"]
+!===
+! status
+! 'ok'
+! exclusions
+! An array of dictionaries with 'user_id', 'created_at', and 'expire_at' keys. +
+'user_id' is the game assigned player id the exclusion applies to. +
+'created_at' is the ISO8601 timestamp of when the exclusion was originally created. +
+'expire_at' is the ISO8601 timestamp of when the exclusion will expire. If null, the exclusion is indefinite.
+! paging
+! JSON dictonary with 'cursors' and 'next' keys. +
+'cursors' will be a dictionary containing an 'after' key, whose value can be passed as the 'after' parameter to {endpoint} to retrieve the next page. +
+'next' will be the full path and non-authorization query parameters to retrieve the next page.
+!===
+| Example
+| [source, json, subs="attributes"]
+----
+{
+  "status":"ok",
+  "exclusions": [
+    {"user_id": "player42", "created_at": "2021-01-23T19:28:32Z", "expire_at": null}
+  ],
+  "paging": {
+    "cursors": {"after": "MTU="},
+    "next": "/{endpoint}?limit=1&after=MTU="
+  }
+}
+----
+|===
+
+=== Error Responses
+
+==== Not Found
+
+:response-code: 404
+:response-body: JSON dictionary with 'status' and 'errors' keys. 'status' will be 'error'. 'errors' will be a dictionary containing keys indicating which resources were not found, with values being an array of human readable error messages.
+:response-example: {"status":"error","errors":{"game_id":["Unknown app id foo"]}}
+include::partial$response.adoc[]
+
+==== Rate Limit Response
+
+:response-code: 429
+:response-body: JSON dictionary with 'status' and 'errors' keys. 'status' will be 'rate_limit'. 'errors' will contain the key 'rate_limit'
+:response-example: {"status":"rate_limit","errors":{"rate_limit":["/{endpoint} may only be called 60 times per second. Please wait a second and try again"]}}
+include::partial$response.adoc[]
+
+== Reading
+:endpoint: v2/exclusions/:user_id
+[cols="1,3a", stripes="even"]
+|===
+| Endpoint
+| https://api.gocarrot.com/{endpoint}
+| Request Type
+| GET
+| Rate Limiting
+| 60 requests per second
+|===
+
+Description: The GET `{endpoint}` endpoint retrieves the current exclusion for the `user_id` in the request path.
+
+=== Required Parameters
+[cols="1,3a", stripes="even"]
+|===
+| game_id
+| Your Teak App ID
+| secret_key
+| Your Teak Server Secret
+|===
+
+=== Success Response
+[cols="1,3a"]
+|===
+| Status Code
+| 200
+| Response Body
+| JSON dictionary with 'status' and 'exclusion' keys.
+[cols="1,3a", stripes="even"]
+!===
+! status
+! 'ok'
+! exclusion
+! If the player has no exclusion, this will be null. Otherwise, a dictionary with 'user_id', 'created_at', and 'expire_at' keys. +
+'user_id' is the game assigned player id the exclusion applies to. +
+'created_at' is the ISO8601 timestamp of when the exclusion was originally created. +
+'expire_at' is the ISO8601 timestamp of when the exclusion will expire. If null, the exclusion is indefinite.
+!===
+| Example
+| [source, json, subs="attributes"]
+----
+{
+  "status":"ok",
+  "exclusion": {"user_id": "player42", "created_at": "2021-01-23T19:28:32Z", "expire_at": null}
+}
+----
+|===
+
+=== Error Responses
+
+==== Not Found
+
+:response-code: 404
+:response-body: JSON dictionary with 'status' and 'errors' keys. 'status' will be 'error'. 'errors' will be a dictionary containing keys indicating which resources were not found, with values being an array of human readable error messages.
+:response-example: {"status":"error","errors":{"game_id":["Unknown app id foo"]}}
+include::partial$response.adoc[]
+
+==== Rate Limit Response
+
+:response-code: 429
+:response-body: JSON dictionary with 'status' and 'errors' keys. 'status' will be 'rate_limit'. 'errors' will contain the key 'rate_limit'
+:response-example: {"status":"rate_limit","errors":{"rate_limit":["/{endpoint} may only be called 60 times per second. Please wait a second and try again"]}}
+include::partial$response.adoc[]
+
+== Creating or Updating
+:endpoint: v2/exclusions
+[cols="1,3a", stripes="even"]
+|===
+| Endpoint
+| https://api.gocarrot.com/{endpoint}
+| Request Type
+| POST
+| Rate Limiting
+| 60 requests per second
+|===
+
+Description: The POST `{endpoint}` endpoint creates or updates an exclusion for a given user_id.
+
+=== Required Parameters
+[cols="1,3a", stripes="even"]
+|===
+| game_id
+| Your Teak App ID
+| secret_key
+| Your Teak Server Secret
+| user_id
+| The Game Assigned Player ID of the player you are retrieving the email address for. This must match the value provided by the game client's Teak SDK integration.
+|===
+
+=== Optional Parameters
+[cols="1,3a", stripes="even"]
+|===
+| expire_at
+| An ISO8601 timestamp of when the exclusion should expire. If omitted in a creation or update request, the exclusion will not expire.
+|===
+
+=== Success Response
+[cols="1,3a"]
+|===
+| Status Code
+| 200
+| Response Body
+| JSON dictionary with 'status', 'action', 'exclusion', 'purged_channels', and 'previous_expire_at' keys.
+[cols="1,3a", stripes="even"]
+!===
+! status
+! 'ok'
+! action
+! 'created' if this is a newly created exclusion for the player, 'updated' if Teak updated an existing exclusion for the player.
+! exclusion
+! A dictionary with 'user_id', 'created_at', and 'expire_at' keys. +
+'user_id' is the game assigned player id the exclusion applies to. +
+'created_at' is the ISO8601 timestamp of when the exclusion was originally created. +
+'expire_at' is the ISO8601 timestamp of when the exclusion will expire. If null, the exclusion is indefinite.
+! purged_channels
+! A dictionary with 'push', 'desktop_push', 'email', and 'sms' keys. This should be ignored if 'action' is 'update'. +
+'push' will be true if the player was previously reachable by mobile push notifications. +
+'desktop_push' will be true if the player was previously reachable by desktop web or Facebook A2U notifications. +
+'email' will be false if the player was not previously reachable by email. Otherwise, it will be a dictionary with an 'email' key containing the player's previously known email address.
+'sms' will be false.
+! previous_expire_at
+! The ISO8601 timestamp the exclusion expired at before the update. If the exclusion is newly created, this will be null.
+!===
+| Example
+| [source, json, subs="attributes"]
+----
+{
+  "status":"ok",
+  "action": "created",
+  "exclusion": {"user_id": "player42", "created_at": "2021-01-23T19:28:32Z", "expire_at": "2021-07-23T19:28:32Z"},
+  "purged_channels": {
+    "push": true,
+    "desktop_push": false,
+    "email": {"email": "player42@example.com"},
+    "sms": false
+  },
+  "previous_expire_at": null
+}
+----
+|===
+
+=== Error Responses
+
+==== Not Found
+
+:response-code: 404
+:response-body: JSON dictionary with 'status' and 'errors' keys. 'status' will be 'error'. 'errors' will be a dictionary containing keys indicating which resources were not found, with values being an array of human readable error messages.
+:response-example: {"status":"error","errors":{"game_id":["Unknown app id foo"]}}
+include::partial$response.adoc[]
+
+==== Invalid Parameter
+
+:response-code: 422
+:response-body: JSON dictionary with 'status' and 'errors' keys. 'status' will be 'error'. 'errors' will be a dictionary containing keys indicating which parameters were invalid, with values being an array of human readable error messages.
+:response-example: {"status":"error","errors":{"user_id":["must be present"]}}
+include::partial$response.adoc[]
+
+==== Rate Limit Response
+
+:response-code: 429
+:response-body: JSON dictionary with 'status' and 'errors' keys. 'status' will be 'rate_limit'. 'errors' will contain the key 'rate_limit'
+:response-example: {"status":"rate_limit","errors":{"rate_limit":["/{endpoint} may only be called 60 times per second. Please wait a second and try again"]}}
+include::partial$response.adoc[]
+
+== Destroying
+[cols="1,3a", stripes="even"]
+|===
+| Endpoint
+| https://api.gocarrot.com/{endpoint}
+| Request Type
+| DELETE
+| Rate Limiting
+| 60 requests per second
+|===
+
+Description: The DELETE `{endpoint}` endpoint destroys an exclusion for a given user_id.
+
+=== Required Parameters
+[cols="1,3a", stripes="even"]
+|===
+| game_id
+| Your Teak App ID
+| secret_key
+| Your Teak Server Secret
+| user_id
+| The Game Assigned Player ID of the player you are retrieving the email address for. This must match the value provided by the game client's Teak SDK integration.
+|===
+
+=== Success Response
+[cols="1,3a"]
+|===
+| Status Code
+| 200
+| Response Body
+| JSON dictionary with 'status', 'action', 'exclusion', 'purged_channels', and 'previous_expire_at' keys.
+[cols="1,3a", stripes="even"]
+!===
+! status
+! 'ok'
+! exclusion
+! If the player had no exclusion, this will be null. Otherwise, a dictionary with 'user_id', 'created_at', and 'expire_at' keys. +
+'user_id' is the game assigned player id the exclusion applies to. +
+'created_at' is the ISO8601 timestamp of when the exclusion was originally created. +
+'expire_at' is the ISO8601 timestamp of when the exclusion will expire. If null, the exclusion is indefinite.
+!===
+| Example
+| [source, json, subs="attributes"]
+----
+{
+  "status":"ok",
+  "exclusion": {"user_id": "player42", "created_at": "2021-01-23T19:28:32Z", "expire_at": "2021-07-23T19:28:32Z"}
+}
+----
+|===
+
+=== Error Responses
+
+==== Not Found
+
+:response-code: 404
+:response-body: JSON dictionary with 'status' and 'errors' keys. 'status' will be 'error'. 'errors' will be a dictionary containing keys indicating which resources were not found, with values being an array of human readable error messages.
+:response-example: {"status":"error","errors":{"game_id":["Unknown app id foo"]}}
+include::partial$response.adoc[]
+
+==== Invalid Parameter
+
+:response-code: 422
+:response-body: JSON dictionary with 'status' and 'errors' keys. 'status' will be 'error'. 'errors' will be a dictionary containing keys indicating which parameters were invalid, with values being an array of human readable error messages.
+:response-example: {"status":"error","errors":{"user_id":["must be present"]}}
+include::partial$response.adoc[]
+
+==== Rate Limit Response
+
+:response-code: 429
+:response-body: JSON dictionary with 'status' and 'errors' keys. 'status' will be 'rate_limit'. 'errors' will contain the key 'rate_limit'
+:response-example: {"status":"rate_limit","errors":{"rate_limit":["/{endpoint} may only be called 60 times per second. Please wait a second and try again"]}}
+include::partial$response.adoc[]
