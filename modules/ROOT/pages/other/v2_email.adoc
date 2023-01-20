@@ -173,6 +173,13 @@ include::partial$response.adoc[]
 
 === Error Responses
 
+==== Player under an xref:page$other/v2_exclusions.adoc[Exclusion]
+
+:response-code: 422
+:response-body: JSON dictionary with 'status' and 'errors' keys. 'status' will be 'error'. 'errors' will be a dictionary containing keys indicating which resources were not found, with values being an array of human readable error messages.
+:response-example: {"status":"error","errors":{"user_id":["player42 is excluded from marketing communication"]}}
+include::partial$response.adoc[]
+
 ==== Not Found
 
 :response-code: 404
