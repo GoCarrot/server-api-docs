@@ -36,7 +36,7 @@ Description: The GET `{endpoint}` endpoint retrieves the current push subscripti
 | Status Code
 | 200
 | Response Body
-| JSON dictionary with 'status', 'channel', 'user_id', 'state', and 'reachable' keys.
+| JSON dictionary with 'status', 'channel', 'user_id', 'state', 'reachable', and 'categories' keys.
 [cols="1,3a", stripes="even"]
 !===
 ! status
@@ -51,11 +51,15 @@ Description: The GET `{endpoint}` endpoint retrieves the current push subscripti
 'opt_in' indicates that the player has not opted out of receiving push notifications.
 ! reachable
 ! true if the player has any registered mobile devices, otherwise false.
+! categories
+! A map of Opt Out Category identifiers to one of 'opt_out or 'opt_in'. +
+'opt_out' indidicates that the player has opted out of receiving push notifications for that category through set preferences. +
+'opt_in' indicates that the player has not opted out of receiving push notifications for that category.
 !===
 | Example
 | [source, json, subs="attributes"]
 ----
-{"status":"ok", "channel":"push", "user_id":"example_user", "state":"opt_in", "reachable": false}
+{"status":"ok", "channel":"push", "user_id":"example_user", "state":"opt_in", "reachable": false, "categories": {"sales": "opt_in", "events": "opt_out"}}
 ----
 |===
 
@@ -122,7 +126,7 @@ It is not necessary for the player to have any mobile devices to make this call.
 | Status Code
 | 200
 | Response Body
-| JSON dictionary with 'status', 'channel', 'user_id', 'previous_state', 'state', and 'reachable' keys.
+| JSON dictionary with 'status', 'channel', 'user_id', 'previous_state', 'state', 'reachable', and 'categories' keys.
 [cols="1,3a", stripes="even"]
 !===
 ! status
@@ -139,11 +143,15 @@ It is not necessary for the player to have any mobile devices to make this call.
 'opt_in' indicates that the player has not opted out of receiving push notifications.
 ! reachable
 ! true if the player has any registered mobile devices, otherwise false.
+! categories
+! A map of Opt Out Category identifiers to one of 'opt_out or 'opt_in'. +
+'opt_out' indidicates that the player has opted out of receiving push notifications for that category through set preferences. +
+'opt_in' indicates that the player has not opted out of receiving push notifications for that category.
 !===
 | Example
 | [source, json, subs="attributes"]
 ----
-{"status":"ok", "channel":"push", "user_id":"example_user", "previous_state": "opt_out", state":"opt_in", "reachable": false}
+{"status":"ok", "channel":"push", "user_id":"example_user", "previous_state": "opt_out", state":"opt_in", "reachable": false, "categories": {"sales": "opt_in", "events": "opt_out"}}
 ----
 |===
 

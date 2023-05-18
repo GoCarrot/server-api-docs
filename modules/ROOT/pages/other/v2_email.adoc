@@ -79,7 +79,7 @@ Description: The GET `{endpoint}` endpoint retrieves the current subscription st
 | Status Code
 | 200
 | Response Body
-| JSON dictionary with 'status', 'channel', 'state', 'delivery_fault', and 'email' keys.
+| JSON dictionary with 'status', 'channel', 'state', 'delivery_fault', 'email', and 'categories' keys.
 [cols="1,3a", stripes="even"]
 !===
 ! status
@@ -96,11 +96,15 @@ Description: The GET `{endpoint}` endpoint retrieves the current subscription st
 ! true if an error was encountered attempting to send to the email address, otherwise false
 ! email
 ! The email address the subscription state was retrieved for.
+! categories
+! A map of Opt Out Category identifiers to one of 'opt_out or 'opt_in'. +
+'opt_out' indidicates that the address has opted out of receiving emailsfor that category. +
+'opt_in' indicates that the address has not opted out of receiving emails for that category.
 !===
 | Example
 | [source, json, subs="attributes"]
 ----
-{"status":"ok", "channel": "email", "state": "available", "delivery_fault": false, "email":"eve@example.com"}
+{"status":"ok", "channel": "email", "state": "available", "delivery_fault": false, "email":"eve@example.com", "categories": {"sales": "opt_in", "events": "opt_out"}}
 ----
 |===
 
@@ -246,7 +250,7 @@ Requests to update a `spam_report` state to `opt_out` will be ignored.
 | Status Code
 | 200
 | Response Body
-| JSON dictionary with 'status', 'channel', 'state', 'previous_state', 'delivery_fault', and 'email' keys.
+| JSON dictionary with 'status', 'channel', 'state', 'previous_state', 'delivery_fault', 'email', and 'categories' keys.
 [cols="1,3a", stripes="even"]
 !===
 ! status
@@ -261,11 +265,15 @@ Requests to update a `spam_report` state to `opt_out` will be ignored.
 ! true if an error was encountered attempting to send to the email address, otherwise false
 ! email
 ! The email address the subscription state was updated for.
+! categories
+! A map of Opt Out Category identifiers to one of 'opt_out or 'opt_in'. +
+'opt_out' indidicates that the address has opted out of receiving emailsfor that category. +
+'opt_in' indicates that the address has not opted out of receiving emails for that category.
 !===
 | Example
 | [source, json, subs="attributes"]
 ----
-{"status":"ok", "channel": "email", "previous_state": "opt_out", state": "available", "delivery_fault": false, "email":"eve@example.com"}
+{"status":"ok", "channel": "email", "previous_state": "opt_out", state": "available", "delivery_fault": false, "email":"eve@example.com", "categories": {"sales": "opt_in", "events": "opt_out"}}
 ----
 |===
 
