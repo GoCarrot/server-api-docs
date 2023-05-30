@@ -179,3 +179,102 @@ include::partial$response.adoc[]
 :response-body: JSON dictionary with 'status' and 'errors' keys. 'status' will be 'rate_limit'. 'errors' will contain the key 'rate_limit'
 :response-example: {"status":"rate_limit","errors":{"rate_limit":["/{endpoint} may only be called 300 times per second. Please wait a second and try again"]}}
 include::partial$response.adoc[]
+
+== Category Update
+:endpoint: v2/desktop_push/subscription_status/:category_identifier
+[cols="1,3a", stripes="even"]
+|===
+| Endpoint
+| https://api.gocarrot.com/{endpoint}
+| Request Type
+| POST
+| Content-Type
+| application/json or application/x-www-form-urlencoded
+| Rate Limiting
+| 300 requests per second
+|===
+
+Description: The POST `{endpoint}` endpoint updates the desktop web push subscription status for a given player and Opt Out Category.
+
+The state will apply to all of a player's desktop devices and browsers. However please be aware that if the user has chosen to opt out of desktop web notifications in their browser settings or by denying notifications from the browser specific push notification permission prompt, this API *_cannot_* be used to cause a player to receive desktop web notifications on that device or browser.
+
+It is not necessary for the player to have any desktop devices to make this call.
+
+=== Required Parameters
+[cols="1,3a", stripes="even"]
+|===
+| category_identifier
+| Note that this is a path parameter. The identifier of the opt out category the player's desktop web push subscription status is being updated for.
+| game_id
+| Your Teak App ID
+| secret_key
+| Your Teak Server Secret
+| user_id
+| The Game Assigned Player ID of the player you are updating desktop web push subscription status for. This must match the value provided by the game client's Teak SDK integration.
+| state
+| One of 'opt_out' or 'opt_in'
+[cols="1,3a", stripes="even"]
+!===
+! opt_out
+! Mobile notifications should be sent to this player.
+! opt_in
+! Mobile notifications may be sent to this player.
+!===
+|===
+
+=== Success Response
+
+[cols="1,3a"]
+|===
+| Status Code
+| 200
+| Response Body
+| JSON dictionary with 'status', 'channel', 'user_id', 'previous_state', 'state', 'reachable', and 'category' keys.
+[cols="1,3a", stripes="even"]
+!===
+! status
+! 'ok'
+! channel
+! 'push'
+! user_id
+! The game assigned player id of the player opt out status was retrieved for.
+! previous_state
+! The previously set desktop web notification subscription state for this player and Opt Out Category.
+! state
+! One of 'opt_out' or 'opt_in'. +
+'opt_out' indicates that the player has opted out of receiving desktop web push notifications through set preferences for this Opt Out Category. +
+'opt_in' indicates that the player has not opted out of receiving desktop web push notifications for this Opt Out Category.
+! reachable
+! true if the player has any registered desktop web push devices or browsers, otherwise false.
+! category
+! The identifier of the Opt Out Category that the desktop web push subscription status was updated for.
+!===
+| Example
+| [source, json, subs="attributes"]
+----
+{"status":"ok", "channel":"desktop_push", "user_id":"example_user", "previous_state": "opt_out", state":"opt_in", "reachable": false, "category": "sales"}
+----
+|===
+
+=== Error Responses
+
+==== Unknown State
+
+:response-code: 404
+:response-body: JSON dictionary with 'status' and 'errors' keys. 'status' will be 'error'. 'errors' will be a dictionary containing keys indicating which parameters were invalid, with values being an array of human readable error messages..
+:response-example: {"status":"error","errors":{"state":["Unknown state opted_in"]}}
+include::partial$response.adoc[]
+
+==== Player Not Found
+
+:response-code: 404
+:response-body: JSON dictionary with 'status' and 'errors' keys. 'status' will be 'error'. 'errors' will be a dictionary containing keys indicating which resources were not found, with values being an array of human readable error messages.
+:response-example: {"status":"error","errors":{"user_id":["No player with id foo"]}}
+include::partial$response.adoc[]
+
+==== Rate Limit Response
+
+:response-code: 429
+:response-body: JSON dictionary with 'status' and 'errors' keys. 'status' will be 'rate_limit'. 'errors' will contain the key 'rate_limit'
+:response-example: {"status":"rate_limit","errors":{"rate_limit":["/{endpoint} may only be called 300 times per second. Please wait a second and try again"]}}
+include::partial$response.adoc[]

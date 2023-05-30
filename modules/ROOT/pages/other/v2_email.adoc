@@ -273,7 +273,103 @@ Requests to update a `spam_report` state to `opt_out` will be ignored.
 | Example
 | [source, json, subs="attributes"]
 ----
-{"status":"ok", "channel": "email", "previous_state": "opt_out", state": "available", "delivery_fault": false, "email":"eve@example.com", "categories": {"sales": "opt_in", "events": "opt_out"}}
+{"status":"ok", "channel": "email", "previous_state": "opt_out", "state": "available", "delivery_fault": false, "email":"eve@example.com", "categories": {"sales": "opt_in", "events": "opt_out"}}
+----
+|===
+
+=== Error Responses
+
+==== Unknown State
+
+:response-code: 404
+:response-body: JSON dictionary with 'status' and 'errors' keys. 'status' will be 'error'. 'errors' will be a dictionary containing keys indicating which parameters were invalid, with values being an array of human readable error messages..
+:response-example: {"status":"error","errors":{"state":["Unknown state opted_in"]}}
+include::partial$response.adoc[]
+
+==== Invalid email address
+
+:response-code: 422
+:response-body: JSON dictionary with 'status' and 'errors' keys. 'status' will be 'error'. 'errors' will be a dictionary containing keys indicating which parameters were invalid, with values being an array of human readable error messages.
+:response-example: {"status":"error","errors":{"email":["Must be a valid email address"]}}
+include::partial$response.adoc[]
+
+==== Rate Limit Response
+
+:response-code: 429
+:response-body: JSON dictionary with 'status' and 'errors' keys. 'status' will be 'rate_limit'. 'errors' will contain the key 'rate_limit'
+:response-example: {"status":"rate_limit","errors":{"rate_limit":["/{endpoint} may only be called 300 times per second. Please wait a second and try again"]}}
+include::partial$response.adoc[]
+
+== Updating Category Subscription Status
+:endpoint: v2/email/subscription_status/:category_identifier
+[cols="1,3a", stripes="even"]
+|===
+| Endpoint
+| https://api.gocarrot.com/{endpoint}
+| Request Type
+| POST
+| Content-Type
+| application/json or application/x-www-form-urlencoded
+| Rate Limiting
+| 300 requests per second
+|===
+
+Description: The POST `{endpoint}` endpoint updates the current subscription status for a given email address and Opt Out Category.
+
+It is not necessary for Teak to have previously seen the given email address for the game. Changes made to email addresses not previously
+seen will apply to the address as soon as it is associated with a player.
+
+=== Required Parameters
+[cols="1,3a", stripes="even"]
+|===
+| category_identifier
+| Note that this is a path parameter. The identifier of the opt out category the email's subscription status is being updated for.
+| game_id
+| Your Teak App ID
+| secret_key
+| Your Teak Server Secret
+| email
+| An email address.
+| state
+| One of 'opt_out' or 'opt_in'
+[cols="1,3a", stripes="even"]
+!===
+! opt_out
+! No emails should be sent to this email address for this Opt Out Category.
+! opt_in
+! Emails may be sent to this email address for this Opt Out Category.
+!===
+|===
+
+=== Success Response
+
+[cols="1,3a"]
+|===
+| Status Code
+| 200
+| Response Body
+| JSON dictionary with 'status', 'channel', 'state', 'previous_state', 'delivery_fault', 'email', and 'category' keys.
+[cols="1,3a", stripes="even"]
+!===
+! status
+! 'ok'
+! channel
+! 'email'
+! previous_state
+! The previous subscription status state for this email address and Opt Oute Category. One of 'opt_out' or 'opt_in'
+! state
+! The newly set state. One of 'opt_out' or 'opt_in'
+! delivery_fault
+! true if an error was encountered attempting to send to the email address, otherwise false
+! email
+! The email address the subscription state was updated for.
+! category
+! The identifier of the Opt Out Category that the email subscription status was updated for.
+!===
+| Example
+| [source, json, subs="attributes"]
+----
+{"status":"ok", "channel": "email", "previous_state": "opt_out", "state": "opt_in", "delivery_fault": false, "email":"eve@example.com", "category": "sales"}
 ----
 |===
 
