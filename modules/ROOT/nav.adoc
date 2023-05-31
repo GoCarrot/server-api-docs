@@ -3,6 +3,7 @@
 * xref:page$rewards/endpoint.adoc[Teak Reward Endpoint]
 * xref:page$rewards/claiming.adoc[Claiming Teak Rewards]
 * xref:page$other/v2_purchase.adoc[Purchase Reporting]
+* xref:page$other/v2_opt_out_categories.adoc[Opt Out Category Management]
 * xref:page$other/v2_email.adoc[Email Address Management]
 * xref:page$other/v2_push_subscription.adoc[Push Subscription Management]
 * xref:page$other/v2_desktop_subscription.adoc[Desktop Web Push Subscription Management]

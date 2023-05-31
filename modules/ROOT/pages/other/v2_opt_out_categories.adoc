@@ -1,0 +1,397 @@
+= Opt Out Category Management
+
+An Opt Out Category is a grouping of Messages that players may independently opt out of receiving. For example, a player could choose to opt out of receiving messaging regarding sales, but continue to receive messaging regarding events, if the game has separate Opt Out Categories for sales and events.
+
+Opt Out Categories are shared across all messaging channels, but player preferences are managed for each channel. For example, if you create a Sale Opt Out Category, then players may opt out of receiving Sale messaging on push, desktop web push, and email separately.
+
+Opt Out Categories are additionally mapped on a 1 to 1 basis to Android Notification Channels. On Android, players may use the native settings application to manage their notification preferences, in addition to any in-game preference management you provide.
+
+Please note that on Android any configured sound or badge display state cannot be modified once the corresponding Android Notification Channel has been created on a device. While you may update those settings for an Opt Out Category, they will not take effect on existing installs until the player uninstalls and reinstalls the application.
+
+== Listing
+:endpoint: v2/opt_out_categories
+[cols="1,3a", stripes="even"]
+|===
+| Endpoint
+| https://api.gocarrot.com/{endpoint}
+| Request Type
+| GET
+| Rate Limiting
+| 5 requests per second
+|===
+
+Description: The GET `{endpoint}` endpoint retreives all Opt Out Categories for the game.
+
+=== Required Parameters
+[cols="1,3a", stripes="even"]
+|===
+| game_id
+| Your Teak App ID
+| secret_key
+| Your Teak Server Secret
+|===
+
+=== Success Response
+[cols="1,3a"]
+|===
+| Status Code
+| 200
+| Response Body
+| JSON dictionary with 'status' and 'opt_out_categories' keys.
+[cols="1,3a", stripes="even"]
+!===
+! status
+! 'ok'
+! opt_out_categories
+! An array of dictionaries with 'game_id', 'identifier', 'name', 'description', 'ios_sound_file', 'android_sound_file', 'show_badge', 'archived', 'created_at', and 'updated_at' keys. +
+'game_id' is the Teak App ID for the game the Opt Out Category is for. +
+'identifier' is the assigned identifier for the Opt Out Category, for use in all APIs. This is not displayed to players. +
+'name' is the player visible name of the Opt Out Category. +
+'description' is the player visible description of the Opt Out Category. +
+'ios_sound_file' is the default sound that should be played on iOS devices when a push notififcation with this Opt Out Category is received. This may be overridden on a per notification basis. +
+'android_sound_file' is the sound that should be played on Android devices when a push notification with this Opt Out Category is received. This may _not_ be changed. +
+'show_badge' is a boolean indicating if a badge should be shown when a push notification with this Opt Out Category is received on a device. This may be overridden on a per notification basis on iOS. This may _not_ be changed on Android. +
+'archived' is a boolean indicating if this Opt Out Category is archived. Archived categories will not be displayed when setting up new Messages, will not be shown on the Email opt out page, will not be created as Android Notification Channels for new installs, and will not be provided to the game client. +
+'created_at' is the ISO8601 timestamp indicating when this Opt Out Category was originally created.
+'updated_at' is the ISO860 timestamp indicating when this Opt Out Category was last updated.
+!===
+| Example
+| [source, json, subs="attributes"]
+----
+{
+  "status":"ok",
+  "opt_out_categories": [
+    {
+      "identifier": "sales",
+      "name": "Sales",
+      "description": "Hear about our latest special offers and never miss out!",
+      "ios_sound_file": "cash_register.wav",
+      "android_sound_file": "cash_register.m4a",
+      "show_badge": true,
+      "archived": false,
+      "created_at": "2021-01-23T19:28:32Z",
+      "updated_at": "2021-05-21T11:23:12Z"
+    }
+  ]
+}
+----
+|===
+
+=== Error Responses
+
+==== Not Found
+
+:response-code: 404
+:response-body: JSON dictionary with 'status' and 'errors' keys. 'status' will be 'error'. 'errors' will be a dictionary containing keys indicating which resources were not found, with values being an array of human readable error messages.
+:response-example: {"status":"error","errors":{"game_id":["Unknown app id foo"]}}
+include::partial$response.adoc[]
+
+==== Rate Limit Response
+
+:response-code: 429
+:response-body: JSON dictionary with 'status' and 'errors' keys. 'status' will be 'rate_limit'. 'errors' will contain the key 'rate_limit'
+:response-example: {"status":"rate_limit","errors":{"rate_limit":["/{endpoint} may only be called 5 times per second. Please wait a second and try again"]}}
+include::partial$response.adoc[]
+
+== Reading
+:endpoint: v2/opt_out_categories/:identifier
+[cols="1,3a", stripes="even"]
+|===
+| Endpoint
+| https://api.gocarrot.com/{endpoint}
+| Request Type
+| GET
+| Rate Limiting
+| 5 requests per second
+|===
+
+Description: The GET `{endpoint}` endpoint retrieves the current configuration for the Opt Out Category with the identifier `identifier` in the request path.
+
+=== Required Parameters
+[cols="1,3a", stripes="even"]
+|===
+| game_id
+| Your Teak App ID
+| secret_key
+| Your Teak Server Secret
+|===
+
+=== Success Response
+[cols="1,3a"]
+|===
+| Status Code
+| 200
+| Response Body
+| JSON dictionary with 'status' and 'opt_out_category' keys.
+[cols="1,3a", stripes="even"]
+!===
+! status
+! 'ok'
+! opt_out_category
+! A dictionary with 'game_id', 'identifier', 'name', 'description', 'ios_sound_file', 'android_sound_file', 'show_badge', 'archived', 'created_at', and 'updated_at' keys. +
+'game_id' is the Teak App ID for the game the Opt Out Category is for. +
+'identifier' is the assigned identifier for the Opt Out Category, for use in all APIs. This is not displayed to players. +
+'name' is the player visible name of the Opt Out Category. +
+'description' is the player visible description of the Opt Out Category. +
+'ios_sound_file' is the default sound that should be played on iOS devices when a push notififcation with this Opt Out Category is received. This may be overridden on a per notification basis. +
+'android_sound_file' is the sound that should be played on Android devices when a push notification with this Opt Out Category is received. This may _not_ be changed. +
+'show_badge' is a boolean indicating if a badge should be shown when a push notification with this Opt Out Category is received on a device. This may be overridden on a per notification basis on iOS. This may _not_ be changed on Android. +
+'archived' is a boolean indicating if this Opt Out Category is archived. Archived categories will not be displayed when setting up new Messages, will not be shown on the Email opt out page, will not be created as Android Notification Channels for new installs, and will not be provided to the game client. +
+'created_at' is the ISO8601 timestamp indicating when this Opt Out Category was originally created.
+'updated_at' is the ISO860 timestamp indicating when this Opt Out Category was last updated.
+!===
+| Example
+| [source, json, subs="attributes"]
+----
+{
+  "status":"ok",
+  "opt_out_category": {
+    "identifier": "sales",
+    "name": "Sales",
+    "description": "Hear about our latest special offers and never miss out!",
+    "ios_sound_file": "cash_register.wav",
+    "android_sound_file": "cash_register.m4a",
+    "show_badge": true,
+    "archived": false,
+    "created_at": "2021-01-23T19:28:32Z",
+    "updated_at": "2021-05-21T11:23:12Z"
+  }
+}
+----
+|===
+
+=== Error Responses
+
+==== Not Found
+
+:response-code: 404
+:response-body: JSON dictionary with 'status' and 'errors' keys. 'status' will be 'error'. 'errors' will be a dictionary containing keys indicating which resources were not found, with values being an array of human readable error messages.
+:response-example: {"status":"error","errors":{"game_id":["Unknown app id foo"]}}
+include::partial$response.adoc[]
+
+==== Rate Limit Response
+
+:response-code: 429
+:response-body: JSON dictionary with 'status' and 'errors' keys. 'status' will be 'rate_limit'. 'errors' will contain the key 'rate_limit'
+:response-example: {"status":"rate_limit","errors":{"rate_limit":["/{endpoint} may only be called 5 times per second. Please wait a second and try again"]}}
+include::partial$response.adoc[]
+
+== Creating
+:endpoint: v2/opt_out_categories
+[cols="1,3a", stripes="even"]
+|===
+| Endpoint
+| https://api.gocarrot.com/{endpoint}
+| Request Type
+| POST
+| Rate Limiting
+| 5 requests per second
+|===
+
+Description: The POST `{endpoint}` endpoint creates a new Opt Out Category.
+
+=== Required Parameters
+[cols="1,3a", stripes="even"]
+|===
+| game_id
+| Your Teak App ID
+| secret_key
+| Your Teak Server Secret
+| identifier
+| The identifier to use for the Opt Out Category in all subsequent API calls. Must be shorter than 32 charaters. Must be unique. May not be changed. May not start with 'teak'. May not be 'default' or 'miscellaneous'.
+| name
+| The player visible name of the Opt Out Category. Must be shorter than 32 characters.
+|===
+
+=== Optional Parameters
+[cols="1,3a", stripes="even"]
+|===
+| description
+| The player visible description of the Opt Out Category.
+| ios_sound_file
+| The default sound that should be played on iOS devices when a push notififcation with this Opt Out Category is received. This may be overridden on a per notification basis.
+| android_sound_file
+| The sound that should be played on Android devices when a push notification with this Opt Out Category is received. This may _not_ be changed.
+| show_badge
+| A boolean indicating if a badge should be shown when a push notification with this Opt Out Category is received on a device. This may be overridden on a per notification basis on iOS. This may _not_ be changed on Android.
+| archived
+| A boolean indicating if this Opt Out Category is archived. Archived categories will not be displayed when setting up new Messages, will not be shown on the Email opt out page, will not be created as Android Notification Channels for new installs, and will not be provided to the game client.
+|===
+
+=== Success Response
+[cols="1,3a"]
+|===
+| Status Code
+| 200
+| Response Body
+| JSON dictionary with 'status', 'action', 'exclusion', 'purged_channels', and 'previous_expire_at' keys.
+[cols="1,3a", stripes="even"]
+!===
+! status
+! 'ok'
+! action
+! 'created' if this is a newly created exclusion for the player, 'updated' if Teak updated an existing exclusion for the player.
+! opt_out_category
+! A dictionary with 'game_id', 'identifier', 'name', 'description', 'ios_sound_file', 'android_sound_file', 'show_badge', 'archived', 'created_at', and 'updated_at' keys. +
+'game_id' is the Teak App ID for the game the Opt Out Category is for. +
+'identifier' is the assigned identifier for the Opt Out Category, for use in all APIs. This is not displayed to players. +
+'name' is the player visible name of the Opt Out Category. +
+'description' is the player visible description of the Opt Out Category. +
+'ios_sound_file' is the default sound that should be played on iOS devices when a push notififcation with this Opt Out Category is received. This may be overridden on a per notification basis. +
+'android_sound_file' is the sound that should be played on Android devices when a push notification with this Opt Out Category is received. This may _not_ be changed. +
+'show_badge' is a boolean indicating if a badge should be shown when a push notification with this Opt Out Category is received on a device. This may be overridden on a per notification basis on iOS. This may _not_ be changed on Android. +
+'archived' is a boolean indicating if this Opt Out Category is archived. Archived categories will not be displayed when setting up new Messages, will not be shown on the Email opt out page, will not be created as Android Notification Channels for new installs, and will not be provided to the game client. +
+'created_at' is the ISO8601 timestamp indicating when this Opt Out Category was originally created.
+'updated_at' is the ISO860 timestamp indicating when this Opt Out Category was last updated.
+!===
+| Example
+| [source, json, subs="attributes"]
+----
+{
+  "status":"ok",
+  "opt_out_category": {
+    "identifier": "sales",
+    "name": "Sales",
+    "description": "Hear about our latest special offers and never miss out!",
+    "ios_sound_file": "cash_register.wav",
+    "android_sound_file": "cash_register.m4a",
+    "show_badge": true,
+    "archived": false,
+    "created_at": "2021-01-23T19:28:32Z",
+    "updated_at": "2021-05-21T11:23:12Z"
+  }
+}
+----
+|===
+
+=== Error Responses
+
+==== Not Found
+
+:response-code: 404
+:response-body: JSON dictionary with 'status' and 'errors' keys. 'status' will be 'error'. 'errors' will be a dictionary containing keys indicating which resources were not found, with values being an array of human readable error messages.
+:response-example: {"status":"error","errors":{"game_id":["Unknown app id foo"]}}
+include::partial$response.adoc[]
+
+==== Invalid Parameter
+
+:response-code: 422
+:response-body: JSON dictionary with 'status' and 'errors' keys. 'status' will be 'error'. 'errors' will be a dictionary containing keys indicating which parameters were invalid, with values being an array of human readable error messages.
+:response-example: {"status":"error","errors":{"identifier":["must be present"]}}
+include::partial$response.adoc[]
+
+==== Rate Limit Response
+
+:response-code: 429
+:response-body: JSON dictionary with 'status' and 'errors' keys. 'status' will be 'rate_limit'. 'errors' will contain the key 'rate_limit'
+:response-example: {"status":"rate_limit","errors":{"rate_limit":["/{endpoint} may only be called 5 times per second. Please wait a second and try again"]}}
+include::partial$response.adoc[]
+
+== Updating
+:endpoint: v2/opt_out_categories/:identifier
+[cols="1,3a", stripes="even"]
+|===
+| Endpoint
+| https://api.gocarrot.com/{endpoint}
+| Request Type
+| PUT
+| Rate Limiting
+| 5 requests per second
+|===
+
+Description: The PUT `{endpoint}` endpoint updates settings for the Opt Out Category with the identifier `identifier` in the request path.
+
+=== Required Parameters
+[cols="1,3a", stripes="even"]
+|===
+| game_id
+| Your Teak App ID
+| secret_key
+| Your Teak Server Secret
+|===
+
+=== Optional Parameters
+[cols="1,3a", stripes="even"]
+|===
+| name
+| The player visible name of the Opt Out Category. Must be shorter than 32 characters.
+| description
+| The player visible description of the Opt Out Category.
+| ios_sound_file
+| The default sound that should be played on iOS devices when a push notififcation with this Opt Out Category is received. This may be overridden on a per notification basis.
+| android_sound_file
+| The sound that should be played on Android devices when a push notification with this Opt Out Category is received. This may _not_ be changed.
+| show_badge
+| A boolean indicating if a badge should be shown when a push notification with this Opt Out Category is received on a device. This may be overridden on a per notification basis on iOS. This may _not_ be changed on Android.
+| archived
+| A boolean indicating if this Opt Out Category is archived. Archived categories will not be displayed when setting up new Messages, will not be shown on the Email opt out page, will not be created as Android Notification Channels for new installs, and will not be provided to the game client.
+|===
+
+=== Success Response
+[cols="1,3a"]
+|===
+| Status Code
+| 200
+| Response Body
+| JSON dictionary with 'status', 'action', 'exclusion', 'purged_channels', and 'previous_expire_at' keys.
+[cols="1,3a", stripes="even"]
+!===
+! status
+! 'ok'
+! action
+! 'created' if this is a newly created exclusion for the player, 'updated' if Teak updated an existing exclusion for the player.
+! opt_out_category
+! A dictionary with 'game_id', 'identifier', 'name', 'description', 'ios_sound_file', 'android_sound_file', 'show_badge', 'archived', 'created_at', and 'updated_at' keys. +
+'game_id' is the Teak App ID for the game the Opt Out Category is for. +
+'identifier' is the assigned identifier for the Opt Out Category, for use in all APIs. This is not displayed to players. +
+'name' is the player visible name of the Opt Out Category. +
+'description' is the player visible description of the Opt Out Category. +
+'ios_sound_file' is the default sound that should be played on iOS devices when a push notififcation with this Opt Out Category is received. This may be overridden on a per notification basis. +
+'android_sound_file' is the sound that should be played on Android devices when a push notification with this Opt Out Category is received. This may _not_ be changed. +
+'show_badge' is a boolean indicating if a badge should be shown when a push notification with this Opt Out Category is received on a device. This may be overridden on a per notification basis on iOS. This may _not_ be changed on Android. +
+'archived' is a boolean indicating if this Opt Out Category is archived. Archived categories will not be displayed when setting up new Messages, will not be shown on the Email opt out page, will not be created as Android Notification Channels for new installs, and will not be provided to the game client. +
+'created_at' is the ISO8601 timestamp indicating when this Opt Out Category was originally created.
+'updated_at' is the ISO860 timestamp indicating when this Opt Out Category was last updated.
+!===
+| Example
+| [source, json, subs="attributes"]
+----
+{
+  "status":"ok",
+  "opt_out_category": {
+    "identifier": "sales",
+    "name": "Sales",
+    "description": "Hear about our latest special offers and never miss out!",
+    "ios_sound_file": "cash_register.wav",
+    "android_sound_file": "cash_register.m4a",
+    "show_badge": true,
+    "archived": false,
+    "created_at": "2021-01-23T19:28:32Z",
+    "updated_at": "2021-05-21T11:23:12Z"
+  }
+}
+----
+|===
+
+=== Error Responses
+
+==== Not Found
+
+:response-code: 404
+:response-body: JSON dictionary with 'status' and 'errors' keys. 'status' will be 'error'. 'errors' will be a dictionary containing keys indicating which resources were not found, with values being an array of human readable error messages.
+:response-example: {"status":"error","errors":{"game_id":["Unknown app id foo"]}}
+include::partial$response.adoc[]
+
+==== Invalid Parameter
+
+:response-code: 422
+:response-body: JSON dictionary with 'status' and 'errors' keys. 'status' will be 'error'. 'errors' will be a dictionary containing keys indicating which parameters were invalid, with values being an array of human readable error messages.
+:response-example: {"status":"error","errors":{"name":["must be shorter than 32 characters"]}}
+include::partial$response.adoc[]
+
+==== Rate Limit Response
+
+:response-code: 429
+:response-body: JSON dictionary with 'status' and 'errors' keys. 'status' will be 'rate_limit'. 'errors' will contain the key 'rate_limit'
+:response-example: {"status":"rate_limit","errors":{"rate_limit":["/{endpoint} may only be called 5 times per second. Please wait a second and try again"]}}
+include::partial$response.adoc[]
