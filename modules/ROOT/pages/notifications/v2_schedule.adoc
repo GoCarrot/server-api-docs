@@ -40,6 +40,8 @@ This endpoint is appropriate for use when users whom the notification should be 
 |===
 | send_time
 | The time in UTC at which to deliver the notification. Must be in ISO8601 format, e.g. "2018-08-23 17:00:00". Must be within 30 days from the time the call is made. If omitted, or if set to a past time, notifications will be scheduled to deliver immediately.
+| personalization_data
+| A map of Game Assigned Player IDs to a map of string key/value pairs. The key/value pairs will be available to be templated into the sent notification. See xref:usage::custom-tags.adoc#_local_notification_tags[Local Notification Tags, window=_blank] for more information.
 |===
 
 == Success Response
