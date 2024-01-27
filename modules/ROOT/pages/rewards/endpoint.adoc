@@ -2,10 +2,10 @@
 
 == What is the Teak Reward Endpoint?
 
-To issue virtual currency or virtual items in response to a user clicking on a notification, social post, or Teak Reward Link you must **set up a server endpoint that can receive a form POST request** from us. This server side endpoint must:
+To issue virtual currency or virtual items in response to a player clicking on a notification, social post, or Teak Reward Link you must **set up a server endpoint that can receive a form POST request** from Teak. This server side endpoint must:
 
 * Validate the request
-* Issue the specified reqrds to the customer
+* Issue the specified rewards to the player
 * Respond to the request and indicate success or failure
 
 === The Request
@@ -54,19 +54,9 @@ signature = CGI.escape(Base64.encode64(OpenSSL::HMAC.digest(OpenSSL::Digest::Dig
 
 == Validating the request
 
-To validate the request we recommend computing the signature using the above method and comparing it to the signature passed in by Teak. If the signatures do not match, then the request is invalid and should be denied.
+To validate the request your server must compute the signature using the above method and compare it to the signature passed in by Teak. If the signatures do not match, then the request is invalid and should be denied.
 
-Alternatively you can check that the request originated from one of the following IP addresses
-
-* 54.174.233.10
-* 54.173.237.66
-* 54.86.179.227
-* 54.172.184.138
-* 54.152.126.152
-
-This list may be updated at any time without notice. As such, we **strongly recommend** that you perform signature validation and not IP address based validation.
-
-Furthermore you should confirm that the user has not already been granted a reward with the given event_id. In the event of a network failure it is possible that Teak will attempt to retry granting the reward. When doing so all parameters, including event_id, will be identical. If the user has already been granted a reward with the given event_id simply return a successful response and do no further processing
+Furthermore you should confirm that the user has not already been granted a reward with the given event_id. In the event of a network failure it is possible that Teak will attempt to retry granting the reward. When doing so all parameters, including event_id, will be identical. If the user has already been granted a reward with the given event_id return a successful response and do no further processing
 
 == Issuing the Reward
 
