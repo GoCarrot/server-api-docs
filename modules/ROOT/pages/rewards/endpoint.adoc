@@ -2,33 +2,33 @@
 
 == What is the Teak Reward Endpoint?
 
-To issue virtual currency or virtual items in response to a player clicking on a notification, social post, or Teak Reward Link you must **set up a server endpoint that can receive a form POST request** from Teak. This server side endpoint must:
+To issue virtual currency or items in response to a player clicking on a notification, email, social post, or Teak Link, you must **set up a server endpoint that can receive a form POST request** from Teak. This server-side endpoint must:
 
 * Validate the request
 * Issue the specified rewards to the player
 * Respond to the request and indicate success or failure
 
-=== The Request
+== The Request
 
-Teak will issue a POST request to a specified endpoint. There is only one endpoint per app, and it is set as the "Server Enpoint" under "Server to Server Communication" in your app's settings.
+Teak will issue a POST request to a specified endpoint. There is only one endpoint per app, and it is set as the "Server Endpoint" under "Server to Server Communication" in your app's settings.
 
-The request will have the following fields set in the POST body:
+The request will have the following parameters set in the POST body with the `application/x-www-form-urlencoded` `Content-Type`:
 [cols="1,3a", stripes="even"]
 |===
 | app_id
-| The Teak App ID of the application (This is typically your Facebook App ID)
+| The Teak App ID of the application
 | clicking_user_id
-| The internal UID of the user who has clicked on the post and should receive the reward.
+| The game assigned player id of the player who has clicked on a notification, email, or Teak Link
 | event_id
-| A random string unique to issuing this reward to this user
+| A globally unique identifier specific to issuing this reward to this player
 | post_id
-| A 64 bit integer which identifies the post, request, notification, or CRM gift that the user clicked on
+| A 64 bit integer that identifies the notification, email, or Teak Link that the player clicked on
 | post_type
-| A string identifying the post or CRM gift in the Teak CMS
+| A string identifying the notification, email, or Teak Link in the Teak Dashboard. Typically this will be the Name of a Message or Link.
 | posting_user_id
-| The ID of the user who made the post or request, or 0 if this is a notification or Teak reward link
+| The game assigned player id of the player who shared the post or request, or 0 if this reward is from an App to Player communication such as a notification, email, or Link.
 | reward
-| A JSON blob with what the user should be rewarded with. The format is {"internal\_id" : quantity, "another\_internal\_id" : quantity}. For example, {"coins" : 25, "energy" :10 }
+| A JSON blob describing what your endpoint should grant the player. The format is {"internal_id" : quantity, "another_internal_id" : quantity}. For example, {"coins" : 25, "energy" :10 }
 | timestamp
 | The UNIX time at which Teak first attempted to grant this reward
 
@@ -38,11 +38,11 @@ The request will have the following fields set in the POST body:
 ----
 POST\n
 {{teak_reward_endpoint_url}}\n
-{{key}={{value}}&{{key2}}={{value}} // etc. No terminating newline
+{{key}={{value}}&{{key2}}={{value}}
 ----
 |===
 
-All keys are sorted alphabetically, and then the entire string is signed using the Server to Server Teak App Secret (available under "Server to Server Communication in your app's settings). The signature is base64 encoded and CGI escaped. In ruby this looks like:
+All keys are sorted alphabetically, and the entire string is signed using the Server to Server Teak App Secret (available under "Server to Server Communication in your app's settings). The signature is base64 encoded, and CGI escaped. In ruby, this looks like:
 
 [source, ruby]
 ----
@@ -54,13 +54,13 @@ signature = CGI.escape(Base64.encode64(OpenSSL::HMAC.digest(OpenSSL::Digest::Dig
 
 == Validating the request
 
-To validate the request your server must compute the signature using the above method and compare it to the signature passed in by Teak. If the signatures do not match, then the request is invalid and should be denied.
+Your server must compute the signature using the above method and compare it to the signature passed in by Teak to validate the request. If the signatures do not match, the request is invalid, and the endpoint should not grant the player any rewards.
 
-Furthermore you should confirm that the user has not already been granted a reward with the given event_id. In the event of a network failure it is possible that Teak will attempt to retry granting the reward. When doing so all parameters, including event_id, will be identical. If the user has already been granted a reward with the given event_id return a successful response and do no further processing
+Furthermore, you should confirm that the player has not already been granted a reward with the given `event_id`. If a network failure or other intermittent error occurs, Teak will retry its request to your server endpoint. When doing so, all parameters, including `event_id`, will be identical. If the player has already been granted a reward with the given `event_id`, return a successful response and do no further processing
 
 == Issuing the Reward
 
-Once the request has been validated you must JSON decode the 'reward' parameter. This will be a dictionary of the internal id of the reward and the quantity. For example, many games internally refer to their earned and purchased currencies as "softCash" and "hardCash", while the user facing names may be "Coins" and "Gold". In the reward dictionary Teak will use the internal "softCash" and "hardCash" names. An example reward parameter would be
+Once the request has been validated, you must JSON decode the 'reward' parameter. This will be a dictionary of the internal id of the reward and the quantity. For example, many games internally refer to their earned and purchased currencies as "softCash" and "hardCash", while the user-facing names may be "Coins" and "Gold". In the reward dictionary, Teak will use the internal "softCash" and "hardCash" names. An example reward parameter would be
 
 [source,json]
 ----
@@ -69,12 +69,12 @@ Once the request has been validated you must JSON decode the 'reward' parameter.
 
 The reward parameter may include any number of rewards and quantities. It is important that your reward endpoint properly grants the user **all** specified rewards.
 
-== Responding to the Request
+== Responding to the request
 
-We expect the endpoint to respond with the HTTP status code 200 and the string TEAKOK anywhere in the response body. If the status code is not 200 or the string TEAKOK does not appear in the response body, Teak will retry the request 16 times with an exponential back off over a period of ~3 days. Each retry will be completely identical. No parameters will ever change between retries.
+The server endpoint must respond with HTTP status code 200 and the string `TEAKOK` anywhere in the response body for Teak to consider the request successful. If the status code is not 200 or the string `TEAKOK` does not appear in the response body, Teak will retry the request 16 times with an exponential backoff over approximately three days. Each retry will be completely identical. No parameters will ever change between retries.
 
 == Testing the endpoint
 
-You can test that your endpoint is working from the 'Bundles' tab in the Rewards page for your app in Teak. Create a bundle to test with (we recommend one that gives out a variety of currencies and items, if applicable) and then click 'Test'
+You can test that your endpoint works from the 'Bundles' tab on the Rewards page for your app in Teak. Create a bundle to test with (we recommend one that gives out a variety of currencies and items, if applicable) and then click 'Test.'
 
-In the modal that pops up, enter a user id in User Id: and 0 in Posting User ID, then click Preview. Teak will attempt to grant the reward by POST-ing to your server, and will show the POST request made, the string == hich Teak signed with your Server to Server key and how the server responded. If your server responds with 200 and 'TEAKOK' in the body, and you confirm that the user was granted the items, you're ready to ship!
+In the modal that pops up, enter a player id in User Id: and 0 in Posting User ID, then click Preview. Teak will attempt to grant the reward by POST-ing to your server and will show the POST request made, the string which Teak signed with your Server to Server key, and how the server responded. If your server responds with 200 and `TEAKOK` in the body, and you confirm that the player was granted the items, you're ready to ship!
