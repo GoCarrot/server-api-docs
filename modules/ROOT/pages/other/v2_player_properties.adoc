@@ -1,0 +1,86 @@
+= Player Properties
+
+xref:usage::settings.adoc#_player_properties[Player Properties, window=_blank] are strings or numbers associated with each player of your game in Teak. Player Properties have several uses, including
+
+* Targeting players for a send by using the player properties xref:usage::audiences.adoc#_player_properties[Audience rule, window=_blank]
+* Personalizing push notification content using xref:usage::custom-tags.adoc[custom tags, window=_blank]
+* Personalizing email content using custom tags
+
+Player Properties must be configured on the Teak dashboard before they can be updated or used. Additionally, the property must permit server updates before you can set it using this API. If you attempt to set a property that is not configured in the dashboard or does not permit server updates, this endpoint will indicate that it is an unknown property but will process updates for all known properties in the same request.
+
+== Updating
+:endpoint: v2/player_properties
+[cols="1,3a", stripes="even"]
+|===
+| Endpoint
+| https://api.gocarrot.com/{endpoint}
+| Request Type
+| POST
+| Rate Limiting
+| 1000 requests per second
+|===
+
+=== Required Parameters
+[cols="1,3a", stripes="even"]
+|===
+| game_id
+| Your Teak App ID
+| secret_key
+| Your Teak Server Secret
+| user_id
+| The Game Assigned Player ID of the player you are updating player properties for. This must match the value provided by the game client's Teak SDK integration.
+| properties
+| A map of player property names to the values of those properties for the given player.
+|===
+
+=== Success Response
+[cols="1,3a"]
+|===
+| Status Code
+| 200
+| Response Body
+| JSON dictionary with 'status' and 'exclusions' keys. If pagination is possible, the dictionary will include a 'paging' key,
+[cols="1,3a", stripes="even"]
+!===
+! status
+! 'ok'
+! new_properties
+! A map of player property names to the new values of those properties set by this call.
+! old_properties
+! A map of player property names to the previous values of those properties before being updated by this call.
+! unknown_properties
+! An array of keys from the properties parameter which are not configured for the game or cannot be updated through the server API.
+!===
+| Example
+| [source, json, subs="attributes"]
+----
+{
+  "status":"ok",
+  "new_properties": {
+    "bankroll": 123456,
+    "last_screen": "Lobby"
+  },
+  "old_properties": {
+    "bankroll": 100000,
+    "last_screen": "Bonus Collect"
+  },
+  "unknown_properties": ["XP"]
+}
+----
+|===
+
+=== Error Responses
+
+==== Not Found
+
+:response-code: 404
+:response-body: JSON dictionary with 'status' and 'errors' keys. 'status' will be 'error'. 'errors' will be a dictionary containing keys indicating which resources were not found, with values being an array of human readable error messages.
+:response-example: {"status":"error","errors":{"game_id":["Unknown app id foo"]}}
+include::partial$response.adoc[]
+
+==== Rate Limit Response
+
+:response-code: 429
+:response-body: JSON dictionary with 'status' and 'errors' keys. 'status' will be 'rate_limit'. 'errors' will contain the key 'rate_limit'
+:response-example: {"status":"rate_limit","errors":{"rate_limit":["/{endpoint} may only be called 60 times per second. Please wait a second and try again"]}}
+include::partial$response.adoc[]

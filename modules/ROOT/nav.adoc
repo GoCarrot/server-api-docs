@@ -1,5 +1,6 @@
 * xref:page$notifications/v2_schedule.adoc[Scheduling Notifications]
 * xref:page$notifications/v2_scheduled_notifications.adoc[Notification Schedule Management]
+* xref:page$other/v2_player_properties.adoc[Player Properties]
 * xref:page$rewards/endpoint.adoc[Teak Reward Endpoint]
 * xref:page$rewards/claiming.adoc[Claiming Teak Rewards]
 * xref:page$other/v2_purchase.adoc[Purchase Reporting]
