@@ -10,6 +10,7 @@ Player Properties must be configured on the Teak dashboard before they can be up
 
 == Updating
 :endpoint: v2/player_properties
+:rate_limit: 1000
 [cols="1,3a", stripes="even"]
 |===
 | Endpoint
@@ -17,7 +18,7 @@ Player Properties must be configured on the Teak dashboard before they can be up
 | Request Type
 | POST
 | Rate Limiting
-| 1000 requests per second
+| {rate_limit} requests per second
 |===
 
 === Required Parameters
@@ -82,5 +83,5 @@ include::partial$response.adoc[]
 
 :response-code: 429
 :response-body: JSON dictionary with 'status' and 'errors' keys. 'status' will be 'rate_limit'. 'errors' will contain the key 'rate_limit'
-:response-example: {"status":"rate_limit","errors":{"rate_limit":["/{endpoint} may only be called 60 times per second. Please wait a second and try again"]}}
+:response-example: {"status":"rate_limit","errors":{"rate_limit":["/{endpoint} may only be called {rate_limit} times per second. Please wait a second and try again"]}}
 include::partial$response.adoc[]
