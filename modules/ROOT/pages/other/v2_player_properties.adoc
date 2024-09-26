@@ -1,12 +1,18 @@
 = Player Properties
 
-xref:usage::settings.adoc#_player_properties[Player Properties, window=_blank] are strings or numbers associated with each player of your game in Teak. Player Properties have several uses, including
+xref:usage::player-properties.adoc[Player Properties, window=_blank] are strings or numbers associated with each player of your game in Teak. Player Properties have several uses, including
 
 * Targeting players for a send by using the player properties xref:usage::audiences.adoc#_player_properties[Audience rule, window=_blank]
 * Personalizing push notification content using xref:usage::custom-tags.adoc[custom tags, window=_blank]
 * Personalizing email content using custom tags
+* Personalizing deep links from Links, push notifications, and emails to take players to a meaningful location in your game
 
 Player Properties must be configured on the Teak dashboard before they can be updated or used. Additionally, the property must permit server updates before you can set it using this API. If you attempt to set a property that is not configured in the dashboard or does not permit server updates, this endpoint will indicate that it is an unknown property but will process updates for all known properties in the same request.
+
+Please note that
+
+* Number Player Properties can store values between -999999999999999999999999999.999999999 and 999999999999999999999999999.999999999.
+* String Player Properties can store up to 16,384 unicode characters (including emoji)
 
 == Updating
 :endpoint: v2/player_properties
