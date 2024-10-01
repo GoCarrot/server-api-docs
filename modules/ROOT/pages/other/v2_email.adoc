@@ -117,6 +117,62 @@ Description: The GET `{endpoint}` endpoint retrieves the current subscription st
 :response-example: {"status":"rate_limit","errors":{"rate_limit":["/{endpoint} may only be called 300 times per second. Please wait a second and try again"]}}
 include::partial$response.adoc[]
 
+== Retrieving Recent Opt Outs
+:endpoint: v2/email/recent_unsubs
+[cols="1,3a", stripes="even"]
+|===
+| Endpoint
+| https://api.gocarrot.com/{endpoint}
+| Request Type
+| GET
+| Rate Limiting
+| 50 requests per second
+|===
+
+Description: The GET `{endpoint}` endpoint retrieves a list of email addresses that have opted out since the given timestamp.
+
+=== Required Parameters
+[cols="1,3a", stripes="even"]
+|===
+| game_id
+| Your Teak App ID
+| secret_key
+| Your Teak Server Secret
+| since
+| An ISO 8601 timestamp. Only email addresses that have opted out since this time will be returned.  Example: `2020-01-01T00:00:00Z`
+|===
+
+=== Success Response
+
+[cols="1,3a"]
+|===
+| Status Code
+| 200
+| Response Body
+| JSON dictionary with 'status', and 'opt_outs' keys.
+[cols="1,3a", stripes="even"]
+!===
+! status
+! 'ok'
+! opt_outs
+! A list of maps with the keys 'device_key', 'updated_at', and 'reason'.
+!===
+| Example
+| [source, json, subs="attributes"]
+----
+{"status":"ok", "opt_outs": [{"device_key": "john.smith@gmail.com", "updated_at": "2024-09-01T12:34:56Z", "reason": "opt_out"},{"device_key": "jane.doe@gmail.com", "updated_at": "2024-09-01T12:34:56Z", "reason": "spam"}]}
+----
+|===
+
+=== Error Responses
+
+==== Rate Limit Response
+
+:response-code: 429
+:response-body: JSON dictionary with 'status' and 'errors' keys. 'status' will be 'rate_limit'. 'errors' will contain the key 'rate_limit'
+:response-example: {"status":"rate_limit","errors":{"rate_limit":["/{endpoint} may only be called 50 times per second. Please wait a second and try again"]}}
+include::partial$response.adoc[]
+
 == Updating
 [cols="1,3a", stripes="even"]
 |===
