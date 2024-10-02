@@ -142,6 +142,15 @@ Description: The GET `{endpoint}` endpoint retrieves a list of email addresses t
 | An ISO 8601 timestamp. Only email addresses that have opted out since this time will be returned.  Example: `2020-01-01T00:00:00Z`
 |===
 
+=== Optional Parameters
+[cols="1,3a", stripes="even"]
+|===
+| limit
+| The number of exclusion records to return. Will be clamped to [1, 10000]. Defaults to 1,000
+| after
+| A pagination token from a previous call to {endpoint}
+|===
+
 === Success Response
 
 [cols="1,3a"]
@@ -156,11 +165,25 @@ Description: The GET `{endpoint}` endpoint retrieves a list of email addresses t
 ! 'ok'
 ! opt_outs
 ! A list of maps with the keys 'device_key', 'updated_at', and 'reason'.
+! paging
+! JSON dictonary with 'cursors' and 'next' keys. +
+'cursors' will be a dictionary containing an 'after' key, whose value can be passed as the 'after' parameter to {endpoint} to retrieve the next page. +
+'next' will be the full path and non-authorization query parameters to retrieve the next page.
 !===
 | Example
 | [source, json, subs="attributes"]
 ----
-{"status":"ok", "opt_outs": [{"device_key": "john.smith@gmail.com", "updated_at": "2024-09-01T12:34:56Z", "reason": "opt_out"},{"device_key": "jane.doe@gmail.com", "updated_at": "2024-09-01T12:34:56Z", "reason": "spam"}]}
+{
+  "status":"ok",
+  "opt_outs": [
+    {"device_key": "john.smith@gmail.com", "updated_at": "2024-09-01T12:34:56Z", "reason": "opt_out"},
+    {"device_key": "jane.doe@gmail.com", "updated_at": "2024-09-01T12:34:56Z", "reason": "spam_report"}
+  ],
+  "paging": {
+    "cursors": {"after": "MTU="},
+    "next": "/{endpoint}?limit=1&after=MTU="
+  }
+}
 ----
 |===
 
