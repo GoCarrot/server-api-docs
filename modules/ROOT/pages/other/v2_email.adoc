@@ -146,7 +146,7 @@ Description: The GET `{endpoint}` endpoint retrieves a list of email addresses t
 [cols="1,3a", stripes="even"]
 |===
 | limit
-| The number of exclusion records to return. Will be clamped to [1, 10000]. Defaults to 1,000
+| The number of recent unsubs to return. Will be clamped to [1, 10000]. Defaults to 1,000
 | after
 | A pagination token from a previous call to {endpoint}
 |===
