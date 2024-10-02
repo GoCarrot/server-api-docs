@@ -117,8 +117,8 @@ Description: The GET `{endpoint}` endpoint retrieves the current subscription st
 :response-example: {"status":"rate_limit","errors":{"rate_limit":["/{endpoint} may only be called 300 times per second. Please wait a second and try again"]}}
 include::partial$response.adoc[]
 
-== Retrieving Recent Opt Outs
-:endpoint: v2/email/recent_unsubs
+== Retrieving Recent Unsubscriptions
+:endpoint: v2/email/unsubscriptions
 [cols="1,3a", stripes="even"]
 |===
 | Endpoint
