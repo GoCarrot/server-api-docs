@@ -1,0 +1,13 @@
+** xref:server-api::page$rewards/endpoint.adoc[Server API]
+*** Server API Quickstart
+*** xref:server-api::page$notifications/v2_schedule.adoc[Scheduling Notifications]
+*** xref:server-api::page$notifications/v2_scheduled_notifications.adoc[Notification Schedule Management]
+*** xref:server-api::page$rewards/endpoint.adoc[Teak Reward Endpoint]
+*** xref:server-api::page$rewards/claiming.adoc[Claiming Teak Rewards]
+*** xref:server-api::page$other/v2_purchase.adoc[Purchase Reporting]
+*** xref:server-api::page$other/v2_opt_out_categories.adoc[Opt Out Category Management]
+*** xref:server-api::page$other/v2_email.adoc[Email Address Management]
+*** xref:server-api::page$other/v2_push_subscription.adoc[Push Subscription Management]
+*** xref:server-api::page$other/v2_desktop_subscription.adoc[Desktop Web Push Subscription Management]
+*** xref:server-api::page$other/v2_exclusions.adoc[Exclusion Management]
+*** xref:server-api::page$other/v2_users.adoc[Player Removal]
