@@ -1,9 +1,9 @@
 = Player Properties
 
-xref:usage::player-properties.adoc[Player Properties, window=_blank] are strings or numbers associated with each player of your game in Teak. Player Properties have several uses, including
+xref:user-guide::player-properties.adoc[Player Properties, window=_blank] are strings or numbers associated with each player of your game in Teak. Player Properties have several uses, including
 
-* Targeting players for a send by using the player properties xref:usage::audiences.adoc#_player_properties[Audience rule, window=_blank]
-* Personalizing push notification content using xref:usage::custom-tags.adoc[custom tags, window=_blank]
+* Targeting players for a send by using the player properties xref:user-guide::audiences.adoc#_player_properties[Audience rule, window=_blank]
+* Personalizing push notification content using xref:user-guide::custom-tags.adoc[custom tags, window=_blank]
 * Personalizing email content using custom tags
 * Personalizing deep links from Links, push notifications, and emails to take players to a meaningful location in your game
 
