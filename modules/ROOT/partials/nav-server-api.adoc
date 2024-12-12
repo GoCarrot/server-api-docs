@@ -1,5 +1,4 @@
-** xref:server-api::page$rewards/endpoint.adoc[Server API]
-*** Server API Quickstart
+** xref:server-api::page$index.adoc[Server API]
 *** xref:server-api::page$notifications/v2_schedule.adoc[Scheduling Notifications]
 *** xref:server-api::page$notifications/v2_scheduled_notifications.adoc[Notification Schedule Management]
 *** xref:server-api::page$rewards/endpoint.adoc[Teak Reward Endpoint]

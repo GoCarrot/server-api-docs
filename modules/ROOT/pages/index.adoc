@@ -1,0 +1,41 @@
+= Server API
+:page-no-toc: true
+
+The Teak Server API allows you to do useful stuff.
+
+== Getting Started
+
+[cols="2", role="nav-table", frame="none", grid="none"]
+|===
+a|
+
+[.sidebarlink]
+****
+Scheduling Notifications
+****
+
+a|
+
+[.sidebarlink]
+****
+Giving Rewards
+****
+
+a|
+
+[.sidebarlink]
+****
+Email Address Management
+****
+
+a|
+
+[.sidebarlink]
+****
+Player Removal
+****
+
+|===
+
+
+Last modified: **{docdatetime}**
