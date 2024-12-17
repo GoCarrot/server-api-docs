@@ -13,7 +13,7 @@
 | 30 requests per second
 |===
 
-Description: The `v2/schedule` endpoint allows for bulk scheduling of notifications to be delivered within 30 days. Before using this API you must configure a corresponding xref:ROOT:user-guide:page$scheduling.adoc#_local[Local Schedule, window=_blank] on the https://app.teak.io/login[Teak Dashboard, window=_blank]. Doing so gives you the full benefit of Teak’s analytics, A/B testing, and Content Management System when using local notifications.
+Description: The `v2/schedule` endpoint allows for bulk scheduling of notifications to be delivered within 30 days. Before using this API you must configure a corresponding xref:usage::page$scheduling.adoc#_local[Local Schedule, window=_blank] on the https://app.teak.io/login[Teak Dashboard, window=_blank]. Doing so gives you the full benefit of Teak’s analytics, A/B testing, and Content Management System when using local notifications.
 
 The `Name` you give the Schedule is `notification_identifier` you should use in calls to this API. Your marketing team may already have set up some Local Schedules; be sure to ask them if they have and what names they’ve given the Local Schedules.
 
@@ -40,7 +40,7 @@ This endpoint is appropriate for use when users whom the notification should be 
 | send_time
 | The time in UTC at which to deliver the notification. Must be in ISO8601 format, e.g. "2018-08-23 17:00:00". Must be within 30 days from the time the call is made. If omitted, or if set to a past time, notifications will be scheduled to deliver immediately.
 | personalization_data
-| A map of Game Assigned Player IDs to a map of string key/value pairs. The key/value pairs will be available to be templated into the sent notification. See xref:ROOT:user-guide:page$custom-tags.adoc#_local_notification_tags[Local Notification Tags, window=_blank] for more information.
+| A map of Game Assigned Player IDs to a map of string key/value pairs. The key/value pairs will be available to be templated into the sent notification. See xref:usage::page$custom-tags.adoc#_local_notification_tags[Local Notification Tags, window=_blank] for more information.
 |===
 
 === Success Response
