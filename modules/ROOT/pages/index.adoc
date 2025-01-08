@@ -6,11 +6,10 @@ The Teak Server API allows you to communicate directly with the Teak server, mak
 == First Steps
 
 1. To start offering in-game rewards → xref:server-api::page$rewards/endpoint.adoc[**Implement Teak Reward Endpoint**]
-2. Schedule some sends from your game server → xref:server-api::page$notifications/v2_scheduled_notifications.adoc[**Scheduling Notifications**]
+2. Schedule certain Notification sends from your game server → xref:server-api::page$notifications/v2_schedule.adoc[**API Driven Notification Sends**]
 3. Give your CRM's more tools for personalization → xref:server-api::page$other/v2_player_properties.adoc[**Integrate Player Properties**]
 
 Once you’ve set up these core features, move on to managing communication preferences, purchase tracking, and more advanced player data tasks. If you need help xref:ROOT::page$support.adoc[*reach out for support*].
-
 
 == API Overview
 
@@ -18,11 +17,11 @@ Here are the common server-side features you should consider implementing:
 
 === Notifications
 
-* xref:server-api::page$notifications/v2_scheduled_notifications.adoc[*Notification Schedule Management*] +
-List, update, or delete scheduled notifications to maintain control over your messaging strategy.
-
-* xref:server-api::page$notifications/v2_schedule.adoc[*Direct Notification Scheduling*] +
+* xref:server-api::page$notifications/v2_schedule.adoc[*API Driven Notification Sends*] +
 Programmatically schedule notifications for players at specific times or in response to in-game events.
+
+* xref:server-api::page$notifications/v2_scheduled_notifications.adoc[*Bulk Schedule Creation*] +
+Create scheduled notifications in bulk that can be edited and managed in the Teak Dashboard.
 
 === Rewards & Player Data
 
