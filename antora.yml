@@ -1,6 +1,6 @@
 name: server-api
 title: Server API
 version: 'v2'
-start_page: rewards/endpoint.adoc
+start_page: index.adoc
 nav:
 - modules/ROOT/nav.adoc

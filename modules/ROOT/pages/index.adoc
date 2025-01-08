@@ -1,41 +1,65 @@
 = Server API
 :page-no-toc: true
 
-The Teak Server API allows you to do useful stuff.
+The Teak Server API allows you to communicate directly with the Teak server, making it easy to handle tasks from your backend rather than the client. Here you’ll find everything you need to manage notifications, handle rewards, track purchases, and maintain player data.
 
-== Getting Started
+== First Steps
 
-[cols="2", role="nav-table", frame="none", grid="none"]
-|===
-a|
+1. To start offering in-game rewards → xref:server-api::page$rewards/endpoint.adoc[**Implement Teak Reward Endpoint**]
+2. Schedule some sends from your game server → xref:server-api::page$notifications/v2_scheduled_notifications.adoc[**Scheduling Notifications**]
+3. Give your CRM's more tools for personalization → xref:server-api::page$other/v2_player_properties.adoc[**Integrate Player Properties**]
 
-[.sidebarlink]
-****
-Scheduling Notifications
-****
-
-a|
-
-[.sidebarlink]
-****
-Giving Rewards
-****
-
-a|
-
-[.sidebarlink]
-****
-Email Address Management
-****
-
-a|
-
-[.sidebarlink]
-****
-Player Removal
-****
-
-|===
+Once you’ve set up these core features, move on to managing communication preferences, purchase tracking, and more advanced player data tasks. If you need help xref:ROOT::page$support.adoc[*reach out for support*].
 
 
-Last modified: **{docdatetime}**
+== API Overview
+
+Here are the common server-side features you should consider implementing:
+
+=== Notifications
+
+* xref:server-api::page$notifications/v2_scheduled_notifications.adoc[*Notification Schedule Management*] +
+List, update, or delete scheduled notifications to maintain control over your messaging strategy.
+
+* xref:server-api::page$notifications/v2_schedule.adoc[*Direct Notification Scheduling*] +
+Programmatically schedule notifications for players at specific times or in response to in-game events.
+
+=== Rewards & Player Data
+
+* xref:server-api::page$rewards/endpoint.adoc[*Teak Reward Endpoint*] +
+Configure and validate reward callbacks to ensure your server grants rewards in response to Teak events.
+
+* xref:server-api::page$rewards/claiming.adoc[*Claiming Teak Rewards*] +
+Securely claim Teak rewards on your server or client so players receive their in-game coins or items.
+
+* xref:server-api::page$other/v2_player_properties.adoc[*Player Properties*] +
+Set a player's custom attributes to enable personalized notifications and advanced segmentation.
+
+* xref:server-api::page$other/v2_purchase.adoc[*Purchase Reporting*] +
+Report in-app purchases from your backend so Teak can accurately track revenue and player spend behavior.
+
+=== Communication & Subscription Management
+
+* xref:server-api::page$other/v2_email.adoc[*Email Address Management*] +
+Securely add and update player email addresses through your backend.
+
+* xref:server-api::page$other/v2_opt_out_categories.adoc[*Opt Out Category Management*] +
+Manage player opt-out preferences for specific notification categories, respecting privacy choices.
+
+* xref:server-api::page$other/v2_push_subscription.adoc[*Push Subscription Management*] +
+Enroll or remove players from push notification subscriptions and maintain up-to-date preference data.
+
+* xref:server-api::page$other/v2_desktop_subscription.adoc[*Desktop Web Push Subscription Management*] +
+Handle desktop web push subscription statuses across devices or browsers to keep player messaging in sync.
+
+=== Privacy Compliance
+
+* xref:server-api::page$other/v2_exclusions.adoc[*Exclusion Management*] +
+Create time-limited exclusions that halt all marketing communication until the exclusion is lifted or expires.
+
+* xref:server-api::page$other/v2_users.adoc[*Player Removal*] +
+Remove player data from Teak to stay compliant with privacy regulations.
+
+== Feature Requests
+
+Is there something missing, or a feature you'd like to see supported? Reach out to us at mailto:team@teak.io[team@teak.io]
