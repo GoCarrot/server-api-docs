@@ -54,7 +54,7 @@ Description: The GET `{endpoint}` endpoint retreives all Opt Out Categories for 
 'ios_show_badge' is a boolean indicating if a badge should be shown by default when a push notification with this Opt Out Category is received on an iOS device. This may be overridden on a per notification basis. +
 'archived' is a boolean indicating if this Opt Out Category is archived. Archived categories will not be displayed when setting up new Messages, will not be shown on the Email opt out page, will not be created as Android Notification Channels for new installs, and will not be provided to the game client. +
 'created_at' is the ISO8601 timestamp indicating when this Opt Out Category was originally created.
-'updated_at' is the ISO860 timestamp indicating when this Opt Out Category was last updated.
+'updated_at' is the ISO8601 timestamp indicating when this Opt Out Category was last updated.
 !===
 | Example
 | [source, json, subs="attributes"]
@@ -141,7 +141,7 @@ Description: The GET `{endpoint}` endpoint retrieves the current configuration f
 'ios_show_badge' is a boolean indicating if a badge should be shown by default when a push notification with this Opt Out Category is received on an iOS device. This may be overridden on a per notification basis. +
 'archived' is a boolean indicating if this Opt Out Category is archived. Archived categories will not be displayed when setting up new Messages, will not be shown on the Email opt out page, will not be created as Android Notification Channels for new installs, and will not be provided to the game client. +
 'created_at' is the ISO8601 timestamp indicating when this Opt Out Category was originally created.
-'updated_at' is the ISO860 timestamp indicating when this Opt Out Category was last updated.
+'updated_at' is the ISO8601 timestamp indicating when this Opt Out Category was last updated.
 !===
 | Example
 | [source, json, subs="attributes"]
@@ -249,7 +249,7 @@ Description: The POST `{endpoint}` endpoint creates a new Opt Out Category.
 'ios_show_badge' is a boolean indicating if a badge should be shown by default when a push notification with this Opt Out Category is received on an iOS device. This may be overridden on a per notification basis. +
 'archived' is a boolean indicating if this Opt Out Category is archived. Archived categories will not be displayed when setting up new Messages, will not be shown on the Email opt out page, will not be created as Android Notification Channels for new installs, and will not be provided to the game client. +
 'created_at' is the ISO8601 timestamp indicating when this Opt Out Category was originally created.
-'updated_at' is the ISO860 timestamp indicating when this Opt Out Category was last updated.
+'updated_at' is the ISO8601 timestamp indicating when this Opt Out Category was last updated.
 !===
 | Example
 | [source, json, subs="attributes"]
@@ -362,7 +362,7 @@ Description: The PUT `{endpoint}` endpoint updates settings for the Opt Out Cate
 'ios_show_badge' is a boolean indicating if a badge should be shown by default when a push notification with this Opt Out Category is received on an iOS device. This may be overridden on a per notification basis. +
 'archived' is a boolean indicating if this Opt Out Category is archived. Archived categories will not be displayed when setting up new Messages, will not be shown on the Email opt out page, will not be created as Android Notification Channels for new installs, and will not be provided to the game client. +
 'created_at' is the ISO8601 timestamp indicating when this Opt Out Category was originally created.
-'updated_at' is the ISO860 timestamp indicating when this Opt Out Category was last updated.
+'updated_at' is the ISO8601 timestamp indicating when this Opt Out Category was last updated.
 !===
 | Example
 | [source, json, subs="attributes"]
