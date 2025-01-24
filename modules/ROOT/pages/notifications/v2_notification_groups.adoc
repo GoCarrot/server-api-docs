@@ -289,27 +289,27 @@ This section outlines the shape of the various types of entity you will encounte
 |===
 | `identifier`
 | `string`
-| The unique identifier of the `NotificationGroup` to which this `PlatformGroup` belongs.
+| The unique identifier of the `<<type_notification_group,NotificationGroup>>` to which this `PlatformGroup` belongs.
 
 | `is_ab_test`
 | `boolean`
-| Whether or not this platfrom group has an active A/B test.  This will be true if there are multiple <<type_notification_instance,NotificationInstance>>s.
+| Whether or not this `PlatformGroup` has an active A/B test.  This will be true if there are multiple <<type_notification_instance,NotificationInstance>>s.
 
 | `start_time`
 | `string?`
-| The ISO8601 timestamp indicating when the A/B test began.
+| The ISO8601 timestamp indicating when the A/B test began, if one is running.
 
 | `instances`
 | `[<<type_notification_instance,NotificationInstance>>]`
-| An array of <<type_notification_instance,NotificationInstance>> dictionaries.
+| An array of <<type_notification_instance,NotificationInstance>> dictionaries.  There will be exactly one record, unless there is an A/B test configured.
 
 | `created_at`
 | `string`
-| The ISO8601 timestamp indicating when this `NotificationGroup` was originally created.
+| The ISO8601 timestamp indicating when this `PlatformGroup` was originally created.
 
 | `updated_at`
 | `string`
-| The ISO8601 timestamp indicating when this `NotificationGroup` was last updated.
+| The ISO8601 timestamp indicating when this `PlatformGroup` was last updated.
 |===
 
 (Note: A '?' at the end of a type indicates that this field may be ommitted.)
@@ -343,7 +343,7 @@ This section outlines the shape of the various types of entity you will encounte
 | ...
 
 | `parent`
-| ... _(This value is only allowed if the Translation is not part of the default translation group.)_
+| ... _(This value is only allowed if the `<<type_translation,Translation>>` is not part of the default translation group.)_
 
 | `silent`
 | ...
@@ -412,11 +412,11 @@ This section outlines the shape of the various types of entity you will encounte
 
 | `created_at`
 | `string`
-| The ISO8601 timestamp indicating when this `NotificationInstance` was originally created.
+| The ISO8601 timestamp indicating when this `Translation` was originally created.
 
 | `updated_at`
 | `string`
-| The ISO8601 timestamp indicating when this `NotificationInstance` was last updated.
+| The ISO8601 timestamp indicating when this `Translation` was last updated.
 |===
 
 (Note: A '?' at the end of a type indicates that this field may be ommitted.)
