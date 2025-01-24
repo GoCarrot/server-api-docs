@@ -252,8 +252,8 @@ Note: Teak SDK version 3.1.1 or later required.
 | `string?`
 | The unique identifier of the reward bundle, if any, to give the player.
 
-| `reward_config`
-| `<<type_reward_config,RewardConfig>>?`
+| `reward_expiration`
+| `<<type_reward_expiration,RewardExpiration>>?`
 | ...
 
 | `translations`
@@ -329,9 +329,9 @@ Note: Teak SDK version 3.1.1 or later required.
 (Note: A '?' at the end of a type indicates that this field may be ommitted.)
 
 
-=== anchor:type_reward_config[]RewardConfig
+=== anchor:type_reward_expiration[]RewardExpiration
 
-`RewardConfig` is a lorem ipsum dolor sit amet.  It is a dictionary containing the following keys:
+`RewardExpiration` is a lorem ipsum dolor sit amet.  It is a dictionary containing the following keys:
 
 [cols="1,2,5a", stripes="even"]
 |===
@@ -339,7 +339,7 @@ Note: Teak SDK version 3.1.1 or later required.
 | `integer`
 | The amount of time after which the reward expires.
 
-| `maximum_age_unit`
+| `age_unit`
 | `<<type_duration_unit,DurationUnit>>`
 | Controls how `maximum_age` is interpreted.
 |===
