@@ -158,7 +158,7 @@ This section outlines the shape of the various types of entity you will encounte
 
 === anchor:type_email_content_mode[]EmailContentMode
 
-`EmailContentMode` controls how `message` is interpreted, when platform is `email`.  It is an enum comprised of one of the following values:
+`EmailContentMode` controls how `message` is interpreted, when channel is `email`.  It is an enum comprised of one of the following values:
 
 [cols="1,3a", stripes="even"]
 |===
@@ -184,9 +184,9 @@ This section outlines the shape of the various types of entity you will encounte
 | `string`
 | The unique identifier of the opt-out category to which this `NotificationGroup` belongs.
 
-| `platforms`
-| `Map<<<type_platform,Platform>>, <<type_platform_group,PlatformGroup>>>`
-| A dictionary whose keys are `<<type_platform,Platform>>` strings, and whose values are `<<type_platform_group,PlatformGroup>>` dictionaries.
+| `channels`
+| `Map<<<type_channel,Channel>>, <<type_channel_group,ChannelGroup>>>`
+| A dictionary whose keys are `<<type_channel,Channel>>` strings, and whose values are `<<type_channel_group,ChannelGroup>>` dictionaries.
 
 | `created_at`
 | `string`
@@ -202,7 +202,7 @@ This section outlines the shape of the various types of entity you will encounte
 
 === anchor:type_notification_instance[]NotificationInstance
 
-`NotificationInstance` represents the configuration of a notification, for a given platform.  If an A/B test is running, there may be multiple `NotificationInstance`s for a single platform, representing the variations under test.  It is a dictionary containing the following keys:
+`NotificationInstance` represents the configuration of a notification, for a given channel.  If an A/B test is running, there may be multiple `NotificationInstance`s for a single channel, representing the variations under test.  It is a dictionary containing the following keys:
 
 [cols="1,2,5a", stripes="even"]
 |===
@@ -212,11 +212,7 @@ This section outlines the shape of the various types of entity you will encounte
 
 | `sets_badge`
 | `boolean`
-| ...
-
-| `is_ab_control`
-| `boolean`
-| ...
+| *Deprecated.*  Superseded by `badge_state`.
 
 | `link_type`
 | `string`
@@ -258,42 +254,42 @@ This section outlines the shape of the various types of entity you will encounte
 (Note: A '?' at the end of a type indicates that this field may be ommitted.)
 
 
-=== anchor:type_platform[]Platform
+=== anchor:type_channel[]Channel
 
-`Platform` is a lorem ipsum dolor sit amet.  It is an enum comprised of one of the following values:
+`Channel` is a lorem ipsum dolor sit amet.  It is an enum comprised of one of the following values:
 
 [cols="1,3a", stripes="even"]
 |===
 | `android`
-| ...
+| The <<type_channel_group,ChannelGroup>> represents notifications for Android.
 
 | `email`
-| ...
+| The <<type_channel_group,ChannelGroup>> represents notifications for email.
 
 | `fb`
-| ...
+| The <<type_channel_group,ChannelGroup>> represents notifications for Facebook.
 
 | `ios`
-| ...
+| The <<type_channel_group,ChannelGroup>> represents notifications for iOS / iPadOS.
 
 | `web`
-| ...
+| The <<type_channel_group,ChannelGroup>> represents notifications for Web Push.
 |===
 
 
-=== anchor:type_platform_group[]PlatformGroup
+=== anchor:type_channel_group[]ChannelGroup
 
-`PlatformGroup` is a lorem ipsum dolor sit amet.  It is a dictionary containing the following keys:
+`ChannelGroup` is a container for the set of <<type_notification_instance,NotificationInstance>>s associated with a particular channel, and controls any relevant A/B test.  It is a dictionary containing the following keys:
 
 [cols="1,2,5a", stripes="even"]
 |===
 | `identifier`
 | `string`
-| The unique identifier of the `<<type_notification_group,NotificationGroup>>` to which this `PlatformGroup` belongs.
+| The unique identifier of the `<<type_notification_group,NotificationGroup>>` to which this `ChannelGroup` belongs.
 
 | `is_ab_test`
 | `boolean`
-| Whether or not this `PlatformGroup` has an active A/B test.  This will be true if there are multiple <<type_notification_instance,NotificationInstance>>s.
+| Whether or not this `ChannelGroup` has an active A/B test.  This will be true if there are multiple <<type_notification_instance,NotificationInstance>>s.
 
 | `start_time`
 | `string?`
@@ -305,11 +301,11 @@ This section outlines the shape of the various types of entity you will encounte
 
 | `created_at`
 | `string`
-| The ISO8601 timestamp indicating when this `PlatformGroup` was originally created.
+| The ISO8601 timestamp indicating when this `ChannelGroup` was originally created.
 
 | `updated_at`
 | `string`
-| The ISO8601 timestamp indicating when this `PlatformGroup` was last updated.
+| The ISO8601 timestamp indicating when this `ChannelGroup` was last updated.
 |===
 
 (Note: A '?' at the end of a type indicates that this field may be ommitted.)
@@ -396,19 +392,19 @@ This section outlines the shape of the various types of entity you will encounte
 
 | `email_content_mode`
 | `<<type_email_content_mode,EmailContentMode>>?`
-| ... _(Only available when platform is `email`.)_
+| ... _(Only available when channel is `email`.)_
 
 | `android_content_mode`
 | `<<type_android_content_mode,AndroidContentMode>>?`
-| ... _(Only available when platform is `android`.)_
+| ... _(Only available when channel is `android`.)_
 
 | `android_icon_mode`
 | `<<type_android_icon_mode,AndroidIconMode>>?`
-| ... _(Only available when platform is `android`.)_
+| ... _(Only available when channel is `android`.)_
 
 | `android_stack_expanded_view`
 | `boolean`
-| Displays the android banner above the expanded view image when the notification is expanded.  _(Only available when platform is `android`.  Must be false when `android_content_mode` is `ios_style`.)_
+| Displays the android banner above the expanded view image when the notification is expanded.  _(Only available when channel is `android`.  Must be false when `android_content_mode` is `ios_style`.)_
 
 | `created_at`
 | `string`
