@@ -170,6 +170,23 @@ This section outlines the shape of the various types of entity you will encounte
 |===
 
 
+=== anchor:type_link_type[]LinkType
+
+`LinkType` controls how links will behave.  It is an enum comprised of one of the following values:
+
+[cols="1,3a", stripes="even"]
+|===
+| `deeplink`
+| A deep link into the application, using the SDK's router.
+
+| `default`
+| Link to the application.
+
+| `outofgame`
+| A link that goes to something other than the application.  E.G. A web page.
+|===
+
+
 === anchor:type_notification_group[]NotificationGroup
 
 `NotificationGroup` is a container for message content across all App-to-Player channels.  It is a dictionary containing the following keys:
@@ -215,7 +232,7 @@ This section outlines the shape of the various types of entity you will encounte
 | *Deprecated.*  Superseded by `badge_state`.
 
 | `link_type`
-| `string`
+| `<<type_link_type,LinkType>>`
 | ...
 
 | `show_in_foreground`
