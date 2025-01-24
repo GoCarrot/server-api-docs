@@ -337,11 +337,11 @@ Note: Teak SDK version 3.1.1 or later required.
 |===
 | `maximum_age`
 | `integer`
-| ...
+| The amount of time after which the reward expires.
 
 | `maximum_age_unit`
 | `<<type_duration_unit,DurationUnit>>`
-| ...
+| Controls how `maximum_age` is interpreted.
 |===
 
 (Note: A '?' at the end of a type indicates that this field may be ommitted.)
