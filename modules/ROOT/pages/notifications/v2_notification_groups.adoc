@@ -331,7 +331,7 @@ Note: Teak SDK version 3.1.1 or later required.
 
 === anchor:type_reward_expiration[]RewardExpiration
 
-`RewardExpiration` is a lorem ipsum dolor sit amet.  It is a dictionary containing the following keys:
+`RewardExpiration` controls how long a player has to collect a reward bundle from a notification before it expires.  It is a dictionary containing the following keys:
 
 [cols="1,2,5a", stripes="even"]
 |===
