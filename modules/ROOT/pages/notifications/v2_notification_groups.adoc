@@ -233,23 +233,24 @@ This section outlines the shape of the various types of entity you will encounte
 
 | `link_type`
 | `<<type_link_type,LinkType>>`
-| ...
+| What kind of link this `NotificationInstance` will use.
 
 | `show_in_foreground`
 | `boolean`
-| ...
+| If true, the notification will be shown even if the game is running in the foreground.+
+Note: Teak SDK version 3.1.1 or later required.
 
 | `skip_game_open`
 | `boolean`
-| ...
+| Skip game open.  Disables rewarding.
 
 | `test_weight`
 | `integer`
-| ...
+| The relative weight of this `NotificationInstance` in an A/B test.  Only meaningful in an A/B test.
 
 | `bundle_name`
 | `string?`
-| ...
+| The unique identifier of the reward bundle, if any, to give the player.
 
 | `reward_config`
 | `<<type_reward_config,RewardConfig>>?`
