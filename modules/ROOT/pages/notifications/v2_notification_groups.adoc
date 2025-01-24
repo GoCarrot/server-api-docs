@@ -97,10 +97,10 @@ This section outlines the shape of the various types of entity you will encounte
 
 [cols="1,3a", stripes="even"]
 |===
-| default
+| `default`
 |
 
-| ios_style
+| `ios_style`
 | If this mode is selected, `android_stack_expanded_view` must be `false`.
 |===
 
@@ -111,13 +111,13 @@ This section outlines the shape of the various types of entity you will encounte
 
 [cols="1,3a", stripes="even"]
 |===
-| builtin
+| `builtin`
 | Use the application icon.
 
-| custom
+| `custom`
 | Use a custom icon.
 
-| none
+| `none`
 | Do not show an icon.
 |===
 
@@ -128,13 +128,13 @@ This section outlines the shape of the various types of entity you will encounte
 
 [cols="1,3a", stripes="even"]
 |===
-| default
+| `default`
 | Badging behavior will be inherited from the Opt-Out Category.
 
-| no
+| `no`
 | No Badge will be shown.
 
-| yes
+| `yes`
 | Badge will be shown. After the player launches the game following a notification that sets the badge, all notifications in the player's Notification Center will be cleared.
 |===
 
@@ -145,13 +145,13 @@ This section outlines the shape of the various types of entity you will encounte
 
 [cols="1,3a", stripes="even"]
 |===
-| minutes
+| `minutes`
 | `maximum_age` represents the number of minutes for which the reward is valid.
 
-| hours
+| `hours`
 | `maximum_age` represents the number of hours for which the reward is valid.
 
-| days
+| `days`
 | `maximum_age` represents the number of days for which the reward is valid.
 |===
 
@@ -162,10 +162,10 @@ This section outlines the shape of the various types of entity you will encounte
 
 [cols="1,3a", stripes="even"]
 |===
-| custom
+| `custom`
 | No email template will be used, the body of the email will be comprised of `message`, which may include HTML.
 
-| default
+| `default`
 | Teak's default email template will be used.  `message` will be placed above the large image.
 |===
 
@@ -176,25 +176,25 @@ This section outlines the shape of the various types of entity you will encounte
 
 [cols="1,2,5a", stripes="even"]
 |===
-| identifier
-| string
-| The unique identifier of this NotificationGroup.
+| `identifier`
+| `string`
+| The unique identifier of this `NotificationGroup`.
 
-| opt_out_category
-| string
-| The unique identifier of the opt-out category to which this NotificationGroup belongs.
+| `opt_out_category`
+| `string`
+| The unique identifier of the opt-out category to which this `NotificationGroup` belongs.
 
-| platforms
-| dictionary(<<type_platform,Platform>>, <<type_platform_group,PlatformGroup>>)
-| A dictionary whose keys are <<type_platform,Platform>> strings, and whose values are <<type_platform_group,PlatformGroup>> dictionaries.
+| `platforms`
+| `Map<<<type_platform,Platform>>, <<type_platform_group,PlatformGroup>>>`
+| A dictionary whose keys are `<<type_platform,Platform>>` strings, and whose values are `<<type_platform_group,PlatformGroup>>` dictionaries.
 
-| created_at
-| string
-| The ISO8601 timestamp indicating when this NotificationGroup was originally created.
+| `created_at`
+| `string`
+| The ISO8601 timestamp indicating when this `NotificationGroup` was originally created.
 
-| updated_at
-| string
-| The ISO8601 timestamp indicating when this NotificationGroup was last updated.
+| `updated_at`
+| `string`
+| The ISO8601 timestamp indicating when this `NotificationGroup` was last updated.
 |===
 
 (Note: A '?' at the end of a type indicates that this field may be ommitted.)
@@ -206,53 +206,53 @@ This section outlines the shape of the various types of entity you will encounte
 
 [cols="1,2,5a", stripes="even"]
 |===
-| badge_state
-| <<type_badge_state,BadgeState>>
+| `badge_state`
+| `<<type_badge_state,BadgeState>>`
 | Controls badge display behavior.
 
-| sets_badge
-| boolean
+| `sets_badge`
+| `boolean`
 | ...
 
-| is_ab_control
-| boolean
+| `is_ab_control`
+| `boolean`
 | ...
 
-| link_type
-| string
+| `link_type`
+| `string`
 | ...
 
-| show_in_foreground
-| boolean
+| `show_in_foreground`
+| `boolean`
 | ...
 
-| skip_game_open
-| boolean
+| `skip_game_open`
+| `boolean`
 | ...
 
-| test_weight
-| integer
+| `test_weight`
+| `integer`
 | ...
 
-| bundle_name
-| string?
+| `bundle_name`
+| `string?`
 | ...
 
-| reward_config
-| <<type_reward_config,RewardConfig>>?
+| `reward_config`
+| `<<type_reward_config,RewardConfig>>?`
 | ...
 
-| translations
-| array(<<type_translation,Translation>>)
+| `translations`
+| `[<<type_translation,Translation>>]`
 | ...
 
-| created_at
-| string
-| The ISO8601 timestamp indicating when this NotificationInstance was originally created.
+| `created_at`
+| `string`
+| The ISO8601 timestamp indicating when this `NotificationInstance` was originally created.
 
-| updated_at
-| string
-| The ISO8601 timestamp indicating when this NotificationInstance was last updated.
+| `updated_at`
+| `string`
+| The ISO8601 timestamp indicating when this `NotificationInstance` was last updated.
 |===
 
 (Note: A '?' at the end of a type indicates that this field may be ommitted.)
@@ -264,19 +264,19 @@ This section outlines the shape of the various types of entity you will encounte
 
 [cols="1,3a", stripes="even"]
 |===
-| android
+| `android`
 | ...
 
-| email
+| `email`
 | ...
 
-| fb
+| `fb`
 | ...
 
-| ios
+| `ios`
 | ...
 
-| web
+| `web`
 | ...
 |===
 
@@ -287,29 +287,29 @@ This section outlines the shape of the various types of entity you will encounte
 
 [cols="1,2,5a", stripes="even"]
 |===
-| identifier
-| string
-| The unique identifier of the NotificationGroup to which this PlatformGroup belongs.
+| `identifier`
+| `string`
+| The unique identifier of the `NotificationGroup` to which this `PlatformGroup` belongs.
 
-| is_ab_test
-| boolean
+| `is_ab_test`
+| `boolean`
 | Whether or not this platfrom group has an active A/B test.  This will be true if there are multiple <<type_notification_instance,NotificationInstance>>s.
 
-| start_time
-| string?
+| `start_time`
+| `string?`
 | The ISO8601 timestamp indicating when the A/B test began.
 
-| instances
-| array(<<type_notification_instance,NotificationInstance>>)
+| `instances`
+| `[<<type_notification_instance,NotificationInstance>>]`
 | An array of <<type_notification_instance,NotificationInstance>> dictionaries.
 
-| created_at
-| string
-| The ISO8601 timestamp indicating when this NotificationGroup was originally created.
+| `created_at`
+| `string`
+| The ISO8601 timestamp indicating when this `NotificationGroup` was originally created.
 
-| updated_at
-| string
-| The ISO8601 timestamp indicating when this NotificationGroup was last updated.
+| `updated_at`
+| `string`
+| The ISO8601 timestamp indicating when this `NotificationGroup` was last updated.
 |===
 
 (Note: A '?' at the end of a type indicates that this field may be ommitted.)
@@ -321,12 +321,12 @@ This section outlines the shape of the various types of entity you will encounte
 
 [cols="1,2,5a", stripes="even"]
 |===
-| maximum_age
-| integer
+| `maximum_age`
+| `integer`
 | ...
 
-| maximum_age_unit
-| <<type_duration_unit,DurationUnit>>
+| `maximum_age_unit`
+| `<<type_duration_unit,DurationUnit>>`
 | ...
 |===
 
@@ -339,19 +339,19 @@ This section outlines the shape of the various types of entity you will encounte
 
 [cols="1,3a", stripes="even"]
 |===
-| system_default
+| `system_default`
 | ...
 
-| parent
+| `parent`
 | ... _(This value is only allowed if the Translation is not part of the default translation group.)_
 
-| silent
+| `silent`
 | ...
 
-| custom
+| `custom`
 | ...
 
-| category_default
+| `category_default`
 | ...
 |===
 
@@ -362,61 +362,61 @@ This section outlines the shape of the various types of entity you will encounte
 
 [cols="1,2,5a", stripes="even"]
 |===
-| loop_large_media
-| boolean
+| `loop_large_media`
+| `boolean`
 | ...
 
-| sound_filename
-| string
+| `sound_filename`
+| `string`
 | ...
 
-| sound_state
-| <<type_sound_state,SoundState>>
+| `sound_state`
+| `<<type_sound_state,SoundState>>`
 | ...
 
-| translation_group_name
-| string
+| `translation_group_name`
+| `string`
 | ...
 
-| title
-| string?
+| `title`
+| `string?`
 | ...
 
-| subtitle
-| string?
+| `subtitle`
+| `string?`
 | ...
 
-| message
-| string?
+| `message`
+| `string?`
 | ...
 
-| locales
-| array(string)?
+| `locales`
+| `[string]?`
 | ...
 
-| email_content_mode
-| <<type_email_content_mode,EmailContentMode>>?
-| ... _(Only present when platform is `email`.)_
+| `email_content_mode`
+| `<<type_email_content_mode,EmailContentMode>>?`
+| ... _(Only available when platform is `email`.)_
 
-| android_content_mode
-| <<type_android_content_mode,AndroidContentMode>>?
-| ... _(Only present when platform is `android`.)_
+| `android_content_mode`
+| `<<type_android_content_mode,AndroidContentMode>>?`
+| ... _(Only available when platform is `android`.)_
 
-| android_icon_mode
-| <<type_android_icon_mode,AndroidIconMode>>?
-| ... _(Only present when platform is `android`.)_
+| `android_icon_mode`
+| `<<type_android_icon_mode,AndroidIconMode>>?`
+| ... _(Only available when platform is `android`.)_
 
-| android_stack_expanded_view
-| boolean
+| `android_stack_expanded_view`
+| `boolean`
 | Displays the android banner above the expanded view image when the notification is expanded.  _(Only available when platform is `android`.  Must be false when `android_content_mode` is `ios_style`.)_
 
-| created_at
-| string
-| The ISO8601 timestamp indicating when this NotificationInstance was originally created.
+| `created_at`
+| `string`
+| The ISO8601 timestamp indicating when this `NotificationInstance` was originally created.
 
-| updated_at
-| string
-| The ISO8601 timestamp indicating when this NotificationInstance was last updated.
+| `updated_at`
+| `string`
+| The ISO8601 timestamp indicating when this `NotificationInstance` was last updated.
 |===
 
 (Note: A '?' at the end of a type indicates that this field may be ommitted.)
