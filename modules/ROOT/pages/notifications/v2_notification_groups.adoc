@@ -107,18 +107,18 @@ This section outlines the shape of the various types of entity you will encounte
 
 === anchor:type_android_icon_mode[]AndroidIconMode
 
-`AndroidIconMode` is a lorem ipsum dolor sit amet.  It is an enum comprised of one of the following values:
+`AndroidIconMode` controls what icon is selected for notifications on Android.  It is an enum comprised of one of the following values:
 
 [cols="1,3a", stripes="even"]
 |===
 | builtin
-| ...
+| Use the application icon.
 
 | custom
-| ...
+| Use a custom icon.
 
 | none
-| ...
+| Do not show an icon.
 |===
 
 
@@ -141,32 +141,32 @@ This section outlines the shape of the various types of entity you will encounte
 
 === anchor:type_duration_unit[]DurationUnit
 
-`DurationUnit` is a lorem ipsum dolor sit amet.  It is an enum comprised of one of the following values:
+`DurationUnit` controls how `maximum_age` is interpreted.  It is an enum comprised of one of the following values:
 
 [cols="1,3a", stripes="even"]
 |===
 | minutes
-| ...
+| `maximum_age` represents the number of minutes for which the reward is valid.
 
 | hours
-| ...
+| `maximum_age` represents the number of hours for which the reward is valid.
 
 | days
-| ...
+| `maximum_age` represents the number of days for which the reward is valid.
 |===
 
 
 === anchor:type_email_content_mode[]EmailContentMode
 
-`EmailContentMode` is a lorem ipsum dolor sit amet.  It is an enum comprised of one of the following values:
+`EmailContentMode` controls how `message` is interpreted, when platform is `email`.  It is an enum comprised of one of the following values:
 
 [cols="1,3a", stripes="even"]
 |===
 | custom
-| ...
+| No email template will be used, the body of the email will be comprised of `message`, which may include HTML.
 
 | default
-| ...
+| Teak's default email template will be used.  `message` will be placed above the large image.
 |===
 
 
