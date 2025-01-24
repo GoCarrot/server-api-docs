@@ -93,15 +93,15 @@ This section outlines the shape of the various types of entity you will encounte
 
 === anchor:type_android_content_mode[]AndroidContentMode
 
-`AndroidContentMode` is a lorem ipsum dolor sit amet.  It is an enum comprised of one of the following values:
+`AndroidContentMode` controls the layout of content for Android notifications.  It is an enum comprised of one of the following values:
 
 [cols="1,3a", stripes="even"]
 |===
 | default
-| ...
+|
 
 | ios_style
-| ...
+| If this mode is selected, `android_stack_expanded_view` must be `false`.
 |===
 
 
@@ -408,7 +408,7 @@ This section outlines the shape of the various types of entity you will encounte
 
 | android_stack_expanded_view
 | boolean
-| ... _(Only present when platform is `android`.)_
+| ... _(Only present when platform is `android`.  Must be false when `android_content_mode` is `ios_style`.)_
 
 | created_at
 | string
