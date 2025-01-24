@@ -21,9 +21,9 @@ Description: The `v2/notification_groups` endpoint allows for querying all notif
 
 [cols="1,3a", stripes="even"]
 |===
-| game_id
+| `game_id`
 | Your Teak App ID
-| secret_key
+| `secret_key`
 | Your Teak Server Secret
 |===
 
@@ -31,9 +31,9 @@ Description: The `v2/notification_groups` endpoint allows for querying all notif
 
 [cols="1,3a", stripes="even"]
 |===
-| limit
+| `limit`
 | The number of notification groups to return. Will be clamped to [1, 1000]. Defaults to 1,000
-| after
+| `after`
 | A pagination token from a previous call to {endpoint}
 |===
 
@@ -45,17 +45,17 @@ Description: The `v2/notification_groups` endpoint allows for querying all notif
 | Status Code
 | 200
 | Response Body
-| JSON dictionary with 'status' and 'notification_groups' keys, and potentially a `paging` key.
+| JSON dictionary with `status` and `notification_groups` keys, and potentially a `paging` key.
 [cols="1,3a", stripes="even"]
 !===
-! status
-! 'ok'
-! notification_groups
-! An array of <<type_notification_group,NotificationGroup>> dictionaries.
-! paging
-! JSON dictionary with 'cursors' and 'next' keys. +
-'cursors' will be a dictionary containing an 'after' key, whose value can be passed as the 'after' parameter to {endpoint} to retrieve the next page. +
-'next' will be the full path and non-authorization query parameters to retrieve the next page.
+! `status`
+! `'ok'`
+! `notification_groups`
+! An array of `<<type_notification_group,NotificationGroup>>` dictionaries.
+! `paging`
+! JSON dictionary with `cursors` and `next` keys. +
+`cursors` will be a dictionary containing an `after` key, whose value can be passed as the `after` parameter to {endpoint} to retrieve the next page. +
+`next` will be the full path and non-authorization query parameters to retrieve the next page.
 !===
 | Example
 | [source, json, subs="attributes"]
