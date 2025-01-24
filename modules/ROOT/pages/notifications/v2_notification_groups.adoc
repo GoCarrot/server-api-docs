@@ -90,6 +90,69 @@ include::partial$response.adoc[]
 
 This section outlines the shape of the various types of entity you will encounter when using this API.
 
+
+=== anchor:type_android_content_mode[]AndroidContentMode
+
+`AndroidContentMode` is a lorem ipsum dolor sit amet.  It is an enum comprised of one of the following values:
+
+[cols="1,3a", stripes="even"]
+|===
+| default
+| ...
+
+| ios_style
+| ...
+|===
+
+
+=== anchor:type_android_icon_mode[]AndroidIconMode
+
+`AndroidIconMode` is a lorem ipsum dolor sit amet.  It is an enum comprised of one of the following values:
+
+[cols="1,3a", stripes="even"]
+|===
+| builtin
+| ...
+
+| custom
+| ...
+
+| none
+| ...
+|===
+
+
+=== anchor:type_duration_unit[]DurationUnit
+
+`DurationUnit` is a lorem ipsum dolor sit amet.  It is an enum comprised of one of the following values:
+
+[cols="1,3a", stripes="even"]
+|===
+| minutes
+| ...
+
+| hours
+| ...
+
+| days
+| ...
+|===
+
+
+=== anchor:type_email_content_mode[]EmailContentMode
+
+`EmailContentMode` is a lorem ipsum dolor sit amet.  It is an enum comprised of one of the following values:
+
+[cols="1,3a", stripes="even"]
+|===
+| custom
+| ...
+
+| default
+| ...
+|===
+
+
 === anchor:type_notification_group[]NotificationGroup
 
 `NotificationGroup` is a lorem ipsum dolor sit amet.  It is a dictionary containing the following keys:
@@ -119,38 +182,6 @@ This section outlines the shape of the various types of entity you will encounte
 
 (Note: A '?' at the end of a type indicates that this field may be ommitted.)
 
-=== anchor:type_platform_group[]PlatformGroup
-
-`PlatformGroup` is a lorem ipsum dolor sit amet.  It is a dictionary containing the following keys:
-
-[cols="1,2,5a", stripes="even"]
-|===
-| identifier
-| string
-| The unique identifier of the NotificationGroup to which this PlatformGroup belongs.
-
-| is_ab_test
-| boolean
-| Whether or not this platfrom group has an active A/B test.  This will be true if there are multiple <<type_notification_instance,NotificationInstance>>s.
-
-| start_time
-| string?
-| The ISO8601 timestamp indicating when the A/B test began.
-
-| instances
-| array(<<type_notification_instance,NotificationInstance>>)
-| An array of <<type_notification_instance,NotificationInstance>> dictionaries.
-
-| created_at
-| string
-| The ISO8601 timestamp indicating when this NotificationGroup was originally created.
-
-| updated_at
-| string
-| The ISO8601 timestamp indicating when this NotificationGroup was last updated.
-|===
-
-(Note: A '?' at the end of a type indicates that this field may be ommitted.)
 
 === anchor:type_notification_instance[]NotificationInstance
 
@@ -208,6 +239,105 @@ This section outlines the shape of the various types of entity you will encounte
 |===
 
 (Note: A '?' at the end of a type indicates that this field may be ommitted.)
+
+
+=== anchor:type_platform[]Platform
+
+`Platform` is a lorem ipsum dolor sit amet.  It is an enum comprised of one of the following values:
+
+[cols="1,3a", stripes="even"]
+|===
+| android
+| ...
+
+| email
+| ...
+
+| fb
+| ...
+
+| ios
+| ...
+
+| web
+| ...
+|===
+
+
+=== anchor:type_platform_group[]PlatformGroup
+
+`PlatformGroup` is a lorem ipsum dolor sit amet.  It is a dictionary containing the following keys:
+
+[cols="1,2,5a", stripes="even"]
+|===
+| identifier
+| string
+| The unique identifier of the NotificationGroup to which this PlatformGroup belongs.
+
+| is_ab_test
+| boolean
+| Whether or not this platfrom group has an active A/B test.  This will be true if there are multiple <<type_notification_instance,NotificationInstance>>s.
+
+| start_time
+| string?
+| The ISO8601 timestamp indicating when the A/B test began.
+
+| instances
+| array(<<type_notification_instance,NotificationInstance>>)
+| An array of <<type_notification_instance,NotificationInstance>> dictionaries.
+
+| created_at
+| string
+| The ISO8601 timestamp indicating when this NotificationGroup was originally created.
+
+| updated_at
+| string
+| The ISO8601 timestamp indicating when this NotificationGroup was last updated.
+|===
+
+(Note: A '?' at the end of a type indicates that this field may be ommitted.)
+
+
+=== anchor:type_reward_config[]RewardConfig
+
+`RewardConfig` is a lorem ipsum dolor sit amet.  It is a dictionary containing the following keys:
+
+[cols="1,2,5a", stripes="even"]
+|===
+| maximum_age
+| integer
+| ...
+
+| maximum_age_unit
+| <<type_duration_unit,DurationUnit>>
+| ...
+|===
+
+(Note: A '?' at the end of a type indicates that this field may be ommitted.)
+
+
+=== anchor:type_sound_state[]SoundState
+
+`SoundState` is a lorem ipsum dolor sit amet.  It is an enum comprised of one of the following values:
+
+[cols="1,3a", stripes="even"]
+|===
+| system_default
+| ...
+
+| parent
+| ... _(This value is only allowed if the Translation is not part of the default translation group.)_
+
+| silent
+| ...
+
+| custom
+| ...
+
+| category_default
+| ...
+|===
+
 
 === anchor:type_translation[]Translation
 
@@ -273,129 +403,3 @@ This section outlines the shape of the various types of entity you will encounte
 |===
 
 (Note: A '?' at the end of a type indicates that this field may be ommitted.)
-
-
-=== anchor:type_reward_config[]RewardConfig
-
-`RewardConfig` is a lorem ipsum dolor sit amet.  It is a dictionary containing the following keys:
-
-[cols="1,2,5a", stripes="even"]
-|===
-| maximum_age
-| integer
-| ...
-
-| maximum_age_unit
-| <<type_duration_unit,DurationUnit>>
-| ...
-|===
-
-(Note: A '?' at the end of a type indicates that this field may be ommitted.)
-
-
-=== anchor:type_platform[]Platform
-
-`Platform` is a lorem ipsum dolor sit amet.  It is an enum comprised of one of the following values:
-
-[cols="1,3a", stripes="even"]
-|===
-| android
-| ...
-
-| email
-| ...
-
-| fb
-| ...
-
-| ios
-| ...
-
-| web
-| ...
-|===
-
-
-=== anchor:type_duration_unit[]DurationUnit
-
-`DurationUnit` is a lorem ipsum dolor sit amet.  It is an enum comprised of one of the following values:
-
-[cols="1,3a", stripes="even"]
-|===
-| minutes
-| ...
-
-| hours
-| ...
-
-| days
-| ...
-|===
-
-
-=== anchor:type_email_content_mode[]EmailContentMode
-
-`EmailContentMode` is a lorem ipsum dolor sit amet.  It is an enum comprised of one of the following values:
-
-[cols="1,3a", stripes="even"]
-|===
-| custom
-| ...
-
-| default
-| ...
-|===
-
-
-=== anchor:type_android_content_mode[]AndroidContentMode
-
-`AndroidContentMode` is a lorem ipsum dolor sit amet.  It is an enum comprised of one of the following values:
-
-[cols="1,3a", stripes="even"]
-|===
-| default
-| ...
-
-| ios_style
-| ...
-|===
-
-
-=== anchor:type_android_icon_mode[]AndroidIconMode
-
-`AndroidIconMode` is a lorem ipsum dolor sit amet.  It is an enum comprised of one of the following values:
-
-[cols="1,3a", stripes="even"]
-|===
-| builtin
-| ...
-
-| custom
-| ...
-
-| none
-| ...
-|===
-
-
-=== anchor:type_sound_state[]SoundState
-
-`SoundState` is a lorem ipsum dolor sit amet.  It is an enum comprised of one of the following values:
-
-[cols="1,3a", stripes="even"]
-|===
-| system_default
-| ...
-
-| parent
-| ... _(This value is only allowed if the Translation is not part of the default translation group.)_
-
-| silent
-| ...
-
-| custom
-| ...
-
-| category_default
-| ...
-|===
