@@ -177,13 +177,13 @@ This section outlines the shape of the various types of entity you will encounte
 [cols="1,3a", stripes="even"]
 |===
 | `deeplink`
-| A deep link into the application, using the SDK's router.
+| A deep link into the game, using the SDK's router.
 
 | `default`
-| Link to the application.
+| Link to the game.
 
 | `outofgame`
-| A link that goes to something other than the application.  E.G. A web page.
+| A link that goes to something other than the game.  E.G. A web page.
 |===
 
 
