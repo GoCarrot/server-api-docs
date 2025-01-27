@@ -254,11 +254,11 @@ Note: Teak SDK version 3.1.1 or later required.
 
 | `reward_expiration`
 | `<<type_reward_expiration,RewardExpiration>>?`
-| ...
+| When the reward associated with the notification expires, if a reward bundle is associated with this `NotificationInstance`.
 
 | `translations`
 | `[<<type_translation,Translation>>]`
-| ...
+| The notification content to use, based on player locale.
 
 | `created_at`
 | `string`
@@ -349,48 +349,48 @@ Note: Teak SDK version 3.1.1 or later required.
 
 === anchor:type_sound_state[]SoundState
 
-`SoundState` is a lorem ipsum dolor sit amet.  It is an enum comprised of one of the following values:
+`SoundState` controls what sound is played for an iOS/iPadOS notification.  It is an enum comprised of one of the following values:
 
 [cols="1,3a", stripes="even"]
 |===
 | `system_default`
-| ...
+| The default sound will be played.  This is chosen by the OS, or by the user.
 
 | `parent`
-| ... _(This value is only allowed if the `<<type_translation,Translation>>` is not part of the default translation group.)_
+| Use the sound from the default translation group. _(This value is only allowed if the `<<type_translation,Translation>>` is not part of the default translation group.)_
 
 | `silent`
-| ...
+| No sound will be played.
 
 | `custom`
-| ...
+| Use the value from `sound_filename`.
 
 | `category_default`
-| ...
+| Use the sound associated with the opt-out category of the `<<type_notification_group,NotificationGroup>>`.
 |===
 
 
 === anchor:type_translation[]Translation
 
-`Translation` is a lorem ipsum dolor sit amet.  It is a dictionary containing the following keys:
+`Translation` represents the content of a notification, for one or more locales.  It is a dictionary containing the following keys:
 
 [cols="1,2,5a", stripes="even"]
 |===
 | `loop_large_media`
 | `boolean`
-| ...
+| Whether or not to loop video content in the notification.
 
 | `sound_filename`
 | `string`
-| ...
+| The filename of the sound in your application bundle that should be played when this translation is used for the notification.  Only relevant to iOS/iPadOS, as opt-out category determines notification sound on Android.
 
 | `sound_state`
 | `<<type_sound_state,SoundState>>`
-| ...
+| Determines which sound will be played on iOS/iPadOS.
 
 | `translation_group_name`
 | `string`
-| ...
+| The unique identifier of the translation group to which this `Translation` belongs.
 
 | `title`
 | `string?`
@@ -406,19 +406,19 @@ Note: Teak SDK version 3.1.1 or later required.
 
 | `locales`
 | `[string]?`
-| ...
+| A list of https://www.rfc-editor.org/rfc/rfc5646.html[language tags] for which this `Translation` will be used.
 
 | `email_content_mode`
 | `<<type_email_content_mode,EmailContentMode>>?`
-| ... _(Only available when channel is `email`.)_
+| Whether or not to use Teak's email template.  _(Only available when channel is `email`.)_
 
 | `android_content_mode`
 | `<<type_android_content_mode,AndroidContentMode>>?`
-| ... _(Only available when channel is `android`.)_
+| What notification layout to use on Android.  _(Only available when channel is `android`.)_
 
 | `android_icon_mode`
 | `<<type_android_icon_mode,AndroidIconMode>>?`
-| ... _(Only available when channel is `android`.)_
+| What notification icon to use on Android.  _(Only available when channel is `android`.)_
 
 | `android_stack_expanded_view`
 | `boolean`
