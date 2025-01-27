@@ -98,7 +98,7 @@ This section outlines the shape of the various types of entity you will encounte
 [cols="1,3a", stripes="even"]
 |===
 | `default`
-|
+| Use the default layout behavior.
 
 | `ios_style`
 | If this mode is selected, `android_stack_expanded_view` must be `false`.
@@ -274,7 +274,7 @@ Note: Teak SDK version 3.1.1 or later required.
 
 === anchor:type_channel[]Channel
 
-`Channel` is a lorem ipsum dolor sit amet.  It is an enum comprised of one of the following values:
+`Channel` represents the avenue by which the player receives a notification.  It is an enum comprised of one of the following values:
 
 [cols="1,3a", stripes="even"]
 |===
