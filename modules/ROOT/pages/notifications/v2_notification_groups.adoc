@@ -1,6 +1,6 @@
 = Notification Groups
 
-== Querying
+== Listing
 :endpoint: v2/notification_groups
 
 [cols="1,3a", stripes="even"]
