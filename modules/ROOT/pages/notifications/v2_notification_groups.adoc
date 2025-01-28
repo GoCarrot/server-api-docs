@@ -568,15 +568,15 @@ Note: Teak SDK version 3.1.1 or later required.
 
 | `title`
 | `string?`
-| ...
+| xref:ROOT:user-guide:page$notifications.adoc#_anatomy[See anatomy of a push notification docs.]
 
 | `subtitle`
 | `string?`
-| ...
+| xref:ROOT:user-guide:page$notifications.adoc#_anatomy[See anatomy of a push notification docs.]
 
 | `message`
 | `string?`
-| ...
+| xref:ROOT:user-guide:page$notifications.adoc#_anatomy[See anatomy of a push notification docs.]
 
 | `locales`
 | `[string]?`
