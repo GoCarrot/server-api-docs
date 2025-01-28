@@ -72,6 +72,16 @@ Description: The `{endpoint}` endpoint allows for querying all notification grou
 
 === Error Responses
 
+==== Rate Limit Response
+
+:response-code: 429
+:response-body: JSON dictionary with 'status' and 'errors' keys. 'status' will be 'rate_limit'. 'errors' will contain the key 'rate_limit'
+:response-example: {"status":"rate_limit","errors":{"rate_limit":["{endpoint} may only be called 5 times per second. Please wait a second and try again"]}}
+include::partial$response.adoc[]
+
+
+=== Error Responses
+
 ==== Not Found
 
 :response-code: 404
