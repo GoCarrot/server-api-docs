@@ -302,7 +302,7 @@ This section outlines the shape of the various types of entity you will encounte
 
 === anchor:type_notification_instance[]NotificationInstance
 
-`NotificationInstance` represents the configuration of a notification, for a given channel.  If an A/B test is running, there may be multiple `NotificationInstance`s for a single channel, representing the variations under test.  It is a dictionary containing the following keys:
+`NotificationInstance` represents the configuration of a notification, for a given channel.  If an A/B test is running, there may be multiple `NotificationInstance` records for a single channel, representing the variations under test.  It is a dictionary containing the following keys:
 
 [cols="1,2,5a", stripes="even"]
 |===
