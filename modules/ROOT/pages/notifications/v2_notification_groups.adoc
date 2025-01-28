@@ -15,7 +15,7 @@
 | 5 requests per second
 |===
 
-Description: The `v2/notification_groups` endpoint allows for querying all notification groups for a given game.
+Description: The `{endpoint}` endpoint allows for querying all notification groups for a given game.
 
 === Required Parameters
 
