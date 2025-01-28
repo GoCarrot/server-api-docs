@@ -80,6 +80,71 @@ Description: The `{endpoint}` endpoint allows for querying all notification grou
 include::partial$response.adoc[]
 
 
+== Creating
+:endpoint: v2/notification_groups
+
+[cols="1,3a", stripes="even"]
+|===
+| Endpoint
+| https://api.gocarrot.com/{endpoint}
+| Request Type
+| POST
+| Content-Type
+| application/json
+| Rate Limiting
+| 5 requests per second
+|===
+
+Description: The `{endpoint}` endpoint allows for creating a notification group for a given game.
+
+=== Required Parameters
+
+[cols="1,3a", stripes="even"]
+|===
+| `game_id`
+| Your Teak App ID
+| `secret_key`
+| Your Teak Server Secret
+| `identifier`
+| A unique identifier for the `<<type_notification_group,NotificationGroup>>` you are creating.
+| `opt_out_category`
+| The unique identifier of the opt-out category the `<<type_notification_group,NotificationGroup>>` will belong to.
+| `channels`
+| A dictionary whose keys are `<<type_channel,Channel>>` strings, and whose values are `<<type_channel_group,ChannelGroup>>` dictionaries.
+|===
+
+=== Optional Parameters
+
+_Not applicable._
+
+=== Success Response
+
+[cols="1,3a"]
+|===
+| Status Code
+| 200
+| Response Body
+| JSON dictionary ...
+[cols="1,3a", stripes="even"]
+!===
+! `status`
+! `'ok'`
+! `notification_group`
+! A `<<type_notification_group,NotificationGroup>>` dictionary.
+!===
+| Example
+| [source, json, subs="attributes"]
+----
+{
+  "status":"ok",
+  "notification_group": {
+    ...
+  }
+}
+----
+|===
+
+
 === Error Responses
 
 ==== Not Found
@@ -89,12 +154,20 @@ include::partial$response.adoc[]
 :response-example: {"status":"error","errors":{"game_id":["Unknown app id 42"]}}
 include::partial$response.adoc[]
 
+==== Invalid Parameter
+
+:response-code: 422
+:response-body: JSON dictionary with 'status' and 'errors' keys. 'status' will be 'error'. 'errors' will be a dictionary containing keys indicating which parameters were invalid, with values being an array of human readable error messages.
+:response-example: {"status":"error","errors":{"identifier":["must be present"]}}
+include::partial$response.adoc[]
+
 ==== Rate Limit Response
 
 :response-code: 429
 :response-body: JSON dictionary with 'status' and 'errors' keys. 'status' will be 'rate_limit'. 'errors' will contain the key 'rate_limit'
 :response-example: {"status":"rate_limit","errors":{"rate_limit":["{endpoint} may only be called 5 times per second. Please wait a second and try again"]}}
 include::partial$response.adoc[]
+
 
 == Types
 
