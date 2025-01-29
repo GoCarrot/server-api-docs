@@ -272,10 +272,10 @@ This section outlines the shape of the various types of entity you will encounte
 [cols="1,3a", stripes="even"]
 |===
 | `default`
-| Use the default layout behavior.
+| Use the default layout behavior. See xref:ROOT:user-guide:notification-content.adoc#anatomy_android_default[Default Android Layout]
 
 | `ios_style`
-| If this mode is selected, `android_stack_expanded_view` must be `false`.
+| Use the iOS Style layout. See See xref:ROOT:user-guide:notification-content.adoc#anatomy_android_ios[Android iOS Style Layout]. If this mode is selected, `android_stack_expanded_view` must be `false`.
 |===
 
 
@@ -568,15 +568,15 @@ Note: Teak SDK version 3.1.1 or later required.
 
 | `title`
 | `string?`
-| xref:ROOT:user-guide:page$notifications.adoc#_anatomy[See anatomy of a push notification docs.]
+| xref:ROOT:user-guide:page$notification-content.adoc#anatomy[See anatomy of a push notification docs.]
 
 | `subtitle`
 | `string?`
-| xref:ROOT:user-guide:page$notifications.adoc#_anatomy[See anatomy of a push notification docs.]
+| xref:ROOT:user-guide:page$notification-content.adoc#anatomy[See anatomy of a push notification docs.]
 
 | `message`
 | `string?`
-| xref:ROOT:user-guide:page$notifications.adoc#_anatomy[See anatomy of a push notification docs.]
+| xref:ROOT:user-guide:page$notification-content.adoc#anatomy[See anatomy of a push notification docs.]
 
 | `locales`
 | `[string]?`
