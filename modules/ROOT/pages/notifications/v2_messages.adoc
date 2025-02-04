@@ -1,7 +1,7 @@
-= Notification Groups
+= Messages
 
 == Listing
-:endpoint: v2/notification_groups
+:endpoint: v2/messages
 
 [cols="1,3a", stripes="even"]
 |===
@@ -45,13 +45,13 @@ Description: The `{endpoint}` endpoint allows for querying all notification grou
 | Status Code
 | 200
 | Response Body
-| JSON dictionary with `status` and `notification_groups` keys, and potentially a `paging` key.
+| JSON dictionary with `status` and `messages` keys, and potentially a `paging` key.
 [cols="1,3a", stripes="even"]
 !===
 ! `status`
 ! `'ok'`
-! `notification_groups`
-! An array of `<<type_notification_group,NotificationGroup>>` dictionaries.
+! `messages`
+! An array of `<<type_message,Message>>` dictionaries.
 ! `paging`
 ! JSON dictionary with `cursors` and `next` keys. +
 `cursors` will be a dictionary containing an `after` key, whose value can be passed as the `after` parameter to {endpoint} to retrieve the next page. +
@@ -62,7 +62,7 @@ Description: The `{endpoint}` endpoint allows for querying all notification grou
 ----
 {
   "status":"ok",
-  "notification_groups": [
+  "messages": [
     ...
   ]
 }
@@ -81,7 +81,7 @@ include::partial$response.adoc[]
 
 
 == Creating
-:endpoint: v2/notification_groups
+:endpoint: v2/messages
 
 [cols="1,3a", stripes="even"]
 |===
@@ -106,9 +106,9 @@ Description: The `{endpoint}` endpoint allows for creating a notification group 
 | `secret_key`
 | Your Teak Server Secret
 | `identifier`
-| A unique identifier for the `<<type_notification_group,NotificationGroup>>` you are creating.
+| A unique identifier for the `<<type_message,Message>>` you are creating.
 | `opt_out_category`
-| The unique identifier of the opt-out category the `<<type_notification_group,NotificationGroup>>` will belong to.
+| The unique identifier of the opt-out category the `<<type_message,Message>>` will belong to.
 | `channels`
 | A dictionary whose keys are `<<type_channel,Channel>>` strings, and whose values are `<<type_channel_group,ChannelGroup>>` dictionaries.
 |===
@@ -129,15 +129,15 @@ _Not applicable._
 !===
 ! `status`
 ! `'ok'`
-! `notification_group`
-! A `<<type_notification_group,NotificationGroup>>` dictionary.
+! `message`
+! A `<<type_message,Message>>` dictionary.
 !===
 | Example
 | [source, json, subs="attributes"]
 ----
 {
   "status":"ok",
-  "notification_group": {
+  "message": {
     ...
   }
 }
@@ -170,7 +170,7 @@ include::partial$response.adoc[]
 
 
 == Updating
-:endpoint: v2/notification_groups
+:endpoint: v2/messages
 
 [cols="1,3a", stripes="even"]
 |===
@@ -184,9 +184,9 @@ include::partial$response.adoc[]
 | 5 requests per second
 |===
 
-Description: The `{endpoint}` endpoint allows for updating the `<<type_notification_group,NotificationGroup>>` with the identifier `identifier` in the request path.
+Description: The `{endpoint}` endpoint allows for updating the `<<type_message,Message>>` with the identifier `identifier` in the request path.
 
-**Note: For the time being, only a `<<type_notification_group,NotificationGroup>>` in which no `<<type_channel_group,ChannelGroup>>` contains more than one `<<type_notification_instance,NotificationInstance>>`.**
+**Note: For the time being, only a `<<type_message,Message>>` in which no `<<type_channel_group,ChannelGroup>>` contains more than one `<<type_message_instance,MessageInstance>>`.**
 
 === Required Parameters
 
@@ -197,9 +197,9 @@ Description: The `{endpoint}` endpoint allows for updating the `<<type_notificat
 | `secret_key`
 | Your Teak Server Secret
 | `identifier`
-| A unique identifier for the `<<type_notification_group,NotificationGroup>>` you are creating.
+| A unique identifier for the `<<type_message,Message>>` you are creating.
 | `opt_out_category`
-| The unique identifier of the opt-out category the `<<type_notification_group,NotificationGroup>>` will belong to.
+| The unique identifier of the opt-out category the `<<type_message,Message>>` will belong to.
 | `channels`
 | A dictionary whose keys are `<<type_channel,Channel>>` strings, and whose values are `<<type_channel_group,ChannelGroup>>` dictionaries.
 |===
@@ -220,15 +220,15 @@ _Not applicable._
 !===
 ! `status`
 ! `'ok'`
-! `notification_group`
-! A `<<type_notification_group,NotificationGroup>>` dictionary.
+! `message`
+! A `<<type_message,Message>>` dictionary.
 !===
 | Example
 | [source, json, subs="attributes"]
 ----
 {
   "status":"ok",
-  "notification_group": {
+  "message": {
     ...
   }
 }
@@ -361,19 +361,19 @@ This section outlines the shape of the various types of entity you will encounte
 |===
 
 
-=== anchor:type_notification_group[]NotificationGroup
+=== anchor:type_message[]Message
 
-`NotificationGroup` is a container for message content across all App-to-Player channels.  It is a dictionary containing the following keys:
+`Message` is a container for message content across all App-to-Player channels.  It is a dictionary containing the following keys:
 
 [cols="1,2,5a", stripes="even"]
 |===
 | `identifier`
 | `string`
-| The unique identifier of this `NotificationGroup`.
+| The unique identifier of this `Message`.
 
 | `opt_out_category`
 | `string`
-| The unique identifier of the opt-out category to which this `NotificationGroup` belongs.
+| The unique identifier of the opt-out category to which this `Message` belongs.
 
 | `channels`
 | `Map<<<type_channel,Channel>>, <<type_channel_group,ChannelGroup>>>`
@@ -381,19 +381,19 @@ This section outlines the shape of the various types of entity you will encounte
 
 | `created_at`
 | `string`
-| The ISO8601 timestamp indicating when this `NotificationGroup` was originally created.
+| The ISO8601 timestamp indicating when this `Message` was originally created.
 
 | `updated_at`
 | `string`
-| The ISO8601 timestamp indicating when this `NotificationGroup` was last updated.
+| The ISO8601 timestamp indicating when this `Message` was last updated.
 |===
 
 (Note: A '?' at the end of a type indicates that this field may be ommitted.)
 
 
-=== anchor:type_notification_instance[]NotificationInstance
+=== anchor:type_message_instance[]MessageInstance
 
-`NotificationInstance` represents the configuration of a notification, for a given channel.  If an A/B test is running, there may be multiple `NotificationInstance` records for a single channel, representing the variations under test.  It is a dictionary containing the following keys:
+`MessageInstance` represents the configuration of a notification, for a given channel.  If an A/B test is running, there may be multiple `MessageInstance` records for a single channel, representing the variations under test.  It is a dictionary containing the following keys:
 
 [cols="1,2,5a", stripes="even"]
 |===
@@ -407,7 +407,7 @@ This section outlines the shape of the various types of entity you will encounte
 
 | `link_type`
 | `<<type_link_type,LinkType>>`
-| What kind of link this `NotificationInstance` will use.
+| What kind of link this `MessageInstance` will use.
 
 | `show_in_foreground`
 | `boolean`
@@ -420,7 +420,7 @@ Note: Teak SDK version 3.1.1 or later required.
 
 | `test_weight`
 | `integer`
-| The relative weight of this `NotificationInstance` in an A/B test.  Only meaningful in an A/B test.
+| The relative weight of this `MessageInstance` in an A/B test.  Only meaningful in an A/B test.
 
 | `bundle_name`
 | `string?`
@@ -428,7 +428,7 @@ Note: Teak SDK version 3.1.1 or later required.
 
 | `reward_expiration`
 | `<<type_reward_expiration,RewardExpiration>>?`
-| When the reward associated with the notification expires, if a reward bundle is associated with this `NotificationInstance`.
+| When the reward associated with the notification expires, if a reward bundle is associated with this `MessageInstance`.
 
 | `translations`
 | `[<<type_translation,Translation>>]`
@@ -436,11 +436,11 @@ Note: Teak SDK version 3.1.1 or later required.
 
 | `created_at`
 | `string`
-| The ISO8601 timestamp indicating when this `NotificationInstance` was originally created.
+| The ISO8601 timestamp indicating when this `MessageInstance` was originally created.
 
 | `updated_at`
 | `string`
-| The ISO8601 timestamp indicating when this `NotificationInstance` was last updated.
+| The ISO8601 timestamp indicating when this `MessageInstance` was last updated.
 |===
 
 (Note: A '?' at the end of a type indicates that this field may be ommitted.)
@@ -471,25 +471,25 @@ Note: Teak SDK version 3.1.1 or later required.
 
 === anchor:type_channel_group[]ChannelGroup
 
-`ChannelGroup` is a container for the set of <<type_notification_instance,NotificationInstance>>s associated with a particular channel, and controls any relevant A/B test.  It is a dictionary containing the following keys:
+`ChannelGroup` is a container for the set of <<type_message_instance,MessageInstance>>s associated with a particular channel, and controls any relevant A/B test.  It is a dictionary containing the following keys:
 
 [cols="1,2,5a", stripes="even"]
 |===
 | `identifier`
 | `string`
-| The unique identifier of the `<<type_notification_group,NotificationGroup>>` to which this `ChannelGroup` belongs.
+| The unique identifier of the `<<type_message,Message>>` to which this `ChannelGroup` belongs.
 
 | `is_ab_test`
 | `boolean`
-| Whether or not this `ChannelGroup` has an active A/B test.  This will be true if there are multiple <<type_notification_instance,NotificationInstance>>s.
+| Whether or not this `ChannelGroup` has an active A/B test.  This will be true if there are multiple <<type_message_instance,MessageInstance>>s.
 
 | `start_time`
 | `string?`
 | The ISO8601 timestamp indicating when the A/B test began, if one is running.
 
 | `instances`
-| `[<<type_notification_instance,NotificationInstance>>]`
-| An array of <<type_notification_instance,NotificationInstance>> dictionaries.  There will be exactly one record, unless there is an A/B test configured.
+| `[<<type_message_instance,MessageInstance>>]`
+| An array of <<type_message_instance,MessageInstance>> dictionaries.  There will be exactly one record, unless there is an A/B test configured.
 
 | `created_at`
 | `string`
@@ -540,7 +540,7 @@ Note: Teak SDK version 3.1.1 or later required.
 | Use the value from `sound_filename`.
 
 | `category_default`
-| Use the sound associated with the opt-out category of the `<<type_notification_group,NotificationGroup>>`.
+| Use the sound associated with the opt-out category of the `<<type_message,Message>>`.
 |===
 
 
