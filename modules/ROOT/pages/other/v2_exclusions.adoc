@@ -53,7 +53,7 @@ Description: The GET `{endpoint}` endpoint retrieves current exclusions for the 
 'created_at' is the ISO8601 timestamp of when the exclusion was originally created. +
 'expire_at' is the ISO8601 timestamp of when the exclusion will expire. If null, the exclusion is indefinite.
 ! paging
-! JSON dictonary with 'cursors' and 'next' keys. +
+! JSON dictionary with 'cursors' and 'next' keys. +
 'cursors' will be a dictionary containing an 'after' key, whose value can be passed as the 'after' parameter to {endpoint} to retrieve the next page. +
 'next' will be the full path and non-authorization query parameters to retrieve the next page.
 !===

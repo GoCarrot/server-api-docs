@@ -1,6 +1,7 @@
 ** xref:server-api::page$index.adoc[Server API]
 *** xref:server-api::page$notifications/v2_schedule.adoc[API Driven Notification Sends]
 *** xref:server-api::page$notifications/v2_scheduled_notifications.adoc[Bulk Schedule Creation]
+*** xref:server-api::page$notifications/v2_messages.adoc[Messages Management]
 *** xref:server-api::page$other/v2_player_properties.adoc[Player Properties]
 *** xref:server-api::page$rewards/endpoint.adoc[Teak Reward Endpoint]
 *** xref:server-api::page$rewards/claiming.adoc[Claiming Teak Rewards]
