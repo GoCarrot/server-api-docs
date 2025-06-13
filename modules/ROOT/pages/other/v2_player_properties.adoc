@@ -40,13 +40,17 @@ Please note that
 | A map of player property names to the values of those properties for the given player.
 |===
 
+=== Alternate Parameters
+
+Instead of providing the `user_id` parameter, which is the Game Assigned Player ID, you can provide `teak_internal_user_id` with Teak's internal user id for the player. This ID is exposed in certain xref:ROOT:user-guide:data-sync.adoc[Data Sync] configurations. If both `user_id` and `teak_internal_user_id` are provided, this endpoint will ignore the `user_id` parameter.
+
 === Success Response
 [cols="1,3a"]
 |===
 | Status Code
 | 200
 | Response Body
-| JSON dictionary with 'status' and 'exclusions' keys. If pagination is possible, the dictionary will include a 'paging' key,
+| JSON dictionary.
 [cols="1,3a", stripes="even"]
 !===
 ! status

@@ -1,14 +1,16 @@
-[cols="1,3a"]
+[cols="1h,3a"]
 |===
 | Status Code
 | {response-code}
 | Response Body
 | {response-body}
+|===
+
+
 ifdef::response-example[]
-| Example
-| [source, json, subs="attributes"]
+.Example
+[source, json, subs="attributes"]
 ----
 {response-example}
 ----
 endif::[]
-|===
