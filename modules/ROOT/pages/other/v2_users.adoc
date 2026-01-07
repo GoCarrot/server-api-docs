@@ -4,7 +4,7 @@
 From time to time a player may request that all of their data be deleted. The DELETE `{endpoint}` endpoint will remove all information Teak has about a player, while retaining anonymized usage data so that metrics such as daily active users and revenue may still be properly calculated. Data removal is complete immediately upon receiving a response from this endpoint, and cannot be undone.
 
 == Destroying
-[cols="1,3a", stripes="even"]
+[cols="1h,3a", frame="none", grid="none"]
 |===
 | Endpoint
 | https://api.gocarrot.com/{endpoint}
@@ -19,6 +19,8 @@ Description: The DELETE `{endpoint}` endpoint removes all information Teak has a
 === Required Parameters
 [cols="1,3a", stripes="even"]
 |===
+|Name | Description
+
 | game_id
 | Your Teak App ID
 | secret_key

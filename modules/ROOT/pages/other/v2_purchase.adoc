@@ -1,6 +1,6 @@
 = Purchase Reporting
 
-[cols="1,3a", stripes="even"]
+[cols="1h,3a", frame="none", grid="none"]
 |===
 | Endpoint
 | https://api.gocarrot.com/v2/purchase
@@ -15,6 +15,8 @@ Description: The `v2/purchase` endpoint allows for server to server reporting of
 == Required Parameters
 [cols="1,3a", stripes="even"]
 |===
+|Name | Description
+
 | game_id
 | Your Teak App ID
 | secret_key
@@ -28,6 +30,8 @@ Description: The `v2/purchase` endpoint allows for server to server reporting of
 == Optional Parameters
 [cols="1,3a", stripes="even"]
 |===
+|Name | Description
+
 | platform
 | One of "ios", "android", or "desktop". Amazon devices should be reported as "android". If absent, will default to "desktop". Must be correctly set for Teak to attribute purchases to player sessions.
 | product_name

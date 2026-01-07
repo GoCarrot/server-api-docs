@@ -3,7 +3,7 @@
 == Listing
 :endpoint: v2/messages
 
-[cols="1,3a", stripes="even"]
+[cols="1h,3a", frame="none", grid="none"]
 |===
 | Endpoint
 | https://api.gocarrot.com/{endpoint}
@@ -21,6 +21,8 @@ Description: The `{endpoint}` endpoint allows for querying all notification grou
 
 [cols="1,3a", stripes="even"]
 |===
+|Name | Description
+
 | `game_id`
 | Your Teak App ID
 | `secret_key`
@@ -31,6 +33,8 @@ Description: The `{endpoint}` endpoint allows for querying all notification grou
 
 [cols="1,3a", stripes="even"]
 |===
+|Name | Description
+
 | `limit`
 | The number of notification groups to return. Will be clamped to [1, 1000]. Defaults to 1,000
 | `after`
@@ -83,7 +87,7 @@ include::partial$response.adoc[]
 == Creating
 :endpoint: v2/messages
 
-[cols="1,3a", stripes="even"]
+[cols="1h,3a", frame="none", grid="none"]
 |===
 | Endpoint
 | https://api.gocarrot.com/{endpoint}
@@ -101,6 +105,8 @@ Description: The `{endpoint}` endpoint allows for creating a notification group 
 
 [cols="1,3a", stripes="even"]
 |===
+|Name | Description
+
 | `game_id`
 | Your Teak App ID
 | `secret_key`
@@ -172,7 +178,7 @@ include::partial$response.adoc[]
 == Updating
 :endpoint: v2/messages
 
-[cols="1,3a", stripes="even"]
+[cols="1h,3a", frame="none", grid="none"]
 |===
 | Endpoint
 | https://api.gocarrot.com/{endpoint}/:identifier
@@ -192,6 +198,8 @@ Description: The `{endpoint}` endpoint allows for updating the `<<type_message,M
 
 [cols="1,3a", stripes="even"]
 |===
+|Name | Description
+
 | `game_id`
 | Your Teak App ID
 | `secret_key`

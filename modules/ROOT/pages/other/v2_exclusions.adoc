@@ -6,7 +6,7 @@ Other player opt out preferences are not impacted by an exclusion.
 
 == Listing
 :endpoint: v2/exclusions
-[cols="1,3a", stripes="even"]
+[cols="1h,3a", frame="none", grid="none"]
 |===
 | Endpoint
 | https://api.gocarrot.com/{endpoint}
@@ -21,6 +21,8 @@ Description: The GET `{endpoint}` endpoint retrieves current exclusions for the 
 === Required Parameters
 [cols="1,3a", stripes="even"]
 |===
+|Name | Description
+
 | game_id
 | Your Teak App ID
 | secret_key
@@ -30,6 +32,8 @@ Description: The GET `{endpoint}` endpoint retrieves current exclusions for the 
 === Optional Parameters
 [cols="1,3a", stripes="even"]
 |===
+|Name | Description
+
 | limit
 | The number of exclusion records to return. Will be clamped to [1, 10000]. Defaults to 1,000
 | after
@@ -91,7 +95,7 @@ include::partial$response.adoc[]
 
 == Reading
 :endpoint: v2/exclusions/:user_id
-[cols="1,3a", stripes="even"]
+[cols="1h,3a", frame="none", grid="none"]
 |===
 | Endpoint
 | https://api.gocarrot.com/{endpoint}
@@ -106,6 +110,8 @@ Description: The GET `{endpoint}` endpoint retrieves the current exclusion for t
 === Required Parameters
 [cols="1,3a", stripes="even"]
 |===
+|Name | Description
+
 | game_id
 | Your Teak App ID
 | secret_key
@@ -157,7 +163,7 @@ include::partial$response.adoc[]
 
 == Creating or Updating
 :endpoint: v2/exclusions
-[cols="1,3a", stripes="even"]
+[cols="1h,3a", frame="none", grid="none"]
 |===
 | Endpoint
 | https://api.gocarrot.com/{endpoint}
@@ -172,6 +178,8 @@ Description: The POST `{endpoint}` endpoint creates or updates an exclusion for 
 === Required Parameters
 [cols="1,3a", stripes="even"]
 |===
+|Name | Description
+
 | game_id
 | Your Teak App ID
 | secret_key
@@ -183,6 +191,8 @@ Description: The POST `{endpoint}` endpoint creates or updates an exclusion for 
 === Optional Parameters
 [cols="1,3a", stripes="even"]
 |===
+|Name | Description
+
 | expire_at
 | An ISO8601 timestamp of when the exclusion should expire. If omitted in a creation or update request, the exclusion will not expire.
 |===
@@ -256,7 +266,7 @@ include::partial$response.adoc[]
 include::partial$response.adoc[]
 
 == Destroying
-[cols="1,3a", stripes="even"]
+[cols="1h,3a", frame="none", grid="none"]
 |===
 | Endpoint
 | https://api.gocarrot.com/{endpoint}
@@ -271,6 +281,8 @@ Description: The DELETE `{endpoint}` endpoint destroys an exclusion for a given 
 === Required Parameters
 [cols="1,3a", stripes="even"]
 |===
+|Name | Description
+
 | game_id
 | Your Teak App ID
 | secret_key

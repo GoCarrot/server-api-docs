@@ -6,7 +6,7 @@ The subscription status set by this API applies to both locally scheduled notifi
 
 == Reading
 :endpoint: v2/push/subscription_status
-[cols="1,3a", stripes="even"]
+[cols="1h,3a", frame="none", grid="none"]
 |===
 | Endpoint
 | https://api.gocarrot.com/{endpoint}
@@ -21,6 +21,8 @@ Description: The GET `{endpoint}` endpoint retrieves the current push subscripti
 === Required Parameters
 [cols="1,3a", stripes="even"]
 |===
+|Name | Description
+
 | game_id
 | Your Teak App ID
 | secret_key
@@ -81,7 +83,7 @@ include::partial$response.adoc[]
 
 == Updating
 :endpoint: v2/push/subscription_status
-[cols="1,3a", stripes="even"]
+[cols="1h,3a", frame="none", grid="none"]
 |===
 | Endpoint
 | https://api.gocarrot.com/{endpoint}
@@ -102,6 +104,8 @@ It is not necessary for the player to have any mobile devices to make this call.
 === Required Parameters
 [cols="1,3a", stripes="even"]
 |===
+|Name | Description
+
 | game_id
 | Your Teak App ID
 | secret_key
@@ -180,7 +184,7 @@ include::partial$response.adoc[]
 
 == Category Update
 :endpoint: v2/push/subscription_status/:category_identifier
-[cols="1,3a", stripes="even"]
+[cols="1h,3a", frame="none", grid="none"]
 |===
 | Endpoint
 | https://api.gocarrot.com/{endpoint}
@@ -201,6 +205,8 @@ It is not necessary for the player to have any mobile devices to make this call.
 === Required Parameters
 [cols="1,3a", stripes="even"]
 |===
+|Name | Description
+
 | category_identifier
 | Note that this is a path parameter. The identifier of the opt out category the player's push subscription status is being updated for.
 | game_id

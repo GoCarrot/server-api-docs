@@ -15,6 +15,8 @@ Teak will issue a POST request to a specified endpoint. There is only one endpoi
 The request will have the following parameters set in the POST body with the `application/x-www-form-urlencoded` `Content-Type`:
 [cols="1,3a", stripes="even"]
 |===
+|Name | Description
+
 | app_id
 | The Teak App ID of the application
 | clicking_user_id

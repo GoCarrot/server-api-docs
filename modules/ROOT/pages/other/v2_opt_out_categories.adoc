@@ -10,7 +10,7 @@ Please note that on Android any configured sound or badge display state cannot b
 
 == Listing
 :endpoint: v2/opt_out_categories
-[cols="1,3a", stripes="even"]
+[cols="1h,3a", frame="none", grid="none"]
 |===
 | Endpoint
 | https://api.gocarrot.com/{endpoint}
@@ -25,6 +25,8 @@ Description: The GET `{endpoint}` endpoint retreives all Opt Out Categories for 
 === Required Parameters
 [cols="1,3a", stripes="even"]
 |===
+|Name | Description
+
 | game_id
 | Your Teak App ID
 | secret_key
@@ -97,7 +99,7 @@ include::partial$response.adoc[]
 
 == Reading
 :endpoint: v2/opt_out_categories/:identifier
-[cols="1,3a", stripes="even"]
+[cols="1h,3a", frame="none", grid="none"]
 |===
 | Endpoint
 | https://api.gocarrot.com/{endpoint}
@@ -112,6 +114,8 @@ Description: The GET `{endpoint}` endpoint retrieves the current configuration f
 === Required Parameters
 [cols="1,3a", stripes="even"]
 |===
+|Name | Description
+
 | game_id
 | Your Teak App ID
 | secret_key
@@ -182,7 +186,7 @@ include::partial$response.adoc[]
 
 == Creating
 :endpoint: v2/opt_out_categories
-[cols="1,3a", stripes="even"]
+[cols="1h,3a", frame="none", grid="none"]
 |===
 | Endpoint
 | https://api.gocarrot.com/{endpoint}
@@ -197,6 +201,8 @@ Description: The POST `{endpoint}` endpoint creates a new Opt Out Category.
 === Required Parameters
 [cols="1,3a", stripes="even"]
 |===
+|Name | Description
+
 | game_id
 | Your Teak App ID
 | secret_key
@@ -210,6 +216,8 @@ Description: The POST `{endpoint}` endpoint creates a new Opt Out Category.
 === Optional Parameters
 [cols="1,3a", stripes="even"]
 |===
+|Name | Description
+
 | description
 | The player visible description of the Opt Out Category.
 | ios_sound_file
@@ -297,7 +305,7 @@ include::partial$response.adoc[]
 
 == Updating
 :endpoint: v2/opt_out_categories/:identifier
-[cols="1,3a", stripes="even"]
+[cols="1h,3a", frame="none", grid="none"]
 |===
 | Endpoint
 | https://api.gocarrot.com/{endpoint}
@@ -312,6 +320,8 @@ Description: The PUT `{endpoint}` endpoint updates settings for the Opt Out Cate
 === Required Parameters
 [cols="1,3a", stripes="even"]
 |===
+|Name | Description
+
 | game_id
 | Your Teak App ID
 | secret_key
@@ -321,6 +331,8 @@ Description: The PUT `{endpoint}` endpoint updates settings for the Opt Out Cate
 === Optional Parameters
 [cols="1,3a", stripes="even"]
 |===
+|Name | Description
+
 | name
 | The player visible name of the Opt Out Category. Must be shorter than 32 characters.
 | description

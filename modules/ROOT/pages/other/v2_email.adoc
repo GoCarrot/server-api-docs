@@ -1,7 +1,7 @@
 = Email Address Management
 
 == Reading
-[cols="1,3a", stripes="even"]
+[cols="1h,3a", frame="none", grid="none"]
 |===
 | Endpoint
 | https://api.gocarrot.com/v2/email
@@ -16,6 +16,8 @@ Description: The GET `v2/email` endpoint retrieves the current email address for
 === Required Parameters
 [cols="1,3a", stripes="even"]
 |===
+|Name | Description
+
 | game_id
 | Your Teak App ID
 | secret_key
@@ -49,7 +51,7 @@ include::partial$response.adoc[]
 
 == Reading Subscription Status
 :endpoint: v2/email/subscription_status
-[cols="1,3a", stripes="even"]
+[cols="1h,3a", frame="none", grid="none"]
 |===
 | Endpoint
 | https://api.gocarrot.com/{endpoint}
@@ -64,6 +66,8 @@ Description: The GET `{endpoint}` endpoint retrieves the current subscription st
 === Required Parameters
 [cols="1,3a", stripes="even"]
 |===
+|Name | Description
+
 | game_id
 | Your Teak App ID
 | secret_key
@@ -119,7 +123,7 @@ include::partial$response.adoc[]
 
 == Retrieving Recent Unsubscriptions
 :endpoint: v2/email/unsubscriptions
-[cols="1,3a", stripes="even"]
+[cols="1h,3a", frame="none", grid="none"]
 |===
 | Endpoint
 | https://api.gocarrot.com/{endpoint}
@@ -134,6 +138,8 @@ Description: The GET `{endpoint}` endpoint retrieves a list of email addresses t
 === Required Parameters
 [cols="1,3a", stripes="even"]
 |===
+|Name | Description
+
 | game_id
 | Your Teak App ID
 | secret_key
@@ -145,6 +151,8 @@ Description: The GET `{endpoint}` endpoint retrieves a list of email addresses t
 === Optional Parameters
 [cols="1,3a", stripes="even"]
 |===
+|Name | Description
+
 | limit
 | The number of recent unsubs to return. Will be clamped to [1, 10000]. Defaults to 1,000
 | after
@@ -197,7 +205,7 @@ Description: The GET `{endpoint}` endpoint retrieves a list of email addresses t
 include::partial$response.adoc[]
 
 == Updating
-[cols="1,3a", stripes="even"]
+[cols="1h,3a", frame="none", grid="none"]
 |===
 | Endpoint
 | https://api.gocarrot.com/v2/email
@@ -216,6 +224,8 @@ Please be aware that Teak enforces that each player may only have a single email
 === Required Parameters
 [cols="1,3a", stripes="even"]
 |===
+|Name | Description
+
 | game_id
 | Your Teak App ID
 | secret_key
@@ -279,7 +289,7 @@ include::partial$response.adoc[]
 
 == Updating Subscription Status
 :endpoint: v2/email/subscription_status
-[cols="1,3a", stripes="even"]
+[cols="1h,3a", frame="none", grid="none"]
 |===
 | Endpoint
 | https://api.gocarrot.com/{endpoint}
@@ -303,6 +313,8 @@ Requests to update a `spam_report` state to `opt_out` will be ignored.
 === Required Parameters
 [cols="1,3a", stripes="even"]
 |===
+|Name | Description
+
 | game_id
 | Your Teak App ID
 | secret_key
@@ -381,7 +393,7 @@ include::partial$response.adoc[]
 
 == Updating Category Subscription Status
 :endpoint: v2/email/subscription_status/:category_identifier
-[cols="1,3a", stripes="even"]
+[cols="1h,3a", frame="none", grid="none"]
 |===
 | Endpoint
 | https://api.gocarrot.com/{endpoint}
@@ -401,6 +413,8 @@ seen will apply to the address as soon as it is associated with a player.
 === Required Parameters
 [cols="1,3a", stripes="even"]
 |===
+|Name | Description
+
 | category_identifier
 | Note that this is a path parameter. The identifier of the opt out category the email's subscription status is being updated for.
 | game_id
@@ -477,7 +491,7 @@ include::partial$response.adoc[]
 
 == Clear Delivery Fault [[clear_delivery_fault]]
 :endpoint: v2/email/delivery_fault
-[cols="1,3a", stripes="even"]
+[cols="1h,3a", frame="none", grid="none"]
 |===
 | Endpoint
 | https://api.gocarrot.com/{endpoint}
@@ -494,6 +508,8 @@ Description: The DELETE `{endpoint}` endpoint clears the delivery fault flag for
 === Required Parameters
 [cols="1,3a", stripes="even"]
 |===
+|Name | Description
+
 | game_id
 | Your Teak App ID
 | secret_key
@@ -540,7 +556,7 @@ include::partial$response.adoc[]
 include::partial$response.adoc[]
 
 == Removing
-[cols="1,3a", stripes="even"]
+[cols="1h,3a", frame="none", grid="none"]
 |===
 | Endpoint
 | https://api.gocarrot.com/v2/email
@@ -557,6 +573,8 @@ Description: The DELETE `v2/email` endpoint allows for removal of an email addre
 === Required Parameters
 [cols="1,3a", stripes="even"]
 |===
+|Name | Description
+
 | game_id
 | Your Teak App ID
 | secret_key

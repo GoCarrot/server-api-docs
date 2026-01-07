@@ -1,7 +1,7 @@
 = Direct Notification Scheduling
 
 == Scheduling
-[cols="1,3a", stripes="even"]
+[cols="1h,3a", frame="none", grid="none"]
 |===
 | Endpoint
 | https://api.gocarrot.com/v2/schedule
@@ -23,6 +23,8 @@ This endpoint is appropriate for use when users whom the notification should be 
 
 [cols="1,3a", stripes="even"]
 |===
+|Name | Description
+
 | game_id
 | Your Teak App ID
 | secret_key
@@ -37,6 +39,8 @@ This endpoint is appropriate for use when users whom the notification should be 
 
 [cols="1,3a", stripes="even"]
 |===
+|Name | Description
+
 | send_time
 | The time in UTC at which to deliver the notification. Must be in ISO8601 format, e.g. "2018-08-23 17:00:00". Must be within 30 days from the time the call is made. If omitted, or if set to a past time, notifications will be scheduled to deliver immediately.
 | personalization_data
@@ -73,7 +77,7 @@ include::partial$response.adoc[]
 include::partial$response.adoc[]
 
 == Cancelling/Unscheduling
-[cols="1,3a", stripes="even"]
+[cols="1h,3a", frame="none", grid="none"]
 |===
 | Endpoint
 | https://api.gocarrot.com/v2/unschedule
@@ -87,13 +91,15 @@ include::partial$response.adoc[]
 
 Description: The `v2/unschedule` endpoint allows for bulk cancelling or unscheduling of notifications scheduled for delivery using the `v2/schedule` API.
 
-The `Name` you give the Schedule is `notification_identifier` you should use in calls tot his API. Your marketing team may already have set up some Local Schedules; be sure to ask them if they have and what names they’ve given the Local Schedules.
+The `Name` you give the Schedule is `notification_identifier` you should use in calls to this API. Your marketing team may already have set up some Local Schedules; be sure to ask them if they have and what names they’ve given the Local Schedules.
 
 
 === Required Parameters
 
 [cols="1,3a", stripes="even"]
 |===
+|Name | Description
+
 | game_id
 | Your Teak App ID
 | secret_key
@@ -106,6 +112,8 @@ You must provide either the `ids` parameter or the `user_ids` and `notification_
 
 [cols="1,3a", stripes="even"]
 |===
+|Name | Description
+
 | notification_identifier
 | The Name of the Schedule in the dashboard.
 | user_ids

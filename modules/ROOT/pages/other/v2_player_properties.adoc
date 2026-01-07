@@ -17,7 +17,7 @@ Please note that
 == Updating
 :endpoint: v2/player_properties
 :rate_limit: 1000
-[cols="1,3a", stripes="even"]
+[cols="1h,3a", frame="none", grid="none"]
 |===
 | Endpoint
 | https://api.gocarrot.com/{endpoint}
@@ -30,6 +30,8 @@ Please note that
 === Required Parameters
 [cols="1,3a", stripes="even"]
 |===
+|Name | Description
+
 | game_id
 | Your Teak App ID
 | secret_key

@@ -3,7 +3,7 @@
 These endpoints allow for the management of Schedules in Teak. Schedules are visible in the dashboard in the Notifications section, and direct Teak to send a Message to an Audience at a specific time, or based on a player entering or leaving the audience.
 
 == Creation
-[cols="1,3a", stripes="even"]
+[cols="1h,3a", frame="none", grid="none"]
 |===
 | Endpoint
 | https://api.gocarrot.com/v2/scheduled_notifications
@@ -24,6 +24,8 @@ This endpoint is appropriate for use when the users a notification should be sen
 === Required Parameters
 [cols="1,3a", stripes="even"]
 |===
+|Name | Description
+
 | game_id
 | Your Teak App ID
 | secret_key
@@ -48,6 +50,8 @@ If "trigger", the Schedule will send the message to players who either enter or 
 ==== When send_type is "later"
 [cols="1,3a", stripes="even"]
 |===
+|Name | Description
+
 | send_time
 | Specifies when the Schedule will send the Message to the Audience. Must be an ISO8601 UTC timestamp, e.g. 2021-10-01T17:00:00Z, for a time in the future.
 |===
@@ -55,6 +59,8 @@ If "trigger", the Schedule will send the message to players who either enter or 
 === Optional Parameters
 [cols="1,3a", stripes="even"]
 |===
+|Name | Description
+
 | send_smear_duration_in_minutes
 | If specified, will distribute sends roughly evenly over the given number of minutes. Defaults to 0. Must be an integer value greater than or equal to 0 and less than or equal to 240.
 | device_priority
@@ -103,7 +109,7 @@ include::partial$response.adoc[]
 include::partial$response.adoc[]
 
 == Updating
-[cols="1,3a", stripes="even"]
+[cols="1h,3a", frame="none", grid="none"]
 |===
 | Endpoint
 | https://api.gocarrot.com/v2/scheduled_notifications/\{id\}
@@ -126,6 +132,8 @@ It is an error to update the enabled state of a Schedule with send_type "trigger
 === Required URL Fields
 [cols="1,3a", stripes="even"]
 |===
+|Name | Description
+
 | id
 | Must be the id of a previously created Schedule, as specified by the "id" field in the API response.
 |===
@@ -133,6 +141,8 @@ It is an error to update the enabled state of a Schedule with send_type "trigger
 === Required Parameters
 [cols="1,3a", stripes="even"]
 |===
+|Name | Description
+
 | game_id
 | Your Teak App ID
 | secret_key
@@ -142,6 +152,8 @@ It is an error to update the enabled state of a Schedule with send_type "trigger
 === Optional Parameters
 [cols="1,3a", stripes="even"]
 |===
+|Name | Description
+
 | enabled
 | A boolean value indicating if the schedule is enabled or not. A disabled schedule will be visible in the Dashboard by default (i.e. not archived) but will not make any sends. Defaults to the current Schedule enabled state. Accepted falsy values are 0 and "false". All other values will be interpreted as truthy.
 | archived
