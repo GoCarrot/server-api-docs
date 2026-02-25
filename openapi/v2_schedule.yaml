@@ -1,0 +1,338 @@
+openapi: 3.1.0
+info:
+  title: Teak Notification Scheduling API
+  description: >-
+    Bulk scheduling and cancellation of local push notifications.
+    Before using this API you must configure a corresponding Local Schedule
+    on the Teak Dashboard.
+  version: "2.0"
+  contact:
+    name: Teak
+    url: https://teak.io
+
+servers:
+  - url: https://api.gocarrot.com
+    description: Production
+
+paths:
+  /v2/schedule:
+    post:
+      operationId: scheduleNotifications
+      summary: Schedule notifications for delivery
+      description: >-
+        Bulk schedule notifications to be delivered within 30 days. Requires a
+        corresponding Local Schedule configured on the Teak Dashboard. The
+        `Name` of that schedule is the `notification_identifier` used here.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ScheduleRequest"
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: "#/components/schemas/ScheduleRequest"
+      responses:
+        "200":
+          description: Notifications scheduled successfully.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ScheduleSuccessResponse"
+              example:
+                status: ok
+                ids:
+                  - "12904919075210912"
+                scheduled:
+                  player_1: "12904919075210912"
+        "404":
+          description: Game not found.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+              example:
+                status: error
+                errors:
+                  game_id:
+                    - "Unknown app id 42"
+        "422":
+          description: Validation error.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+              example:
+                status: error
+                errors:
+                  notification_identifier:
+                    - "must be present"
+        "429":
+          description: Rate limit exceeded.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/RateLimitResponse"
+              example:
+                status: rate_limit
+                errors:
+                  rate_limit:
+                    - "/v2/schedule may only be called 30 times per second. Please wait a second and try again"
+
+  /v2/unschedule:
+    post:
+      operationId: unscheduleNotifications
+      summary: Cancel previously scheduled notifications
+      description: >-
+        Bulk cancel notifications previously scheduled via `/v2/schedule`.
+        Provide either `ids` (up to 1,000) or the combination of `user_ids`
+        (up to 100) and `notification_identifier`.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UnscheduleRequest"
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: "#/components/schemas/UnscheduleRequest"
+      responses:
+        "200":
+          description: Notifications cancelled successfully.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SuccessResponse"
+              example:
+                status: ok
+                ids:
+                  - "12904919075210912"
+        "404":
+          description: Game not found.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+              example:
+                status: error
+                errors:
+                  game_id:
+                    - "Unknown app id 42"
+        "422":
+          description: Validation error.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+              example:
+                status: error
+                errors:
+                  notification_identifier:
+                    - "must be present"
+        "429":
+          description: Rate limit exceeded.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/RateLimitResponse"
+              example:
+                status: rate_limit
+                errors:
+                  rate_limit:
+                    - "/v2/unschedule may only be called 30 times per second. Please wait a second and try again"
+
+components:
+  schemas:
+    ScheduleRequest:
+      type: object
+      required:
+        - game_id
+        - secret_key
+        - notification_identifier
+        - user_ids
+      properties:
+        game_id:
+          type: string
+          description: Your Teak App ID.
+        secret_key:
+          type: string
+          description: Your Teak Server Secret.
+        notification_identifier:
+          type: string
+          description: The Name of the Local Schedule in the dashboard.
+        user_ids:
+          type: array
+          items:
+            type: string
+          maxItems: 100
+          description: >-
+            Game Assigned Player IDs to send the notification to.
+            Maximum of 100 per call.
+        send_time:
+          type: string
+          format: date-time
+          description: >-
+            UTC time at which to deliver the notification, in ISO 8601 format
+            (e.g. "2018-08-23 17:00:00"). Must be within 30 days. If omitted
+            or set to a past time, notifications are scheduled for immediate
+            delivery.
+        personalization_data:
+          type: object
+          additionalProperties:
+            type: object
+            additionalProperties:
+              type: string
+          description: >-
+            Map of Game Assigned Player ID to a map of string key/value pairs.
+            These are available as template tags in the notification content.
+          example:
+            player_123:
+              first_name: Alex
+              level: "42"
+        device_ids:
+          type: object
+          additionalProperties:
+            type: string
+          description: >-
+            Map of Game Assigned Player ID to Teak Device ID. When provided,
+            the notification will be targeted to the specified device for each
+            player instead of using the prioritization set on the Schedule in
+            the dashboard. Players in `user_ids` but not in `device_ids` use
+            the dashboard prioritization. If a device ID cannot be resolved,
+            that player is skipped and the error is reported in the response.
+          example:
+            player_123: "device-id-abc"
+            player_456: "device-id-def"
+
+    UnscheduleRequest:
+      type: object
+      required:
+        - game_id
+        - secret_key
+      properties:
+        game_id:
+          type: string
+          description: Your Teak App ID.
+        secret_key:
+          type: string
+          description: Your Teak Server Secret.
+        notification_identifier:
+          type: string
+          description: >-
+            The Name of the Local Schedule in the dashboard.
+            Required when using `user_ids`.
+        user_ids:
+          type: array
+          items:
+            type: string
+          maxItems: 100
+          description: >-
+            Game Assigned Player IDs to cancel notifications for.
+            Maximum of 100 per call. Must be accompanied by
+            `notification_identifier`. Mutually exclusive with `ids`.
+        ids:
+          type: array
+          items:
+            type: string
+          maxItems: 1000
+          description: >-
+            Opaque IDs returned from previous `/v2/schedule` calls.
+            Maximum of 1,000 per call. Mutually exclusive with `user_ids`.
+      oneOf:
+        - required:
+            - ids
+          not:
+            required:
+              - user_ids
+        - required:
+            - user_ids
+            - notification_identifier
+          not:
+            required:
+              - ids
+
+    ScheduleSuccessResponse:
+      type: object
+      required:
+        - status
+        - ids
+        - scheduled
+      properties:
+        status:
+          type: string
+          const: ok
+        ids:
+          type: array
+          items:
+            type: string
+          description: Opaque IDs for the deliveries scheduled.
+        scheduled:
+          type: object
+          additionalProperties:
+            type: string
+          description: >-
+            Map of Game Assigned Player ID to the opaque delivery ID for
+            that player.
+        errors:
+          type: object
+          properties:
+            device_ids:
+              type: object
+              additionalProperties:
+                type: string
+              description: >-
+                Map of Game Assigned Player ID to a human-readable error
+                message for each player whose device ID could not be
+                resolved. Only present when `device_ids` was provided and
+                one or more entries could not be resolved.
+
+    SuccessResponse:
+      type: object
+      required:
+        - status
+        - ids
+      properties:
+        status:
+          type: string
+          const: ok
+        ids:
+          type: array
+          items:
+            type: string
+          description: Opaque IDs for the deliveries cancelled.
+
+    ErrorResponse:
+      type: object
+      required:
+        - status
+        - errors
+      properties:
+        status:
+          type: string
+          const: error
+        errors:
+          type: object
+          additionalProperties:
+            type: array
+            items:
+              type: string
+          description: >-
+            Keys are the parameter that failed validation; values are arrays
+            of human-readable error messages.
+
+    RateLimitResponse:
+      type: object
+      required:
+        - status
+        - errors
+      properties:
+        status:
+          type: string
+          const: rate_limit
+        errors:
+          type: object
+          properties:
+            rate_limit:
+              type: array
+              items:
+                type: string
