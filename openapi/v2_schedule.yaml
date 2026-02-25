@@ -196,10 +196,10 @@ components:
           description: >-
             Map of Game Assigned Player ID to Teak Device ID. When provided,
             the notification will be targeted to the specified device for each
-            player instead of all devices. Players in `user_ids` but not in
-            `device_ids` receive the notification on all devices. If a device
-            ID cannot be resolved, that player is skipped and the error is
-            reported in the response.
+            player instead of using the prioritization set on the Schedule in
+            the dashboard. Players in `user_ids` but not in `device_ids` use
+            the dashboard prioritization. If a device ID cannot be resolved,
+            that player is skipped and the error is reported in the response.
           example:
             player_123: "device-id-abc"
             player_456: "device-id-def"

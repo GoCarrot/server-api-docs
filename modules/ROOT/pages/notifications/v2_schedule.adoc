@@ -46,7 +46,7 @@ This endpoint is appropriate for use when users whom the notification should be 
 | personalization_data
 | A map of Game Assigned Player IDs to a map of string key/value pairs. The key/value pairs will be available to be templated into the sent notification. See xref:ROOT:user-guide:page$custom-tags.adoc#_local_notification_tags[Local Notification Tags, window=_blank] for more information.
 | device_ids
-| A map of Game Assigned Player IDs to Teak Device IDs. When provided, the notification will be targeted to the specified device for each player instead of all devices. Players included in `user_ids` but not in `device_ids` will receive the notification on all devices. If a device ID cannot be resolved (e.g. the device does not exist or does not belong to the specified player), that player will be skipped and the error reported in the response.
+| A map of Game Assigned Player IDs to Teak Device IDs. When provided, the notification will be targeted to the specified device for each player instead of using the prioritization set on the Schedule in the dashboard. Players included in `user_ids` but not in `device_ids` will use the dashboard prioritization. If a device ID cannot be resolved (e.g. the device does not exist or does not belong to the specified player), that player will be skipped and the error reported in the response.
 |===
 
 === Success Response
