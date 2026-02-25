@@ -45,13 +45,35 @@ This endpoint is appropriate for use when users whom the notification should be 
 | The time in UTC at which to deliver the notification. Must be in ISO8601 format, e.g. "2018-08-23 17:00:00". Must be within 30 days from the time the call is made. If omitted, or if set to a past time, notifications will be scheduled to deliver immediately.
 | personalization_data
 | A map of Game Assigned Player IDs to a map of string key/value pairs. The key/value pairs will be available to be templated into the sent notification. See xref:ROOT:user-guide:page$custom-tags.adoc#_local_notification_tags[Local Notification Tags, window=_blank] for more information.
+| device_ids
+| A map of Game Assigned Player IDs to Teak Device IDs. When provided, the notification will be targeted to the specified device for each player instead of all devices. Players included in `user_ids` but not in `device_ids` will receive the notification on all devices. If a device ID cannot be resolved (e.g. the device does not exist or does not belong to the specified player), that player will be skipped and the error reported in the response.
 |===
 
 === Success Response
 :response-code: 200
-:response-body: JSON dictionary with 'status' and 'ids' keys. 'status' will be 'ok'. 'ids' will contain an array of strings which are opaque ids for the deliveries scheduled. Every delivery will have a unique id.
-:response-example: {"status":"ok", "ids":["12904919075210912"]}
+:response-body: JSON dictionary with 'status', 'ids', and 'scheduled' keys. 'status' will be 'ok'. 'ids' will contain an array of strings which are opaque ids for the deliveries scheduled. Every delivery will have a unique id. 'scheduled' will be a map of Game Assigned Player ID to the opaque delivery id for that player. If `device_ids` was provided and any device IDs could not be resolved, an 'errors' key will be present containing a 'device_ids' map of the Game Assigned Player ID to a human readable error message. Players with unresolvable device IDs will not have deliveries scheduled.
+:response-example: {"status":"ok", "ids":["12904919075210912"], "scheduled":{"player_1":"12904919075210912"}}
 include::partial$response.adoc[]
+
+==== Partial Device ID Failure
+
+When `device_ids` is provided and some device IDs cannot be resolved, the response will still return a `200` status. Successfully targeted players will be scheduled normally. Unresolvable players will be skipped and reported in the `errors.device_ids` map.
+
+[source,json]
+----
+{
+  "status": "ok",
+  "ids": ["12904919075210912"],
+  "scheduled": {
+    "player_1": "12904919075210912"
+  },
+  "errors": {
+    "device_ids": {
+      "player_2": "could not resolve device 'bad-device-id'"
+    }
+  }
+}
+----
 
 === Error Responses
 
