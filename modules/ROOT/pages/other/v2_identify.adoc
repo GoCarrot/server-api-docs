@@ -1,0 +1,123 @@
+= Server to Server Player Sessions
+:endpoint: v2/identify
+
+The POST `{endpoint}` endpoint creates or resumes a player session from a server to server context. This is useful for games that manage their own server infrastructure and want to track player sessions, populate player properties for use in audience targeting and message personalization, and resolve deep links with player-specific data.
+
+When a new player is identified for the first time, Teak will create the player record. Subsequent calls for the same player will resume their session.
+
+== Creating or Resuming a Player Session
+[cols="1h,3a", frame="none", grid="none"]
+|===
+| Endpoint
+| https://api.gocarrot.com/{endpoint}
+| Request Type
+| POST
+| Content-Type
+| application/json or application/x-www-form-urlencoded
+|===
+
+=== Required Parameters
+[cols="1,3a", stripes="even"]
+|===
+|Name | Description
+
+| game_id
+| Your Teak App ID
+| secret_key
+| Your Teak Server Secret
+| user_id
+| The Game Assigned Player ID. This must match the value provided by the game client's Teak SDK integration.
+|===
+
+=== Optional Parameters
+[cols="1,3a", stripes="even"]
+|===
+|Name | Description
+
+| timezone
+| The player's timezone as a UTC offset (e.g. `-7.0` for US Pacific Daylight Time). Used for timezone-aware message scheduling.
+| client_ip
+| The player's IP address. Used for GeoIP country resolution. When omitted, the IP address of the requesting server is used, which will not produce meaningful GeoIP data for your players.
+| deep_link
+| A deep link to return in the response. If the link scheme begins with `teak`, xref:ROOT:user-guide:page$custom-tags.adoc[Liquid templating, window=_blank] is applied and xref:ROOT:user-guide:page$player-properties.adoc[Player Property, window=_blank] values can be substituted using `\{{property_name}}` syntax. Non-teak scheme links are returned as-is.
+|===
+
+=== Example Request
+[source, json]
+----
+{
+  "game_id": "your_teak_app_id",
+  "secret_key": "your_server_secret",
+  "user_id": "player_123",
+  "timezone": -7.0,
+  "client_ip": "203.0.113.42",
+  "deep_link": "teak12345:///reward?level={{player_level}}"
+}
+----
+
+=== Success Response
+[cols="1,3a"]
+|===
+| Status Code
+| 201
+| Response Body
+| JSON dictionary.
+[cols="1,3a", stripes="even"]
+!===
+! id
+! Teak's internal numeric ID for the player.
+! game_id
+! The numeric ID of the game.
+! country_code
+! Two-letter ISO country code derived from GeoIP lookup of `client_ip` (or the request IP if `client_ip` is not provided). Empty string if GeoIP lookup fails.
+! opt_out_states
+! A dictionary of channel opt-out states for this player. Contains keys `email`, `push`, and `sms`, each with a `state` value indicating the player's current opt-out preference for that channel.
+! user_profile
+! The player's current xref:ROOT:user-guide:page$player-properties.adoc[Player Properties, window=_blank]. A dictionary containing: +
+'string_attributes' is a map of string property names to their current values. +
+'number_attributes' is a map of number property names to their current values. +
+'context' is an opaque string for internal use.
+! deep_link
+! _(Only present if `deep_link` was provided in the request.)_ The deep link after Liquid template rendering. Player Property values are substituted for `\{{property_name}}` placeholders in links with a `teak` scheme. Non-teak scheme links are returned unmodified.
+!===
+| Example
+| [source, json]
+----
+{
+  "id": 12345,
+  "game_id": 678,
+  "country_code": "US",
+  "opt_out_states": {
+    "email": {"state": "opted_in"},
+    "push": {"state": "opted_in"},
+    "sms": {"state": "opted_out_no_data"}
+  },
+  "user_profile": {
+    "string_attributes": {
+      "player_level": "elite"
+    },
+    "number_attributes": {
+      "high_score": 9001.0
+    },
+    "context": "..."
+  },
+  "deep_link": "teak12345:///reward?level=elite"
+}
+----
+|===
+
+=== Error Responses
+
+==== Forbidden
+
+:response-code: 403
+:response-body: JSON dictionary with 'status' and 'errors' keys. 'status' will be 'error'. 'errors' will be a dictionary containing keys indicating which parameters were invalid, with values being an array of human readable error messages.
+:response-example: {"status":"error","errors":{"authorization":["is invalid"]}}
+include::partial$response.adoc[]
+
+==== Not Found
+
+:response-code: 404
+:response-body: JSON dictionary with an 'error' key containing a dictionary with 'code' and 'message' keys.
+:response-example: {"error":{"code":404,"message":"Could not find game with id unknown_app_id"}}
+include::partial$response.adoc[]
