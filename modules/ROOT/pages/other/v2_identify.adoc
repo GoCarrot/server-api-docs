@@ -88,9 +88,9 @@ NOTE: If a player has been permanently opted out via data removal, the session w
   "country_code": "US",
   "session_id": "12345",
   "opt_out_states": {
-    "email": {"state": "opted_in"},
-    "push": {"state": "opted_in"},
-    "sms": {"state": "opted_out_no_data"}
+    "email": {"state": "opt_in"},
+    "push": {"state": "opt_in"},
+    "sms": {"state": "opt_out"}
   },
   "deep_link": "teak12345:///reward?level=elite"
 }
