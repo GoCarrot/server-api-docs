@@ -46,7 +46,7 @@ NOTE: If a player has been permanently opted out via data removal, the session w
 | email
 | An email address for this player. When provided, Teak will store or update the player's email address for use in email marketing campaigns. If the player has been permanently opted out, the email address will not be stored.
 | deep_link
-| A deep link to return in the response. If the link scheme begins with `teak`, xref:ROOT:user-guide:page$custom-tags.adoc[Liquid templating, window=_blank] is applied and xref:ROOT:user-guide:page$player-properties.adoc[Player Property, window=_blank] values can be substituted using `\{{property_name}}` syntax. Non-teak scheme links are returned as-is.
+| A deep link to return in the response. If the link scheme begins with `teak`, xref:ROOT:user-guide:page$custom-tags.adoc[Liquid templating, window=_blank] is applied and xref:ROOT:user-guide:page$player-properties.adoc[Player Properties, window=_blank] values can be substituted using `\{{property_name}}` syntax. Non-teak scheme links are returned as-is.
 |===
 
 === Example Request
