@@ -99,6 +99,13 @@ NOTE: If a player has been permanently opted out via data removal, the session w
 
 === Error Responses
 
+==== Bad Request
+
+:response-code: 400
+:response-body: JSON dictionary with 'status' and 'errors' keys. 'status' will be 'error'. 'errors' will be a dictionary containing keys for each invalid parameter, with values being an array of human readable error messages. All validation errors are returned at once.
+:response-example: {"status":"error","errors":{"timezone_id":["Mars/Olympus_Mons is not a recognized IANA timezone name"],"client_ip":["not-an-ip is not a valid IP address"]}}
+include::partial$response.adoc[]
+
 ==== Forbidden
 
 :response-code: 403
