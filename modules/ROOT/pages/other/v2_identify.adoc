@@ -39,8 +39,8 @@ NOTE: If a player has been permanently opted out via data removal, the session w
 |===
 |Name | Description
 
-| timezone
-| The player's timezone as a UTC offset (e.g. `-7.0` for US Pacific Daylight Time). Used for timezone-aware message scheduling.
+| timezone_id
+| The player's IANA timezone name (e.g. `America/Los_Angeles`). Used for timezone-aware message scheduling. When omitted, UTC is assumed.
 | client_ip
 | The player's IP address. Used for GeoIP country resolution. When omitted, the IP address of the requesting server is used, which will not produce meaningful GeoIP data for your players.
 | email
@@ -56,7 +56,7 @@ NOTE: If a player has been permanently opted out via data removal, the session w
   "game_id": "your_teak_app_id",
   "secret_key": "your_server_secret",
   "user_id": "player_123",
-  "timezone": -7.0,
+  "timezone_id": "America/Los_Angeles",
   "client_ip": "203.0.113.42",
   "email": "player@example.com",
   "deep_link": "teak12345:///reward?level={{player_level}}"
