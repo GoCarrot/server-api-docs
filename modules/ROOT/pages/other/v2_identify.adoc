@@ -1,9 +1,12 @@
 = Server to Server Player Sessions
 :endpoint: v2/identify
+:rate_limit: 200
 
 The POST `{endpoint}` endpoint creates or resumes a player session from a server to server context. This is useful for games that manage their own server infrastructure and want to track player sessions, populate player properties for use in audience targeting and message personalization, and resolve deep links with player-specific data.
 
 When a new player is identified for the first time, Teak will create the player record. Subsequent calls for the same player will resume their session.
+
+NOTE: If a player has been permanently opted out via data removal, the session will still be created but no push tokens, email addresses, or advertising identifiers will be stored or updated for the player.
 
 == Creating or Resuming a Player Session
 [cols="1h,3a", frame="none", grid="none"]
@@ -14,6 +17,8 @@ When a new player is identified for the first time, Teak will create the player 
 | POST
 | Content-Type
 | application/json or application/x-www-form-urlencoded
+| Rate Limiting
+| {rate_limit} requests per second
 |===
 
 === Required Parameters
@@ -66,6 +71,8 @@ When a new player is identified for the first time, Teak will create the player 
 !===
 ! country_code
 ! Two-letter ISO country code derived from GeoIP lookup of `client_ip` (or the request IP if `client_ip` is not provided). Empty string if GeoIP lookup fails.
+! session_id
+! An identifier for this player session. Present when a session is successfully created.
 ! opt_out_states
 ! A dictionary of channel opt-out states for this player. Contains keys `email`, `push`, and `sms`, each with a `state` value indicating the player's current opt-out preference for that channel.
 ! deep_link
@@ -76,6 +83,7 @@ When a new player is identified for the first time, Teak will create the player 
 ----
 {
   "country_code": "US",
+  "session_id": "12345",
   "opt_out_states": {
     "email": {"state": "opted_in"},
     "push": {"state": "opted_in"},
@@ -100,4 +108,11 @@ include::partial$response.adoc[]
 :response-code: 404
 :response-body: JSON dictionary with an 'error' key containing a dictionary with 'code' and 'message' keys.
 :response-example: {"error":{"code":404,"message":"Could not find game with id unknown_app_id"}}
+include::partial$response.adoc[]
+
+==== Rate Limit Response
+
+:response-code: 429
+:response-body: JSON dictionary with 'status' and 'errors' keys. 'status' will be 'rate_limit'. 'errors' will contain the key 'rate_limit'
+:response-example: {"status":"rate_limit","errors":{"rate_limit":["/{endpoint} may only be called {rate_limit} times per second. Please wait a second and try again"]}}
 include::partial$response.adoc[]
