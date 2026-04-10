@@ -32,8 +32,6 @@ This is primarily useful for game architectures where events are generated serve
 | The Game Assigned Player ID of the player this event is for. This must match the value provided by the game client's Teak SDK integration.
 | action_type
 | The event type string (e.g. "level_up", "purchase"). Corresponds to the `action_type` parameter in the SDK's `incrementEvent`.
-| object_type
-| The event value string (e.g. "character", "item"). Corresponds to the `object_type` parameter in the SDK's `incrementEvent`.
 |===
 
 === Optional Parameters
@@ -41,18 +39,20 @@ This is primarily useful for game architectures where events are generated serve
 |===
 |Name | Description
 
+| object_type
+| The event category string (e.g. "character", "item"). Corresponds to the `object_type` parameter in the SDK's `incrementEvent`.
 | object_instance_id
 | Additional context for the event (e.g. "warrior", "sword"). Corresponds to the `object_instance_id` parameter in the SDK's `incrementEvent`.
 | event_count
-| The number of times this event occurred. Used for aggregate event reporting.
+| The number of times this event occurred. Used for aggregate event reporting. Defaults to 1 if omitted.
+| value
+| An arbitrary numeric value associated with this event. For example, the total coin cost across all occurrences. Defaults to 1 if omitted.
 | sum_of_squares
-| The sum of squared values for this event. Used for statistical calculations (variance/standard deviation).
-| duration
-| Duration associated with this event, in seconds.
-| ip_address
-| The player's IP address. Used for geographic segmentation. Takes highest priority for geo resolution. If both `ip_address` and `country_code` are provided, `ip_address` is used.
+| The sum of squared per-occurrence values for this event. Used for statistical calculations (variance/standard deviation). Defaults to 1 if omitted.
+| client_ip
+| The player's IP address. Used for geographic segmentation. Takes highest priority for geo resolution. If both `client_ip` and `country_code` are provided, `client_ip` is used.
 | country_code
-| ISO 3166-1 alpha-2 country code for the player (e.g. "US", "GB"). Used for geographic segmentation when `ip_address` is not provided. If neither `ip_address` nor `country_code` is provided, the player's location from their most recent SDK session is used automatically.
+| ISO 3166-1 alpha-2 country code for the player (e.g. "US", "GB"). Used for geographic segmentation when `client_ip` is not provided. If neither `client_ip` nor `country_code` is provided, the player's location from their most recent SDK session is used automatically.
 |===
 
 === Success Response
@@ -134,19 +134,19 @@ Use this endpoint to send multiple analytics events in a single request. This is
 | action_type
 | *Required.* The event type string.
 | object_type
-| *Required.* The event value string.
+| The event category string.
 | object_instance_id
 | Additional context for the event.
 | event_count
-| The number of times this event occurred.
+| The number of times this event occurred. Defaults to 1 if omitted.
+| value
+| An arbitrary numeric value associated with this event. For example, the total coin cost across all occurrences. Defaults to 1 if omitted.
 | sum_of_squares
-| The sum of squared values for this event.
-| duration
-| Duration associated with this event, in seconds.
-| ip_address
+| The sum of squared per-occurrence values for this event. Defaults to 1 if omitted.
+| client_ip
 | The player's IP address for geographic segmentation. Takes highest priority for geo resolution.
 | country_code
-| ISO 3166-1 alpha-2 country code for geographic segmentation. Used when `ip_address` is not provided. Falls back to last SDK session location if neither is specified.
+| ISO 3166-1 alpha-2 country code for geographic segmentation. Used when `client_ip` is not provided. Falls back to last SDK session location if neither is specified.
 |===
 
 === Example Request
@@ -165,15 +165,19 @@ Use this endpoint to send multiple analytics events in a single request. This is
     },
     {
       "user_id": "player_456",
-      "action_type": "purchase",
-      "object_type": "item",
-      "object_instance_id": "sword",
-      "event_count": 3,
+      "action_type": "spin",
+      "object_type": "Mr. Bling Bling's Slots",
+      "object_instance_id": "bet_5000",
+      "event_count": 10,
+      "value": 50000,
+      "sum_of_squares": 250000000,
       "country_code": "US"
     }
   ]
 }
 ----
+
+In the second event, the player spun a slot machine ten times at 5,000 coins per spin. The `value` is the total coin cost (50,000) and `sum_of_squares` is 5000^2^ x 10 = 250,000,000.
 
 === Success Response
 [cols="1,3a"]
