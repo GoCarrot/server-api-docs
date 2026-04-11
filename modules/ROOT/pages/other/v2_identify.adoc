@@ -2,13 +2,13 @@
 :endpoint: v2/identify
 :rate_limit: 200
 
-The POST `{endpoint}` endpoint creates or resumes a player session from a server to server context. This is useful for games that manage their own server infrastructure and want to track player sessions, populate player properties for use in audience targeting and message personalization, and resolve deep links with player-specific data.
+The POST `{endpoint}` endpoint records that a player has started a session and returns data about the player. This is useful for games that cannot integrate the Teak SDK.
 
-When a new player is identified for the first time, Teak will create the player record. Subsequent calls for the same player will resume their session.
+Each call to this endpoint tracks a new session. This drives the xref:ROOT:user-guide:page$audiences.adoc#_played[Played, window=_blank] event in the Audience builder. If Teak has not seen this player before, it also tracks an xref:ROOT:user-guide:page$audiences.adoc#_installed[Installed, window=_blank] event.
 
-NOTE: If a player has been permanently opted out via data removal, the session will still be created but no push tokens, email addresses, or advertising identifiers will be stored or updated for the player.
+NOTE: If a player has been permanently opted out via xref:page$other/v2_exclusions.adoc[exclusion], the session will still be tracked but no push tokens, email addresses, or advertising identifiers will be stored or updated for the player.
 
-== Creating or Resuming a Player Session
+== Recording a Player Session
 [cols="1h,3a", frame="none", grid="none"]
 |===
 | Endpoint
@@ -46,7 +46,7 @@ NOTE: If a player has been permanently opted out via data removal, the session w
 | email
 | An email address for this player. When provided, Teak will store or update the player's email address for use in email marketing campaigns. If the player has been permanently opted out, the email address will not be stored.
 | deep_link
-| A deep link to return in the response. If the link scheme begins with `teak`, xref:ROOT:user-guide:page$custom-tags.adoc[Liquid templating, window=_blank] is applied and xref:ROOT:user-guide:page$player-properties.adoc[Player Properties, window=_blank] values can be substituted using `\{{property_name}}` syntax. Non-teak scheme links are returned as-is.
+| A deep link to return in the response. If the link is a Teak managed link — either a `teak` custom scheme URL or a URL matching a Teak link domain — it is resolved to a custom scheme deep link with xref:ROOT:user-guide:page$custom-tags.adoc[Liquid templating, window=_blank] applied. xref:ROOT:user-guide:page$player-properties.adoc[Player Properties, window=_blank] values can be substituted using `\{{property_name}}` syntax. Other links are returned as-is.
 |===
 
 === Example Request
@@ -75,11 +75,11 @@ NOTE: If a player has been permanently opted out via data removal, the session w
 ! country_code
 ! Two-letter ISO country code derived from GeoIP lookup of `client_ip` (or the request IP if `client_ip` is not provided). Empty string if GeoIP lookup fails.
 ! session_id
-! An identifier for this player session. Present when a session is successfully created.
+! An identifier for this player session. Present when a session is successfully tracked.
 ! opt_out_states
 ! A dictionary of channel opt-out states for this player. Contains keys `email`, `push`, and `sms`, each with a `state` value indicating the player's current opt-out preference for that channel.
 ! deep_link
-! _(Only present if `deep_link` was provided in the request.)_ The deep link after Liquid template rendering. Player Property values are substituted for `\{{property_name}}` placeholders in links with a `teak` scheme. Non-teak scheme links are returned unmodified.
+! _(Only present if `deep_link` was provided in the request.)_ The processed deep link. Teak managed links — `teak` custom scheme URLs and Teak link domain URLs — are resolved to a custom scheme deep link with Liquid templating applied. xref:ROOT:user-guide:page$player-properties.adoc[Player Properties, window=_blank] values are substituted for `\{{property_name}}` placeholders. Other links are returned unmodified.
 !===
 | Example
 | [source, json]
