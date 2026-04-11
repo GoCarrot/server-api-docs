@@ -42,7 +42,9 @@ NOTE: If a player has been permanently opted out via xref:page$other/v2_exclusio
 | timezone_id
 | The player's IANA timezone name (e.g. `America/Los_Angeles`). Used for timezone-aware message scheduling. When omitted, UTC is assumed.
 | client_ip
-| The player's IP address. Used for GeoIP country resolution. When omitted, the IP address of the requesting server is used, which will not produce meaningful GeoIP data for your players.
+| The player's IP address. Used for GeoIP country resolution. Either `client_ip` or `country_code` must be provided. If both are provided, `client_ip` takes priority. If neither the player's IP address nor country are known, pass `127.0.0.1`.
+| country_code
+| Two-letter ISO country code (e.g. `US`, `DE`). Used when the player's IP address is not available but their country is known. Either `client_ip` or `country_code` must be provided. If both are provided, `client_ip` takes priority.
 | email
 | An email address for this player. When provided, Teak will store or update the player's email address for use in email marketing campaigns. If the player has been permanently opted out, the email address will not be stored.
 | deep_link
@@ -73,7 +75,7 @@ NOTE: If a player has been permanently opted out via xref:page$other/v2_exclusio
 [cols="1,3a", stripes="even"]
 !===
 ! country_code
-! Two-letter ISO country code derived from GeoIP lookup of `client_ip` (or the request IP if `client_ip` is not provided). Empty string if GeoIP lookup fails.
+! Two-letter ISO country code. When `client_ip` is provided, this is derived from GeoIP lookup. When `country_code` is provided instead, this echoes the provided value. Empty string if GeoIP lookup fails.
 ! session_id
 ! An identifier for this player session. Present when a session is successfully tracked.
 ! opt_out_states
@@ -103,7 +105,7 @@ NOTE: If a player has been permanently opted out via xref:page$other/v2_exclusio
 
 :response-code: 400
 :response-body: JSON dictionary with 'status' and 'errors' keys. 'status' will be 'error'. 'errors' will be a dictionary containing keys for each invalid parameter, with values being an array of human readable error messages. All validation errors are returned at once.
-:response-example: {"status":"error","errors":{"timezone_id":["Mars/Olympus_Mons is not a recognized IANA timezone name"],"client_ip":["not-an-ip is not a valid IP address"]}}
+:response-example: {"status":"error","errors":{"timezone_id":["Mars/Olympus_Mons is not a recognized IANA timezone name"],"location":["either client_ip or country_code must be provided"]}}
 include::partial$response.adoc[]
 
 ==== Forbidden
