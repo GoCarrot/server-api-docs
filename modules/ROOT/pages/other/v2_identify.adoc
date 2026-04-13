@@ -1,0 +1,130 @@
+= Server to Server Player Sessions
+:endpoint: v2/identify
+:rate_limit: 200
+
+The POST `{endpoint}` endpoint records that a player has started a session and returns data about the player. This is useful for games that cannot integrate the Teak SDK.
+
+Each call to this endpoint tracks a new session. This drives the xref:ROOT:user-guide:page$audiences.adoc#_played[Played, window=_blank] event in the Audience builder. If Teak has not seen this player before, it also tracks an xref:ROOT:user-guide:page$audiences.adoc#_installed[Installed, window=_blank] event.
+
+NOTE: If a player has been permanently opted out via xref:page$other/v2_exclusions.adoc[exclusion], the session will still be tracked but no push tokens, email addresses, or advertising identifiers will be stored or updated for the player.
+
+== Recording a Player Session
+[cols="1h,3a", frame="none", grid="none"]
+|===
+| Endpoint
+| https://api.gocarrot.com/{endpoint}
+| Request Type
+| POST
+| Content-Type
+| application/json or application/x-www-form-urlencoded
+| Rate Limiting
+| {rate_limit} requests per second
+|===
+
+=== Required Parameters
+[cols="1,3a", stripes="even"]
+|===
+|Name | Description
+
+| game_id
+| Your Teak App ID
+| secret_key
+| Your Teak Server Secret
+| user_id
+| The Game Assigned Player ID. This must match the value provided by the game client's Teak SDK integration.
+|===
+
+=== Optional Parameters
+[cols="1,3a", stripes="even"]
+|===
+|Name | Description
+
+| timezone_id
+| The player's IANA timezone name (e.g. `America/Los_Angeles`). Used for timezone-aware message scheduling. When omitted, UTC is assumed.
+| client_ip
+| The player's IP address. Used for GeoIP country resolution. Either `client_ip` or `country_code` must be provided. If both are provided, `client_ip` takes priority. If neither the player's IP address nor country are known, pass `127.0.0.1`.
+| country_code
+| Two-letter ISO country code (e.g. `US`, `DE`). Used when the player's IP address is not available but their country is known. Either `client_ip` or `country_code` must be provided. If both are provided, `client_ip` takes priority.
+| email
+| An email address for this player. When provided, Teak will store or update the player's email address for use in email marketing campaigns. If the player has been permanently opted out, the email address will not be stored.
+| deep_link
+| A deep link to return in the response. If the link is a Teak managed link — either a `teak` custom scheme URL or a URL matching a Teak link domain — it is resolved to a custom scheme deep link with xref:ROOT:user-guide:page$custom-tags.adoc[Liquid templating, window=_blank] applied. xref:ROOT:user-guide:page$player-properties.adoc[Player Properties, window=_blank] values can be substituted using `\{{property_name}}` syntax. Other links are returned as-is.
+|===
+
+=== Example Request
+[source, json]
+----
+{
+  "game_id": "your_teak_app_id",
+  "secret_key": "your_server_secret",
+  "user_id": "player_123",
+  "timezone_id": "America/Los_Angeles",
+  "client_ip": "203.0.113.42",
+  "email": "player@example.com",
+  "deep_link": "teak12345:///reward?level={{player_level}}"
+}
+----
+
+=== Success Response
+[cols="1,3a"]
+|===
+| Status Code
+| 201
+| Response Body
+| JSON dictionary.
+[cols="1,3a", stripes="even"]
+!===
+! country_code
+! Two-letter ISO country code. When `client_ip` is provided, this is derived from GeoIP lookup. When `country_code` is provided instead, this echoes the provided value. Empty string if GeoIP lookup fails.
+! session_id
+! An identifier for this player session. Present when a session is successfully tracked.
+! opt_out_states
+! A dictionary of channel opt-out states for this player. Contains keys `email`, `push`, and `sms`, each with a `state` value indicating the player's current opt-out preference for that channel.
+! deep_link
+! _(Only present if `deep_link` was provided in the request.)_ The processed deep link. Teak managed links — `teak` custom scheme URLs and Teak link domain URLs — are resolved to a custom scheme deep link with Liquid templating applied. xref:ROOT:user-guide:page$player-properties.adoc[Player Properties, window=_blank] values are substituted for `\{{property_name}}` placeholders. Other links are returned unmodified.
+!===
+| Example
+| [source, json]
+----
+{
+  "country_code": "US",
+  "session_id": "12345",
+  "opt_out_states": {
+    "email": {"state": "opt_in"},
+    "push": {"state": "opt_in"},
+    "sms": {"state": "opt_out"}
+  },
+  "deep_link": "teak12345:///reward?level=elite"
+}
+----
+|===
+
+=== Error Responses
+
+==== Bad Request
+
+:response-code: 400
+:response-body: JSON dictionary with 'status' and 'errors' keys. 'status' will be 'error'. 'errors' will be a dictionary containing keys for each invalid parameter, with values being an array of human readable error messages. All validation errors are returned at once.
+:response-example: {"status":"error","errors":{"timezone_id":["Mars/Olympus_Mons is not a recognized IANA timezone name"],"location":["either client_ip or country_code must be provided"]}}
+include::partial$response.adoc[]
+
+==== Forbidden
+
+:response-code: 403
+:response-body: JSON dictionary with 'status' and 'errors' keys. 'status' will be 'error'. 'errors' will be a dictionary containing keys indicating which parameters were invalid, with values being an array of human readable error messages.
+:response-example: {"status":"error","errors":{"authorization":["is invalid"]}}
+include::partial$response.adoc[]
+
+==== Not Found
+
+:response-code: 404
+:response-body: JSON dictionary with an 'error' key containing a dictionary with 'code' and 'message' keys.
+:response-example: {"error":{"code":404,"message":"Could not find game with id unknown_app_id"}}
+include::partial$response.adoc[]
+
+==== Rate Limit Response
+
+:response-code: 429
+:response-body: JSON dictionary with 'status' and 'errors' keys. 'status' will be 'rate_limit'. 'errors' will contain the key 'rate_limit'
+:response-example: {"status":"rate_limit","errors":{"rate_limit":["/{endpoint} may only be called {rate_limit} times per second. Please wait a second and try again"]}}
+include::partial$response.adoc[]

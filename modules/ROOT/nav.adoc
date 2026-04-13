@@ -11,4 +11,5 @@
 * xref:page$other/v2_push_subscription.adoc[Push Subscription Management]
 * xref:page$other/v2_desktop_subscription.adoc[Desktop Web Push Subscription Management]
 * xref:page$other/v2_exclusions.adoc[Exclusion Management]
+* xref:page$other/v2_identify.adoc[Server to Server Player Sessions]
 * xref:page$other/v2_users.adoc[Player Removal]
