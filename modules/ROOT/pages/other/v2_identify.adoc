@@ -31,7 +31,7 @@ NOTE: If a player has been permanently opted out via xref:page$other/v2_exclusio
 | secret_key
 | Your Teak Server Secret
 | user_id
-| The Game Assigned Player ID. This must match the value provided by the game client's Teak SDK integration.
+| The Game Assigned Player ID. This value will be used to identify the player across all Teak APIs and in the reward endpoint.
 |===
 
 === Optional Parameters
