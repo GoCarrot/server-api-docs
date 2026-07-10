@@ -44,7 +44,7 @@ Per-player failures do not fail the batch. Any player that cannot be scheduled i
 |Name | Description
 
 | send_time
-| The time in UTC at which to deliver the update. Must be in ISO8601 format, e.g. "2018-08-23 17:00:00". Must be within 30 days from the time the call is made. If omitted, or if set to a past time, the update will be scheduled to deliver immediately. See the horizon note below.
+| The time in UTC at which to deliver the update. Must be in ISO8601 format, e.g. "2018-08-23 17:00:00". Must be within 30 days from the time the call is made. If omitted it defaults to the current time; a past time (or the default) delivers as soon as possible, subject to the 10-hour horizon in the note below.
 | custom_data
 | A map of Game Assigned Player IDs to the update payload for that player. Each value may be either a JSON object or a pre-serialized JSON string. See the warning below.
 | system_data
