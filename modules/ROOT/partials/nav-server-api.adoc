@@ -1,5 +1,6 @@
 ** xref:server-api::page$index.adoc[Server API]
 *** xref:server-api::page$notifications/v2_schedule.adoc[API Driven Notification Sends]
+*** xref:server-api::page$notifications/v2_schedule_live_activity_updates.adoc[Bulk Live Activity Updates]
 *** xref:server-api::page$notifications/v2_scheduled_notifications.adoc[Bulk Schedule Creation]
 *** xref:server-api::page$notifications/v2_messages.adoc[Messages Management]
 *** xref:server-api::page$other/v2_player_properties.adoc[Player Properties]

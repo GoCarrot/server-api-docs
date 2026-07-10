@@ -23,6 +23,9 @@ Programmatically schedule notifications for players at specific times or in resp
 * xref:server-api::page$notifications/v2_scheduled_notifications.adoc[*Bulk Schedule Creation*] +
 Create scheduled notifications in bulk that can be edited and managed in the Teak Dashboard.
 
+* xref:server-api::page$notifications/v2_schedule_live_activity_updates.adoc[*Bulk Live Activity Updates*] +
+Schedule and cancel iOS Live Activity updates for a batch of players from your backend.
+
 === Rewards & Player Data
 
 * xref:server-api::page$rewards/endpoint.adoc[*Teak Reward Endpoint*] +
