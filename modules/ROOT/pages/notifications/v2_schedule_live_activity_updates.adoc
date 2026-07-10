@@ -55,7 +55,7 @@ Per-player failures do not fail the batch. Any player that cannot be scheduled i
 
 WARNING: `custom_data` is structurally optional — omitting it will not fail request validation — but it is effectively required per-player. A player with no entry in the `custom_data` map lands in `errors.user_ids` and is *not* scheduled. To schedule an update for a player, include that player in `custom_data`.
 
-NOTE: `send_time` is validated twice, with different blast radius. A `send_time` more than 30 days in the future (or one that cannot be parsed) is a hard validation error that rejects the *entire* request with a `422`. Separately, each individual update must fall within 10 hours of when that player's Live Activity was created; a player whose `send_time` is outside that horizon is reported per-player in `errors.user_ids` while the rest of the batch is scheduled.
+NOTE: `send_time` is validated twice, with different blast radius. A `send_time` more than 30 days in the future (or one that cannot be parsed) is a hard validation error that rejects the *entire* request with a `422`. Separately, each individual update must fall within 10 hours of when that player's Live Activity was created; a player whose `send_time` is outside that horizon is reported per-player in `errors.user_ids` while the rest of the batch is scheduled. Note that an omitted `send_time` defaults to the current time, so the horizon applies to immediate updates as well: a player whose Live Activity was created more than 10 hours ago is reported in `errors.user_ids` rather than delivered immediately.
 
 === Success Response
 :response-code: 200
