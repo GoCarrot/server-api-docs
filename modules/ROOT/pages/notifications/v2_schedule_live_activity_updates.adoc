@@ -44,7 +44,7 @@ Per-player failures do not fail the batch. Any player that cannot be scheduled i
 |Name | Description
 
 | send_time
-| The time in UTC at which to deliver the update. Must be in ISO8601 format, e.g. "2018-08-23 17:00:00". If omitted, defaults to the current time and delivers as soon as possible. Must be within 10 hours of when the player's Live Activity was created; a player whose `send_time` falls outside that window is reported in `errors.user_ids` and not scheduled.
+| The time in UTC at which to deliver the update. Must be in ISO8601 format, e.g. "2018-08-23 17:00:00". If omitted, defaults to the current time and delivers as soon as possible. See the note below for the timing limits.
 | custom_data
 | A map of Game Assigned Player IDs to the update payload for that player. Each value may be either a JSON object or a pre-serialized JSON string. A player is only scheduled if they have an entry here; any player in `user_ids` omitted from `custom_data` is reported in `errors.user_ids` and not scheduled.
 | system_data
@@ -52,6 +52,8 @@ Per-player failures do not fail the batch. Any player that cannot be scheduled i
 | device_ids
 | A map of Game Assigned Player IDs to Teak Device IDs. When provided, the update is targeted to the specified device for that player instead of their most recently registered Live Activity device. Players included in `user_ids` but not in `device_ids` target their most recent Live Activity. If a device ID cannot be resolved (e.g. the device does not exist, does not belong to the player, or has no matching Live Activity), that player is skipped and reported in `errors.user_ids`.
 |===
+
+NOTE: A `send_time` more than 30 days in the future is rejected with a `422`; separately, each update must fall within 10 hours of when its player's Live Activity was created, and any player outside that window is reported in `errors.user_ids` while the rest of the batch is scheduled.
 
 === Success Response
 :response-code: 200

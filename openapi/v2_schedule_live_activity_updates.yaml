@@ -194,9 +194,10 @@ components:
           description: >-
             UTC time at which to deliver the update, in ISO 8601 format
             (e.g. "2018-08-23 17:00:00"). If omitted, defaults to the current
-            time and delivers as soon as possible. Must be within 10 hours of
-            when the player's Live Activity was created; a player whose
-            `send_time` falls outside that window is reported in
+            time and delivers as soon as possible. A `send_time` more than 30
+            days in the future is rejected with a 422 (whole request);
+            separately, each update must fall within 10 hours of when its
+            player's Live Activity was created, or that player is reported in
             `errors.user_ids` and is not scheduled.
         custom_data:
           type: object
