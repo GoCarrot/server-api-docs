@@ -193,15 +193,11 @@ components:
           format: date-time
           description: >-
             UTC time at which to deliver the update, in ISO 8601 format
-            (e.g. "2018-08-23 17:00:00"). Must be within 30 days or the entire
-            request is rejected with a 422. If omitted it defaults to the
-            current time; a past time (or the default) delivers as soon as
-            possible. Note the horizon is enforced twice: separately from the
-            30-day request-level limit, each individual update must fall within
-            10 hours of when that player's Live Activity was created, or that
-            player is reported per-player in `errors.user_ids`. An omitted
-            `send_time` therefore still trips the horizon for a player whose
-            Live Activity was created more than 10 hours ago.
+            (e.g. "2018-08-23 17:00:00"). If omitted, defaults to the current
+            time and delivers as soon as possible. Must be within 10 hours of
+            when the player's Live Activity was created; a player whose
+            `send_time` falls outside that window is reported in
+            `errors.user_ids` and is not scheduled.
         custom_data:
           type: object
           additionalProperties:
@@ -211,9 +207,9 @@ components:
           description: >-
             Map of Game Assigned Player ID to the update payload for that
             player. Each value may be a JSON object or a pre-serialized JSON
-            string. Structurally optional (its absence does not fail request
-            validation) but effectively required per-player: a player with no
-            entry lands in `errors.user_ids` and is NOT scheduled.
+            string. A player is only scheduled if they have an entry here; any
+            player in `user_ids` omitted from `custom_data` is reported in
+            `errors.user_ids` and is not scheduled.
           example:
             player_1:
               score: 1

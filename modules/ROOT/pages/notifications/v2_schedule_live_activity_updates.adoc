@@ -44,18 +44,14 @@ Per-player failures do not fail the batch. Any player that cannot be scheduled i
 |Name | Description
 
 | send_time
-| The time in UTC at which to deliver the update. Must be in ISO8601 format, e.g. "2018-08-23 17:00:00". Must be within 30 days from the time the call is made. If omitted it defaults to the current time; a past time (or the default) delivers as soon as possible, subject to the 10-hour horizon in the note below.
+| The time in UTC at which to deliver the update. Must be in ISO8601 format, e.g. "2018-08-23 17:00:00". If omitted, defaults to the current time and delivers as soon as possible. Must be within 10 hours of when the player's Live Activity was created; a player whose `send_time` falls outside that window is reported in `errors.user_ids` and not scheduled.
 | custom_data
-| A map of Game Assigned Player IDs to the update payload for that player. Each value may be either a JSON object or a pre-serialized JSON string. See the warning below.
+| A map of Game Assigned Player IDs to the update payload for that player. Each value may be either a JSON object or a pre-serialized JSON string. A player is only scheduled if they have an entry here; any player in `user_ids` omitted from `custom_data` is reported in `errors.user_ids` and not scheduled.
 | system_data
 | A map of Game Assigned Player IDs to a system payload for that player, in the same shape as `custom_data` (JSON object or pre-serialized JSON string). Players may be omitted.
 | device_ids
 | A map of Game Assigned Player IDs to Teak Device IDs. When provided, the update is targeted to the specified device for that player instead of their most recently registered Live Activity device. Players included in `user_ids` but not in `device_ids` target their most recent Live Activity. If a device ID cannot be resolved (e.g. the device does not exist, does not belong to the player, or has no matching Live Activity), that player is skipped and reported in `errors.user_ids`.
 |===
-
-WARNING: `custom_data` is structurally optional — omitting it will not fail request validation — but it is effectively required per-player. A player with no entry in the `custom_data` map lands in `errors.user_ids` and is *not* scheduled. To schedule an update for a player, include that player in `custom_data`.
-
-NOTE: `send_time` is validated twice, with different blast radius. A `send_time` more than 30 days in the future (or one that cannot be parsed) is a hard validation error that rejects the *entire* request with a `422`. Separately, each individual update must fall within 10 hours of when that player's Live Activity was created; a player whose `send_time` is outside that horizon is reported per-player in `errors.user_ids` while the rest of the batch is scheduled. Note that an omitted `send_time` defaults to the current time, so the horizon applies to immediate updates as well: a player whose Live Activity was created more than 10 hours ago is reported in `errors.user_ids` rather than delivered immediately.
 
 === Success Response
 :response-code: 200
