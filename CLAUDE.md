@@ -39,3 +39,11 @@ Each API endpoint document follows a consistent structure:
 4. Optional parameters table
 5. Success response with example
 6. Error responses (404, 422, 429) using the `partial$response.adoc` template
+
+### OpenAPI Spec
+
+Each endpoint-group also has a matching OpenAPI 3.1 spec in `openapi/` (one file
+per group, e.g. `openapi/v2_schedule.yaml`). When you add or change an endpoint's
+AsciiDoc page, update the matching `openapi/*.yaml` in the same PR so the two stay
+in sync. (The specs are not yet wired into the Antora build, so nothing validates
+them automatically — keep them accurate by hand.)

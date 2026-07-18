@@ -20,6 +20,9 @@ Here are the common server-side features you should consider implementing:
 * xref:server-api::page$notifications/v2_schedule.adoc[*API Driven Notification Sends*] +
 Programmatically schedule notifications for players at specific times or in response to in-game events.
 
+* xref:server-api::page$notifications/v2_schedule_live_activity_updates.adoc[*Bulk Live Activity Updates*] +
+Schedule and cancel iOS Live Activity updates for a batch of players from your backend.
+
 * xref:server-api::page$notifications/v2_scheduled_notifications.adoc[*Bulk Schedule Creation*] +
 Create scheduled notifications in bulk that can be edited and managed in the Teak Dashboard.
 

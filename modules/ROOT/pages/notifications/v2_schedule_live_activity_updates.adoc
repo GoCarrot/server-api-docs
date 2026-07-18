@@ -1,0 +1,195 @@
+= Bulk Live Activity Updates
+
+These server-to-server endpoints schedule and cancel https://developer.apple.com/documentation/activitykit[Live Activity, window=_blank] updates for a batch of players at once. They mirror the shape of the xref:server-api::page$notifications/v2_schedule.adoc[bulk notification scheduling] endpoints: a shared `live_activity_id` and `send_time` across a `user_ids` batch, with per-user `custom_data`, `system_data`, and `device_ids` maps.
+
+Before an update can be scheduled for a player, that player's device must have started a Live Activity and registered its push token with Teak under the matching `live_activity_id`. Players with no matching Live Activity are reported per-user in the response rather than failing the whole call.
+
+Setting up the client side — starting a Live Activity, registering its push token, and choosing its id — is covered in the SDK guides: xref:ios::live-activities.adoc[iOS Live Activities] and xref:unity::live-activities.adoc[Unity Live Activities].
+
+== Concepts
+
+[cols="1,3a", stripes="even"]
+|===
+|Term | Meaning
+
+| live_activity_id
+| The identifier your app assigns to a Live Activity when it starts one and registers its push token with Teak (the SDK calls this the `activityId`, e.g. `chest_timer_0`). It must be unique per concurrent instance, and Teak keys both scheduling and cancellation off it. See the xref:ios::live-activities.adoc[SDK guides] for how it is chosen and registered.
+
+| custom_data
+| The Live Activity's updated https://developer.apple.com/documentation/activitykit/activityattributes/contentstate[ContentState, window=_blank] — the game-defined values iOS renders into the Live Activity UI. Teak delivers it verbatim as the APNs `aps` `content-state`, so its shape must match your app's ActivityKit `ContentState`.
+
+| system_data
+| Optional APNs system fields for the update. Only four keys are honored — `event`, `stale-date`, `dismissal-date`, and `alert` — and any other key is ignored. `event` defaults to `update`; set it to `end` to end the Live Activity. Including an `alert` makes the update user-visible (an alerting push) instead of a silent content update.
+|===
+
+== Scheduling
+[cols="1h,3a", frame="none", grid="none"]
+|===
+| Endpoint
+| https://api.gocarrot.com/v2/schedule_live_activity_updates
+| Request Type
+| POST
+| Content-Type
+| application/json or application/x-www-form-urlencoded
+| Rate Limiting
+| 30 requests per second
+|===
+
+Description: The `v2/schedule_live_activity_updates` endpoint schedules a Live Activity update for each player in `user_ids`. Every player in the batch shares the same `live_activity_id` and `send_time`, while `custom_data`, `system_data`, and `device_ids` are keyed per-player.
+
+Per-player failures do not fail the batch. Any player that cannot be scheduled is reported under the `errors.user_ids` map in an otherwise-successful `200` response, and the remaining players are scheduled normally.
+
+=== Required Parameters
+
+[cols="1,3a", stripes="even"]
+|===
+|Name | Description
+
+| game_id
+| Your Teak App ID
+| secret_key
+| Your Teak Server Secret
+| live_activity_id
+| The identifier of the Live Activity to update. Must match the `live_activity_id` the player's device registered when it started the Live Activity.
+| user_ids
+| Array of Game Assigned Player IDs to schedule the update for. Maximum of 100 per call. If you need to schedule the update for more users, make additional calls.
+|===
+
+=== Optional Parameters
+
+[cols="1,3a", stripes="even"]
+|===
+|Name | Description
+
+| send_time
+| The time in UTC at which to deliver the update. Must be in ISO8601 format, e.g. "2018-08-23 17:00:00". If omitted, defaults to the current time and delivers as soon as possible. See the note below for the timing limits.
+| custom_data
+| A map of Game Assigned Player IDs to that player's `custom_data` (the Live Activity `content-state` — see Concepts above). Each value may be either a JSON object or a pre-serialized JSON string. A player is only scheduled if they have an entry here; any player in `user_ids` omitted from `custom_data` is reported in `errors.user_ids` and not scheduled.
+| system_data
+| A map of Game Assigned Player IDs to that player's `system_data` (the honored APNs system fields — see Concepts above). Each value may be either a JSON object or a pre-serialized JSON string. Players may be omitted.
+| device_ids
+| A map of Game Assigned Player IDs to Teak Device IDs. When provided, the update is targeted to the specified device for that player instead of their most recently registered Live Activity device. Players included in `user_ids` but not in `device_ids` target their most recent Live Activity. If a device ID cannot be resolved (e.g. the device does not exist, does not belong to the player, or has no matching Live Activity), that player is skipped and reported in `errors.user_ids`.
+|===
+
+NOTE: A `send_time` more than 30 days in the future is rejected with a `422`; separately, each update must fall within 10 hours of when its player's Live Activity was created, and any player outside that window is reported in `errors.user_ids` while the rest of the batch is scheduled.
+
+=== Success Response
+:response-code: 200
+:response-body: JSON dictionary with 'status', 'ids', and 'scheduled' keys. 'status' will be 'ok'. 'ids' will contain an array of strings which are opaque ids for the updates scheduled. Every update will have a unique id. 'scheduled' will be a map of Game Assigned Player ID to the opaque update id for that player. If any player could not be scheduled, an 'errors' key will be present containing a 'user_ids' map of the Game Assigned Player ID to a human readable error message. Players in the 'errors.user_ids' map will not have updates scheduled.
+:response-example: {"status":"ok", "ids":["12904919075210912"], "scheduled":{"player_1":"12904919075210912"}}
+include::partial$response.adoc[]
+
+==== Partial Per-Player Failure
+
+When one or more players cannot be scheduled, the response still returns a `200` status. Successfully scheduled players appear in `scheduled`. Failed players are reported in the `errors.user_ids` map with a human readable reason (e.g. no matching Live Activity, unknown player id, missing `custom_data`, a `send_time` outside the 10-hour horizon, or an unresolvable device id).
+
+[source,json]
+----
+{
+  "status": "ok",
+  "ids": ["12904919075210912"],
+  "scheduled": {
+    "player_1": "12904919075210912"
+  },
+  "errors": {
+    "user_ids": {
+      "player_2": "no matching live activity"
+    }
+  }
+}
+----
+
+=== Error Responses
+
+==== Not Found
+
+:response-code: 404
+:response-body: JSON dictionary with 'status' and 'errors' keys. 'status' will be 'error'. 'errors' will be a dictionary in which the keys are the parameter which could not be found, and the values will be an array of human readable messages indicating what could not be found.
+:response-example: {"status":"error","errors":{"game_id":["Unknown app id 42"]}}
+include::partial$response.adoc[]
+
+==== Validation Error
+
+:response-code: 422
+:response-body: JSON dictionary with 'status' and 'errors' keys. 'status' will be 'error'. 'errors' will be a dictionary in which the keys are the parameter which failed to meet requirements, and the values will be an array of human readable messages for failed validations. A validation error rejects the entire request; no updates are scheduled.
+:response-example: {"status":"error","errors":{"live_activity_id":["must be present"]}}
+include::partial$response.adoc[]
+
+==== Rate Limit Response
+
+:response-code: 429
+:response-body: JSON dictionary with 'status' and 'errors' keys. 'status' will be 'rate_limit'. 'errors' will contain the key 'rate_limit'
+:response-example: {"status":"rate_limit","errors":{"rate_limit":["/v2/schedule_live_activity_updates may only be called 30 times per second. Please wait a second and try again"]}}
+include::partial$response.adoc[]
+
+== Cancelling/Unscheduling
+[cols="1h,3a", frame="none", grid="none"]
+|===
+| Endpoint
+| https://api.gocarrot.com/v2/unschedule_live_activity_updates
+| Request Type
+| POST
+| Content-Type
+| application/json or application/x-www-form-urlencoded
+| Rate Limiting
+| 30 requests per second
+|===
+
+Description: The `v2/unschedule_live_activity_updates` endpoint cancels pending Live Activity updates scheduled with `v2/schedule_live_activity_updates`. Cancellation is scoped to a single `live_activity_id` across the players in `user_ids`.
+
+NOTE: Unlike xref:server-api::page$notifications/v2_schedule.adoc#_cancelling_unscheduling[notification unscheduling], this endpoint does not accept an `ids` array and has no `notification_identifier`. Updates to cancel are identified solely by `live_activity_id` and `user_ids` (optionally narrowed by `device_ids`). For a player without a `device_ids` entry, *all* of that player's pending updates for the given `live_activity_id` are cancelled.
+
+=== Required Parameters
+
+[cols="1,3a", stripes="even"]
+|===
+|Name | Description
+
+| game_id
+| Your Teak App ID
+| secret_key
+| Your Teak Server Secret
+| live_activity_id
+| The identifier of the Live Activity whose updates should be cancelled.
+| user_ids
+| Array of Game Assigned Player IDs to cancel updates for. Maximum of 100 per call. If you need to cancel updates for more users, make additional calls.
+|===
+
+=== Optional Parameters
+
+[cols="1,3a", stripes="even"]
+|===
+|Name | Description
+
+| device_ids
+| A map of Game Assigned Player IDs to Teak Device IDs. When provided, only the pending updates for the specified device are cancelled for that player. Players included in `user_ids` but not in `device_ids` have all of their pending updates for this `live_activity_id` cancelled. If a device ID cannot be resolved, that player is skipped and reported in `errors.user_ids`.
+|===
+
+=== Success Response
+:response-code: 200
+:response-body: JSON dictionary with 'status' and 'ids' keys. 'status' will be 'ok'. 'ids' will contain an array of strings which are the opaque ids of the updates that were cancelled; it will be empty if no matching updates were found. If a supplied device id could not be resolved, an 'errors' key will be present containing a 'user_ids' map of the Game Assigned Player ID to a human readable error message.
+:response-example: {"status":"ok", "ids":["12904919075210912"]}
+include::partial$response.adoc[]
+
+=== Error Responses
+
+==== Not Found
+
+:response-code: 404
+:response-body: JSON dictionary with 'status' and 'errors' keys. 'status' will be 'error'. 'errors' will be a dictionary in which the keys are the parameter which could not be found, and the values will be an array of human readable messages indicating what could not be found.
+:response-example: {"status":"error","errors":{"game_id":["Unknown app id 42"]}}
+include::partial$response.adoc[]
+
+==== Validation Error
+
+:response-code: 422
+:response-body: JSON dictionary with 'status' and 'errors' keys. 'status' will be 'error'. 'errors' will be a dictionary in which the keys are the parameter which failed to meet requirements, and the values will be an array of human readable messages for failed validations.
+:response-example: {"status":"error","errors":{"live_activity_id":["must be present"]}}
+include::partial$response.adoc[]
+
+==== Rate Limit Response
+
+:response-code: 429
+:response-body: JSON dictionary with 'status' and 'errors' keys. 'status' will be 'rate_limit'. 'errors' will contain the key 'rate_limit'
+:response-example: {"status":"rate_limit","errors":{"rate_limit":["/v2/unschedule_live_activity_updates may only be called 30 times per second. Please wait a second and try again"]}}
+include::partial$response.adoc[]

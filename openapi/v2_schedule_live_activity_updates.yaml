@@ -1,0 +1,389 @@
+openapi: 3.1.0
+info:
+  title: Teak Bulk Live Activity Update API
+  description: >-
+    Bulk scheduling and cancellation of iOS Live Activity updates for a batch
+    of players, server-to-server. Mirrors the shape of the bulk notification
+    scheduling API. Before an update can be scheduled for a player, that
+    player's device must have started a Live Activity and registered its push
+    token with Teak under the matching `live_activity_id`.
+  version: "2.0"
+  contact:
+    name: Teak
+    url: https://teak.io
+
+servers:
+  - url: https://api.gocarrot.com
+    description: Production
+
+paths:
+  /v2/schedule_live_activity_updates:
+    post:
+      operationId: scheduleLiveActivityUpdates
+      summary: Schedule Live Activity updates for a batch of players
+      description: >-
+        Schedule a Live Activity update for each player in `user_ids`. Every
+        player in the batch shares the same `live_activity_id` and `send_time`,
+        while `custom_data`, `system_data`, and `device_ids` are keyed
+        per-player. Per-player failures do not fail the batch: any player that
+        cannot be scheduled is reported under `errors.user_ids` in an
+        otherwise-successful 200 response.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ScheduleRequest"
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: "#/components/schemas/ScheduleRequest"
+      responses:
+        "200":
+          description: >-
+            Updates scheduled. Players that could not be scheduled are reported
+            under `errors.user_ids`.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ScheduleSuccessResponse"
+              example:
+                status: ok
+                ids:
+                  - "12904919075210912"
+                scheduled:
+                  player_1: "12904919075210912"
+                errors:
+                  user_ids:
+                    player_2: "no matching live activity"
+        "404":
+          description: Game not found.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+              example:
+                status: error
+                errors:
+                  game_id:
+                    - "Unknown app id 42"
+        "422":
+          description: >-
+            Validation error. Rejects the entire request; no updates are
+            scheduled.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+              example:
+                status: error
+                errors:
+                  live_activity_id:
+                    - "must be present"
+        "429":
+          description: Rate limit exceeded.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/RateLimitResponse"
+              example:
+                status: rate_limit
+                errors:
+                  rate_limit:
+                    - "/v2/schedule_live_activity_updates may only be called 30 times per second. Please wait a second and try again"
+
+  /v2/unschedule_live_activity_updates:
+    post:
+      operationId: unscheduleLiveActivityUpdates
+      summary: Cancel pending Live Activity updates for a batch of players
+      description: >-
+        Cancel pending Live Activity updates previously scheduled via
+        `/v2/schedule_live_activity_updates`. Cancellation is scoped to a single
+        `live_activity_id` across the players in `user_ids`. Unlike
+        `/v2/unschedule`, there is no `ids` array and no `notification_identifier`.
+        A player without a `device_ids` entry has all of their pending updates
+        for the given `live_activity_id` cancelled.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UnscheduleRequest"
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: "#/components/schemas/UnscheduleRequest"
+      responses:
+        "200":
+          description: >-
+            Updates cancelled. `ids` is empty if no matching updates were found.
+            Unresolvable device pins are reported under `errors.user_ids`.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UnscheduleSuccessResponse"
+              example:
+                status: ok
+                ids:
+                  - "12904919075210912"
+        "404":
+          description: Game not found.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+              example:
+                status: error
+                errors:
+                  game_id:
+                    - "Unknown app id 42"
+        "422":
+          description: Validation error.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+              example:
+                status: error
+                errors:
+                  live_activity_id:
+                    - "must be present"
+        "429":
+          description: Rate limit exceeded.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/RateLimitResponse"
+              example:
+                status: rate_limit
+                errors:
+                  rate_limit:
+                    - "/v2/unschedule_live_activity_updates may only be called 30 times per second. Please wait a second and try again"
+
+components:
+  schemas:
+    ScheduleRequest:
+      type: object
+      required:
+        - game_id
+        - secret_key
+        - live_activity_id
+        - user_ids
+      properties:
+        game_id:
+          type: string
+          description: Your Teak App ID.
+        secret_key:
+          type: string
+          description: Your Teak Server Secret.
+        live_activity_id:
+          type: string
+          description: >-
+            The identifier of the Live Activity to update. Must match the
+            `live_activity_id` the player's device registered when it started
+            the Live Activity.
+        user_ids:
+          type: array
+          items:
+            type: string
+          maxItems: 100
+          description: >-
+            Game Assigned Player IDs to schedule the update for.
+            Maximum of 100 per call.
+        send_time:
+          type: string
+          format: date-time
+          description: >-
+            UTC time at which to deliver the update, in ISO 8601 format
+            (e.g. "2018-08-23 17:00:00"). If omitted, defaults to the current
+            time and delivers as soon as possible. A `send_time` more than 30
+            days in the future is rejected with a 422 (whole request);
+            separately, each update must fall within 10 hours of when its
+            player's Live Activity was created, or that player is reported in
+            `errors.user_ids` and is not scheduled.
+        custom_data:
+          type: object
+          additionalProperties:
+            oneOf:
+              - type: object
+              - type: string
+          description: >-
+            Map of Game Assigned Player ID to that player's update payload — the
+            Live Activity ContentState, delivered verbatim as the APNs `aps`
+            `content-state`, so its shape must match your app's ActivityKit
+            ContentState. Each value may be a JSON object or a pre-serialized
+            JSON string. A player is only scheduled if they have an entry here;
+            any player in `user_ids` omitted from `custom_data` is reported in
+            `errors.user_ids` and is not scheduled.
+          example:
+            player_1:
+              score: 1
+            player_2:
+              score: 2
+        system_data:
+          type: object
+          additionalProperties:
+            oneOf:
+              - type: object
+              - type: string
+          description: >-
+            Map of Game Assigned Player ID to that player's APNs system fields.
+            Only four keys are honored — `event`, `stale-date`,
+            `dismissal-date`, and `alert` — and any other key is ignored.
+            `event` defaults to `update`; set it to `end` to end the Live
+            Activity. Including an `alert` makes the update user-visible (an
+            alerting push) instead of a silent content update. Each value may be
+            a JSON object or a pre-serialized JSON string. Players may be
+            omitted.
+        device_ids:
+          type: object
+          additionalProperties:
+            type: string
+          description: >-
+            Map of Game Assigned Player ID to Teak Device ID. When provided,
+            the update is targeted to the specified device for that player
+            instead of their most recently registered Live Activity device.
+            Players in `user_ids` but not in `device_ids` target their most
+            recent Live Activity. If a device ID cannot be resolved, that
+            player is skipped and reported in `errors.user_ids`.
+          example:
+            player_1: "device-id-abc"
+
+    UnscheduleRequest:
+      type: object
+      required:
+        - game_id
+        - secret_key
+        - live_activity_id
+        - user_ids
+      properties:
+        game_id:
+          type: string
+          description: Your Teak App ID.
+        secret_key:
+          type: string
+          description: Your Teak Server Secret.
+        live_activity_id:
+          type: string
+          description: >-
+            The identifier of the Live Activity whose updates should be
+            cancelled.
+        user_ids:
+          type: array
+          items:
+            type: string
+          maxItems: 100
+          description: >-
+            Game Assigned Player IDs to cancel updates for.
+            Maximum of 100 per call.
+        device_ids:
+          type: object
+          additionalProperties:
+            type: string
+          description: >-
+            Map of Game Assigned Player ID to Teak Device ID. When provided,
+            only the pending updates for the specified device are cancelled for
+            that player. Players in `user_ids` but not in `device_ids` have all
+            of their pending updates for this `live_activity_id` cancelled. If a
+            device ID cannot be resolved, that player is skipped and reported in
+            `errors.user_ids`.
+          example:
+            player_1: "device-id-abc"
+
+    ScheduleSuccessResponse:
+      type: object
+      required:
+        - status
+        - ids
+        - scheduled
+      properties:
+        status:
+          type: string
+          const: ok
+        ids:
+          type: array
+          items:
+            type: string
+          description: Opaque IDs for the updates scheduled.
+        scheduled:
+          type: object
+          additionalProperties:
+            type: string
+          description: >-
+            Map of Game Assigned Player ID to the opaque update ID for that
+            player.
+        errors:
+          type: object
+          properties:
+            user_ids:
+              type: object
+              additionalProperties:
+                type: string
+              description: >-
+                Map of Game Assigned Player ID to a human-readable error message
+                for each player that could not be scheduled (e.g. no matching
+                Live Activity, unknown player id, missing `custom_data`, a
+                `send_time` outside the 10-hour horizon, or an unresolvable
+                device id). Only present when at least one player failed.
+
+    UnscheduleSuccessResponse:
+      type: object
+      required:
+        - status
+        - ids
+      properties:
+        status:
+          type: string
+          const: ok
+        ids:
+          type: array
+          items:
+            type: string
+          description: >-
+            Opaque IDs for the updates cancelled. Empty if no matching updates
+            were found.
+        errors:
+          type: object
+          properties:
+            user_ids:
+              type: object
+              additionalProperties:
+                type: string
+              description: >-
+                Map of Game Assigned Player ID to a human-readable error message
+                for each player whose supplied device ID could not be resolved.
+                Only present when one or more device IDs could not be resolved.
+
+    ErrorResponse:
+      type: object
+      required:
+        - status
+        - errors
+      properties:
+        status:
+          type: string
+          const: error
+        errors:
+          type: object
+          additionalProperties:
+            type: array
+            items:
+              type: string
+          description: >-
+            Keys are the parameter that failed validation; values are arrays
+            of human-readable error messages.
+
+    RateLimitResponse:
+      type: object
+      required:
+        - status
+        - errors
+      properties:
+        status:
+          type: string
+          const: rate_limit
+        errors:
+          type: object
+          properties:
+            rate_limit:
+              type: array
+              items:
+                type: string
