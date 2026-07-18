@@ -4,6 +4,24 @@ These server-to-server endpoints schedule and cancel https://developer.apple.com
 
 Before an update can be scheduled for a player, that player's device must have started a Live Activity and registered its push token with Teak under the matching `live_activity_id`. Players with no matching Live Activity are reported per-user in the response rather than failing the whole call.
 
+Setting up the client side — starting a Live Activity, registering its push token, and choosing its id — is covered in the SDK guides: xref:ios::live-activities.adoc[iOS Live Activities] and xref:unity::live-activities.adoc[Unity Live Activities].
+
+== Concepts
+
+[cols="1,3a", stripes="even"]
+|===
+|Term | Meaning
+
+| live_activity_id
+| The identifier your app assigns to a Live Activity when it starts one and registers its push token with Teak (the SDK calls this the `activityId`, e.g. `chest_timer_0`). It must be unique per concurrent instance, and Teak keys both scheduling and cancellation off it. See the xref:ios::live-activities.adoc[SDK guides] for how it is chosen and registered.
+
+| custom_data
+| The Live Activity's updated https://developer.apple.com/documentation/activitykit/activityattributes/contentstate[ContentState, window=_blank] — the game-defined values iOS renders into the Live Activity UI. Teak delivers it verbatim as the APNs `aps` `content-state`, so its shape must match your app's ActivityKit `ContentState`.
+
+| system_data
+| Optional APNs system fields for the update. Only four keys are honored — `event`, `stale-date`, `dismissal-date`, and `alert` — and any other key is ignored. `event` defaults to `update`; set it to `end` to end the Live Activity. Including an `alert` makes the update user-visible (an alerting push) instead of a silent content update.
+|===
+
 == Scheduling
 [cols="1h,3a", frame="none", grid="none"]
 |===
@@ -46,9 +64,9 @@ Per-player failures do not fail the batch. Any player that cannot be scheduled i
 | send_time
 | The time in UTC at which to deliver the update. Must be in ISO8601 format, e.g. "2018-08-23 17:00:00". If omitted, defaults to the current time and delivers as soon as possible. See the note below for the timing limits.
 | custom_data
-| A map of Game Assigned Player IDs to the update payload for that player. Each value may be either a JSON object or a pre-serialized JSON string. A player is only scheduled if they have an entry here; any player in `user_ids` omitted from `custom_data` is reported in `errors.user_ids` and not scheduled.
+| A map of Game Assigned Player IDs to that player's `custom_data` (the Live Activity `content-state` — see Concepts above). Each value may be either a JSON object or a pre-serialized JSON string. A player is only scheduled if they have an entry here; any player in `user_ids` omitted from `custom_data` is reported in `errors.user_ids` and not scheduled.
 | system_data
-| A map of Game Assigned Player IDs to a system payload for that player, in the same shape as `custom_data` (JSON object or pre-serialized JSON string). Players may be omitted.
+| A map of Game Assigned Player IDs to that player's `system_data` (the honored APNs system fields — see Concepts above). Each value may be either a JSON object or a pre-serialized JSON string. Players may be omitted.
 | device_ids
 | A map of Game Assigned Player IDs to Teak Device IDs. When provided, the update is targeted to the specified device for that player instead of their most recently registered Live Activity device. Players included in `user_ids` but not in `device_ids` target their most recent Live Activity. If a device ID cannot be resolved (e.g. the device does not exist, does not belong to the player, or has no matching Live Activity), that player is skipped and reported in `errors.user_ids`.
 |===

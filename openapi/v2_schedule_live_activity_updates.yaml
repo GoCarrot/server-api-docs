@@ -206,10 +206,12 @@ components:
               - type: object
               - type: string
           description: >-
-            Map of Game Assigned Player ID to the update payload for that
-            player. Each value may be a JSON object or a pre-serialized JSON
-            string. A player is only scheduled if they have an entry here; any
-            player in `user_ids` omitted from `custom_data` is reported in
+            Map of Game Assigned Player ID to that player's update payload — the
+            Live Activity ContentState, delivered verbatim as the APNs `aps`
+            `content-state`, so its shape must match your app's ActivityKit
+            ContentState. Each value may be a JSON object or a pre-serialized
+            JSON string. A player is only scheduled if they have an entry here;
+            any player in `user_ids` omitted from `custom_data` is reported in
             `errors.user_ids` and is not scheduled.
           example:
             player_1:
@@ -223,9 +225,14 @@ components:
               - type: object
               - type: string
           description: >-
-            Map of Game Assigned Player ID to a system payload for that player,
-            in the same shape as `custom_data` (JSON object or pre-serialized
-            JSON string). Players may be omitted.
+            Map of Game Assigned Player ID to that player's APNs system fields.
+            Only four keys are honored — `event`, `stale-date`,
+            `dismissal-date`, and `alert` — and any other key is ignored.
+            `event` defaults to `update`; set it to `end` to end the Live
+            Activity. Including an `alert` makes the update user-visible (an
+            alerting push) instead of a silent content update. Each value may be
+            a JSON object or a pre-serialized JSON string. Players may be
+            omitted.
         device_ids:
           type: object
           additionalProperties:
