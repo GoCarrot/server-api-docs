@@ -70,17 +70,19 @@ Instead of providing the `user_id` parameter, which is the Game Assigned Player 
 {
   "status":"ok",
   "new_properties": {
-    "bankroll": 123456,
+    "bankroll": 123456.0,
     "last_screen": "Lobby"
   },
   "old_properties": {
-    "bankroll": 100000,
+    "bankroll": 100000.0,
     "last_screen": "Bonus Collect"
   },
   "unknown_properties": ["XP"]
 }
 ----
 |===
+
+NOTE: Number Player Property values in `new_properties` and `old_properties` are always returned as decimals (e.g. a stored `50000` is returned as `50000.0`), regardless of the format submitted.
 
 === Error Responses
 
@@ -165,6 +167,18 @@ Use this endpoint to update player properties for multiple players in a single r
 }
 ----
 
+=== Processing Order [[processing_order]]
+
+Player objects in `players` are applied in array order. If the same player is
+identified more than once in a request - by repeating `user_id`, by mixing
+`user_id` and `teak_internal_user_id` for the same player, or by any other
+means - the properties they share are last-write-wins: whichever entry appears
+later in the array determines the value that lands in the database for that
+property. Each entry's `new_properties` in the response reflects the value
+that actually landed, not necessarily the value that entry itself submitted.
+`old_properties` always reflects the value before any entry in the request was
+applied, for every entry.
+
 === Success Response
 [cols="1,3a"]
 |===
@@ -190,8 +204,8 @@ Use this endpoint to update player properties for multiple players in a single r
     {
       "status": "ok",
       "user_id": "player_123",
-      "new_properties": {"bankroll": 50000},
-      "old_properties": {"bankroll": 40000},
+      "new_properties": {"bankroll": 50000.0},
+      "old_properties": {"bankroll": 40000.0},
       "unknown_properties": []
     },
     {
@@ -210,6 +224,8 @@ Use this endpoint to update player properties for multiple players in a single r
 |===
 
 NOTE: Individual player failures do not prevent other players in the batch from being processed. Check the `results` array to determine which players were updated successfully.
+
+NOTE: If the same player appears in more than one entry, see <<processing_order>> above for how conflicting property values are resolved.
 
 === Error Responses
 
