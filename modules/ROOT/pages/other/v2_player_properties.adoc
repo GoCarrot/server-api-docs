@@ -70,11 +70,11 @@ Instead of providing the `user_id` parameter, which is the Game Assigned Player 
 {
   "status":"ok",
   "new_properties": {
-    "bankroll": 123456,
+    "bankroll": 123456.0,
     "last_screen": "Lobby"
   },
   "old_properties": {
-    "bankroll": 100000,
+    "bankroll": 100000.0,
     "last_screen": "Bonus Collect"
   },
   "unknown_properties": ["XP"]
@@ -204,8 +204,8 @@ applied, for every entry.
     {
       "status": "ok",
       "user_id": "player_123",
-      "new_properties": {"bankroll": 50000},
-      "old_properties": {"bankroll": 40000},
+      "new_properties": {"bankroll": 50000.0},
+      "old_properties": {"bankroll": 40000.0},
       "unknown_properties": []
     },
     {
