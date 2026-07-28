@@ -165,6 +165,18 @@ Use this endpoint to update player properties for multiple players in a single r
 }
 ----
 
+=== Processing Order
+
+Player objects in `players` are applied in array order. If the same player is
+identified more than once in a request - by repeating `user_id`, by mixing
+`user_id` and `teak_internal_user_id` for the same player, or by any other
+means - the properties they share are last-write-wins: whichever entry appears
+later in the array determines the value that lands in the database for that
+property. Each entry's `new_properties` in the response reflects the value
+that actually landed, not necessarily the value that entry itself submitted.
+`old_properties` always reflects the value before any entry in the request was
+applied, for every entry.
+
 === Success Response
 [cols="1,3a"]
 |===
@@ -210,6 +222,8 @@ Use this endpoint to update player properties for multiple players in a single r
 |===
 
 NOTE: Individual player failures do not prevent other players in the batch from being processed. Check the `results` array to determine which players were updated successfully.
+
+NOTE: If the same player appears in more than one entry, see <<_processing_order>> above for how conflicting property values are resolved.
 
 === Error Responses
 
