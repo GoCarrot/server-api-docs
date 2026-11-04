@@ -41,9 +41,9 @@ invalid_post:: Teak does not recognize this reward id
 
 If ``response.status`` is ``grant_reward`` then response.reward will be a JSON encoded object of the form ``{"internal_id" : quantity, "another_internal_id" : anotherQuantity}``. If ``response.status`` is any other value, the ``response.reward`` key will not be present.
 
-Quantities are JSON numbers. Whole numbers are sent as integers (`25`, never `25.0`). Parse quantities as a decimal type, not an integer or a float.
+Quantities are JSON numbers. Whole numbers are sent as integers (`25`, never `25.0`) and are within ±4.5e15. Parse quantities as a decimal type, not an integer or a float.
 
-Fractional quantities are opt-in per game; ask Teak to enable them. When enabled, fractional quantities have up to 9 decimal places and 15 significant digits, and whole numbers are within ±4.5e15, as they are today. See xref:server-api::page$rewards/endpoint.adoc#_fractional_quantities[Fractional quantities] for details. We recommend SDK 4.4 or later for fractional rewards. For example:
+Fractional quantities are opt-in per game; ask Teak to enable them. When enabled, fractional quantities have up to 9 decimal places and 15 significant digits. See xref:server-api::page$rewards/endpoint.adoc#_fractional_quantities[Fractional quantities] for details. We recommend SDK 4.4 or later for fractional rewards. For example:
 
 [source,json]
 ----
