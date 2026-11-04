@@ -75,9 +75,11 @@ The reward parameter may include any number of rewards and quantities. It is imp
 
 === Fractional quantities
 
-Quantities are JSON numbers. Whole numbers are always sent as integers (`25`, never `25.0`) and are within ±4.5e15. Parse quantities as a decimal type, not an integer or a float.
+Quantities are JSON numbers with a magnitude of up to 999,999,999,999,999,999,999,999,999.999. Whole numbers are always sent as integers (`25`, never `25.0`).
 
-Fractional quantities are opt-in per game: ask Teak to enable them for your game before you expect to receive them. When enabled, fractional quantities have up to 9 decimal places and 15 significant digits. Significant digits are counted on both sides of the decimal point, not counting leading zeros. For example, `123456.123456789` has 15 significant digits. The 15-digit limit exists because many JSON parsers read fractions as doubles, which keep 15 significant decimal digits intact, so a capped value arrives unchanged.
+Fractional quantities are opt-in per game: ask Teak to enable them for your game before you expect to receive them. When enabled, fractional quantities have up to 3 decimal places.
+
+Think about the type you parse quantities into. If your parser reads JSON numbers as doubles, large or long values may lose precision. Prefer a decimal type.
 
 For example, a reward with a fractional quantity:
 
