@@ -30,7 +30,7 @@ The request will have the following parameters set in the POST body with the `ap
 | posting_user_id
 | The game assigned player id of the player who shared the post or request, or 0 if this reward is from an App to Player communication such as a notification, email, or Link.
 | reward
-| A JSON blob describing what your endpoint should grant the player. The format is {"internal_id" : quantity, "another_internal_id" : quantity}. For example, {"coins" : 25, "energy" :10 }
+| A JSON blob describing what your endpoint should grant the player. The format is {"internal_id" : quantity, "another_internal_id" : quantity}. For example, {"coins" : 25, "energy" :10 }. Quantities are JSON numbers and may be fractional for games that have fractional rewards enabled (see <<Issuing the Reward>>).
 | timestamp
 | The UNIX time at which Teak first attempted to grant this reward
 
@@ -58,6 +58,8 @@ signature = CGI.escape(Base64.encode64(OpenSSL::HMAC.digest(OpenSSL::Digest::Dig
 
 Your server must compute the signature using the above method and compare it to the signature passed in by Teak to validate the request. If the signatures do not match, the request is invalid, and the endpoint should not grant the player any rewards.
 
+Compute the signature over the `reward` value exactly as received. Don't decode and re-encode it first, since re-serializing can change the bytes (for example `25.0` for `25`) and break the signature.
+
 Furthermore, you should confirm that the player has not already been granted a reward with the given `event_id`. If a network failure or other intermittent error occurs, Teak will retry its request to your server endpoint. When doing so, all parameters, including `event_id`, will be identical. If the player has already been granted a reward with the given `event_id`, return a successful response and do no further processing
 
 == Issuing the Reward
@@ -70,6 +72,21 @@ Once the request has been validated, you must JSON decode the 'reward' parameter
 ----
 
 The reward parameter may include any number of rewards and quantities. It is important that your reward endpoint properly grants the user **all** specified rewards.
+
+=== Fractional quantities
+
+Quantities are JSON numbers. Whole numbers are always sent as integers (`25`, never `25.0`). Fractional quantities are opt-in per game: ask Teak to enable them for your game before you expect to receive them. When enabled:
+
+* Fractional quantities have up to 9 decimal places and 15 significant digits.
+* Whole numbers are within ±4.5e15, as they are today.
+* Parse quantities as a decimal type, not an integer or a float.
+
+For example, a reward with a fractional quantity:
+
+[source,json]
+----
+{"softCash" : 50, "hardCash" : 2.5}
+----
 
 == Responding to the request
 

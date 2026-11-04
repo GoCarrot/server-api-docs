@@ -41,6 +41,13 @@ invalid_post:: Teak does not recognize this reward id
 
 If ``response.status`` is ``grant_reward`` then response.reward will be a JSON encoded object of the form ``{"internal_id" : quantity, "another_internal_id" : anotherQuantity}``. If ``response.status`` is any other value, the ``response.reward`` key will not be present.
 
+Quantities are JSON numbers. Whole numbers are sent as integers. Fractional quantities are opt-in per game; ask Teak to enable them. When they are enabled, parse quantities as a decimal type, not an integer or a float. We recommend SDK 4.4 or later for fractional rewards. For example:
+
+[source,json]
+----
+{"softCash" : 50, "hardCash" : 2.5}
+----
+
 Teak **does not** provide any in game UI. It is up to the game to inform users of the reward they were issued or why the reward was not granted.
 
 == Server integration
