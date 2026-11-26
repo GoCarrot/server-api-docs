@@ -67,12 +67,20 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/AudienceResponse"
+        "403":
+          description: Invalid secret_key.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
         "404":
           description: No list Audience with that id for the app.
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/ErrorResponse"
+        "429":
+          description: Rate limit exceeded.
     patch:
       operationId: updateAudience
       summary: Change a list Audience, or replace its list
@@ -92,6 +100,12 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/AudienceResponse"
+        "403":
+          description: Invalid secret_key.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
         "404":
           description: No list Audience with that id for the app.
           content:
