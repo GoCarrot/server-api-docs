@@ -1,0 +1,187 @@
+= Audience List Management
+
+These endpoints create and update list Audiences in Teak: Audiences made from a list of player IDs, like the ones you can upload as a CSV in the Dashboard. Audiences are visible in the Dashboard in the Audiences section, and Schedules send Messages to them (see xref:server-api::page$notifications/v2_scheduled_notifications.adoc[Bulk Schedule Creation]).
+
+An Audience is built in the background after you send the list. Its `upload_state` tells you where it is. Wait for it to be `ready` before you send to the Audience, and before you send the list again.
+
+== Creation
+[cols="1h,3a", frame="none", grid="none"]
+|===
+| Endpoint
+| https://api.gocarrot.com/v2/audiences
+| Request Type
+| POST
+| Content-Type
+| application/json
+| Rate Limiting
+| 5 requests per second
+|===
+
+=== Required Parameters
+[cols="1,3a", stripes="even"]
+|===
+|Name | Description
+
+| game_id
+| Your Teak App ID
+| secret_key
+| Your Teak Server Secret
+| name
+| The name of the Audience to create. Limited to 255 characters. Must not match the name of another Audience for the game that isn't archived, because Schedules find their Audience by name.
+| player_ids
+| An array of the player IDs the Audience should contain: the IDs you pass to Teak when you identify a player. Each ID must be a non-blank string or a number. Repeated IDs count once. Up to 100,000 IDs per request. IDs that don't match a player are left out of the Audience.
+|===
+
+=== Optional Parameters
+[cols="1,3a", stripes="even"]
+|===
+|Name | Description
+
+| description
+| A description of the Audience, shown in the Dashboard.
+|===
+
+=== Success Response
+
+:response-code: 200
+:response-body: JSON dictionary with "status" and "audience" keys. "status" will be "ok". "audience" will contain an object representing the Audience with the following keys: id, name, description, archived, upload_state, matched_count, unmatched_count. See <<Reading an Audience>> for what the keys mean.
+:response-example: {"status":"ok","audience":{"id":12345,"name":"Spring sale testers","description":"Players for the spring sale test","archived":false,"upload_state":"uploaded","matched_count":null,"unmatched_count":null}}
+include::partial$response.adoc[]
+:!response-example:
+
+=== Error Responses
+
+==== Validation Error
+
+:response-code: 422
+:response-body: JSON dictionary with "status" and "errors" keys. "status" will be "error". "errors" will be a dictionary in which the keys are the parameter which failed to meet requirements, and the values will be an array of human readable messages for failed validations.
+include::partial$response.adoc[]
+
+==== Authorization Error
+
+:response-code: 403
+:response-body: JSON dictionary with "status" and "errors" keys. "status" will be "error". "errors" will contain the key "authorization".
+include::partial$response.adoc[]
+
+==== Rate Limit Response
+
+:response-code: 429
+:response-body: JSON dictionary with "status" and "errors" keys. "status" will be "rate_limt". "errors" will contain the key "rate_limit".
+include::partial$response.adoc[]
+
+== Updating
+[cols="1h,3a", frame="none", grid="none"]
+|===
+| Endpoint
+| https://api.gocarrot.com/v2/audiences/\{id\}
+| Request Type
+| PATCH or PUT
+| Content-Type
+| application/json
+| Rate Limiting
+| 5 requests per second
+|===
+
+Changes the name, description or archived state of a list Audience, or replaces its list of players. Only the parameters you send change.
+
+Sending `player_ids` replaces the whole list, and Teak builds the Audience again. Wait for `upload_state` to be `ready` before you send the list again.
+
+This endpoint only works on list Audiences. An Audience defined by rules in the Dashboard isn't found.
+
+=== Required URL Fields
+[cols="1,3a", stripes="even"]
+|===
+|Name | Description
+
+| id
+| The id of a list Audience, as specified by the "id" field in the API response.
+|===
+
+=== Required Parameters
+[cols="1,3a", stripes="even"]
+|===
+|Name | Description
+
+| game_id
+| Your Teak App ID
+| secret_key
+| Your Teak Server Secret
+|===
+
+=== Optional Parameters
+[cols="1,3a", stripes="even"]
+|===
+|Name | Description
+
+| name
+| A new name for the Audience. Limited to 255 characters. Must not match the name of another Audience for the game that isn't archived.
+| description
+| A new description for the Audience.
+| archived
+| A boolean value indicating if the Audience is archived or not. Accepted values are true, false, "true", "false", 1, 0, "1" and "0". An archived Audience can't be found by name by Schedules. Unarchiving an Audience is an error if another Audience that isn't archived has its name.
+| player_ids
+| An array of player IDs that replaces the Audience's list. Follows the same rules as when creating an Audience, and can't be empty.
+|===
+
+=== Success Response
+
+:response-code: 200
+:response-body: JSON dictionary with "status" and "audience" keys, as when creating an Audience.
+include::partial$response.adoc[]
+
+=== Error Responses
+
+==== Not Found
+
+:response-code: 404
+:response-body: JSON dictionary with "status" and "errors" keys. "status" will be "error". "errors" will contain the key "id".
+include::partial$response.adoc[]
+
+==== Validation Error
+
+:response-code: 422
+:response-body: JSON dictionary with "status" and "errors" keys. "status" will be "error". "errors" will be a dictionary in which the keys are the parameter which failed to meet requirements, and the values will be an array of human readable messages for failed validations.
+include::partial$response.adoc[]
+
+==== Rate Limit Response
+
+:response-code: 429
+:response-body: JSON dictionary with "status" and "errors" keys. "status" will be "rate_limt". "errors" will contain the key "rate_limit".
+include::partial$response.adoc[]
+
+== Reading an Audience
+[cols="1h,3a", frame="none", grid="none"]
+|===
+| Endpoint
+| https://api.gocarrot.com/v2/audiences/\{id\}
+| Request Type
+| GET
+| Rate Limiting
+| 5 requests per second
+|===
+
+Use this endpoint to check on an Audience after you create it or send it a new list. It takes the same game_id, secret_key and id as updating an Audience, and returns the same "audience" object. Like updating, it only finds list Audiences.
+
+=== Success Response
+
+:response-code: 200
+:response-body: JSON dictionary with "status" and "audience" keys. "status" will be "ok". "audience" will contain the following keys:
+
+id:: The id of the Audience.
+name:: The name of the Audience.
+description:: The description of the Audience.
+archived:: true if the Audience is archived.
+upload_state:: Where the Audience is in being built. One of "uploaded", "looking_up", "requesting_warehouse_import", "requested_warehouse_import" or "ready". The Audience is complete when this is "ready".
+matched_count:: The number of IDs in the latest list that matched a player. null until Teak has counted them.
+unmatched_count:: The number of IDs in the latest list that didn't match a player, so aren't in the Audience. null until Teak has counted them. Check this before you send, to catch a mistyped ID.
+:response-example: {"status":"ok","audience":{"id":12345,"name":"Spring sale testers","description":"Players for the spring sale test","archived":false,"upload_state":"ready","matched_count":2,"unmatched_count":0}}
+include::partial$response.adoc[]
+:!response-example:
+
+=== Error Responses
+
+==== Not Found
+
+:response-code: 404
+:response-body: JSON dictionary with "status" and "errors" keys. "status" will be "error". "errors" will contain the key "id".
+include::partial$response.adoc[]

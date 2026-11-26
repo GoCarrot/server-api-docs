@@ -26,6 +26,9 @@ Schedule and cancel iOS Live Activity updates for a batch of players from your b
 * xref:server-api::page$notifications/v2_scheduled_notifications.adoc[*Bulk Schedule Creation*] +
 Create scheduled notifications in bulk that can be edited and managed in the Teak Dashboard.
 
+* xref:server-api::page$notifications/v2_audiences.adoc[*Audience List Management*] +
+Create and update Audiences from a list of player IDs, to send Schedules to.
+
 === Rewards & Player Data
 
 * xref:server-api::page$rewards/endpoint.adoc[*Teak Reward Endpoint*] +
