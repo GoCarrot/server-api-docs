@@ -38,6 +38,12 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ErrorResponse"
+        "404":
+          description: Unknown game_id.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
         "422":
           description: Validation error.
           content:
@@ -74,7 +80,7 @@ paths:
               schema:
                 $ref: "#/components/schemas/ErrorResponse"
         "404":
-          description: No list Audience with that id for the app.
+          description: No list Audience with that id for the app, or an unknown game_id.
           content:
             application/json:
               schema:
@@ -107,7 +113,7 @@ paths:
               schema:
                 $ref: "#/components/schemas/ErrorResponse"
         "404":
-          description: No list Audience with that id for the app.
+          description: No list Audience with that id for the app, or an unknown game_id.
           content:
             application/json:
               schema:

@@ -29,7 +29,7 @@ An Audience is built in the background after you send the list. Its `upload_stat
 | name
 | The name of the Audience to create. Limited to 255 characters. Must not match the name of another Audience for the game that isn't archived, because Schedules find their Audience by name.
 | player_ids
-| An array of the player IDs the Audience should contain: the IDs you pass to Teak when you identify a player. Each ID must be a non-blank string or a number. Repeated IDs count once. Up to 100,000 IDs per request. IDs that don't match a player are left out of the Audience.
+| An array of the player IDs the Audience should contain: the IDs you pass to Teak when you identify a player. Each ID must be a non-blank string or a whole number. Repeated IDs count once. Up to 100,000 IDs per request. IDs that don't match a player are left out of the Audience.
 |===
 
 === Optional Parameters
@@ -50,6 +50,12 @@ include::partial$response.adoc[]
 :!response-example:
 
 === Error Responses
+
+==== Not Found
+
+:response-code: 404
+:response-body: JSON dictionary with "status" and "errors" keys. "status" will be "error". "errors" will contain the key "game_id" if the App ID is unknown.
+include::partial$response.adoc[]
 
 ==== Validation Error
 
@@ -134,7 +140,7 @@ include::partial$response.adoc[]
 ==== Not Found
 
 :response-code: 404
-:response-body: JSON dictionary with "status" and "errors" keys. "status" will be "error". "errors" will contain the key "id".
+:response-body: JSON dictionary with "status" and "errors" keys. "status" will be "error". "errors" will contain the key "id" if there is no list Audience with that id, or the key "game_id" if the App ID is unknown.
 include::partial$response.adoc[]
 
 ==== Validation Error
@@ -216,7 +222,7 @@ include::partial$response.adoc[]
 ==== Not Found
 
 :response-code: 404
-:response-body: JSON dictionary with "status" and "errors" keys. "status" will be "error". "errors" will contain the key "id".
+:response-body: JSON dictionary with "status" and "errors" keys. "status" will be "error". "errors" will contain the key "id" if there is no list Audience with that id, or the key "game_id" if the App ID is unknown.
 include::partial$response.adoc[]
 
 ==== Authorization Error
