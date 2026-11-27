@@ -92,7 +92,7 @@ paths:
       summary: Change a list Audience, or replace its list
       description: >-
         Only the parameters sent change. `PUT` is accepted too. Sending
-        `player_ids` replaces the whole list and builds the Audience again.
+        `players` replaces the whole list and builds the Audience again.
       requestBody:
         required: true
         content:
@@ -144,21 +144,26 @@ components:
         type: string
       description: Your Teak Server Secret.
   schemas:
-    PlayerIds:
+    Players:
       type: array
       minItems: 1
-      maxItems: 100000
       items:
-        oneOf:
-          - type: string
-            minLength: 1
-          - type: integer
+        type: object
+        required: [id]
+        additionalProperties: false
+        properties:
+          id:
+            oneOf:
+              - type: string
+                minLength: 1
+              - type: integer
+            description: The player ID you pass to Teak when you identify the player.
       description: >-
-        Player IDs for the Audience. Repeated IDs count once; IDs that don't
-        match a player are left out.
+        The players for the Audience. Repeated IDs count once; IDs that don't
+        match a player are left out. `id` is the only key accepted today.
     CreateAudienceRequest:
       type: object
-      required: [game_id, secret_key, name, player_ids]
+      required: [game_id, secret_key, name, players]
       properties:
         game_id:
           type: string
@@ -170,8 +175,8 @@ components:
           description: Must not match the name of another Audience for the app that isn't archived.
         description:
           type: string
-        player_ids:
-          $ref: "#/components/schemas/PlayerIds"
+        players:
+          $ref: "#/components/schemas/Players"
     UpdateAudienceRequest:
       type: object
       required: [game_id, secret_key]
@@ -187,8 +192,8 @@ components:
           type: string
         archived:
           type: boolean
-        player_ids:
-          $ref: "#/components/schemas/PlayerIds"
+        players:
+          $ref: "#/components/schemas/Players"
     AudienceResponse:
       type: object
       properties:

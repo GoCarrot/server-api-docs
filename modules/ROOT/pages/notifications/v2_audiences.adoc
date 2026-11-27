@@ -28,8 +28,8 @@ An Audience is built in the background after you send the list. Its `upload_stat
 | Your Teak Server Secret
 | name
 | The name of the Audience to create. Limited to 255 characters. Must not match the name of another Audience for the game that isn't archived, because Schedules find their Audience by name.
-| player_ids
-| An array of the player IDs the Audience should contain: the IDs you pass to Teak when you identify a player. Each ID must be a non-blank string or a whole number. Repeated IDs count once. Up to 100,000 IDs per request. IDs that don't match a player are left out of the Audience.
+| players
+| An array of objects, one per player the Audience should contain, like `[{"id": "player-1"}, {"id": "player-2"}]`. `id` is the player ID you pass to Teak when you identify the player, as a non-blank string or a whole number. `id` is the only key an object accepts today; any other key is an error. Repeated IDs count once. IDs that don't match a player are left out of the Audience.
 |===
 
 === Optional Parameters
@@ -90,7 +90,7 @@ include::partial$response.adoc[]
 
 Changes the name, description or archived state of a list Audience, or replaces its list of players. Only the parameters you send change.
 
-Sending `player_ids` replaces the whole list, and Teak builds the Audience again. Wait for `upload_state` to be `ready` before you send the list again, so each list finishes building before the next one starts.
+Sending `players` replaces the whole list, and Teak builds the Audience again. Wait for `upload_state` to be `ready` before you send the list again, so each list finishes building before the next one starts.
 
 This endpoint only works on list Audiences. An Audience defined by rules in the Dashboard isn't found.
 
@@ -124,9 +124,9 @@ This endpoint only works on list Audiences. An Audience defined by rules in the 
 | description
 | A new description for the Audience.
 | archived
-| A boolean value indicating if the Audience is archived or not. Accepted values are true, false, "true", "false", 1, 0, "1" and "0". An archived Audience can't be found by name by Schedules. Unarchiving an Audience is an error if another Audience that isn't archived has its name.
-| player_ids
-| An array of player IDs that replaces the Audience's list. Follows the same rules as when creating an Audience, and can't be empty.
+| A boolean value indicating if the Audience is archived or not. Accepted values are true, false, 1, 0, and the strings "1", "0", "true", "false", "t", "f", "on" and "off" (also in upper case). Any other value is an error. An archived Audience can't be found by name by Schedules. Unarchiving an Audience is an error if another Audience that isn't archived has its name.
+| players
+| An array of player objects that replaces the Audience's list. Follows the same rules as when creating an Audience, and can't be empty.
 |===
 
 === Success Response
